@@ -58,5 +58,3 @@ class RepsheetVisualizer < Sinatra::Base
     erb :breakdown
   end
 end
-
-RepsheetVisualizer.run!

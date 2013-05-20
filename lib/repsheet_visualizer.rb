@@ -1,1 +1,1 @@
-require 'repsheet_visualizer/app.rb'
+require 'repsheet_visualizer/application/app.rb'

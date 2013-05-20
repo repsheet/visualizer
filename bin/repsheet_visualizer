@@ -2,9 +2,11 @@
 
 begin
   require 'repsheet_visualizer/application/app.rb'
+  RepsheetVisualizer.run!
 rescue LoadError => e
   require 'rubygems'
   path = File.expand_path '../../lib', __FILE__
   $:.unshift(path) if File.directory?(path) && !$:.include?(path)
   require 'repsheet_visualizer/application/app.rb'
+  RepsheetVisualizer.run!
 end
