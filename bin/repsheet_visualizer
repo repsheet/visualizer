@@ -2,11 +2,19 @@
 
 begin
   require 'repsheet_visualizer/application/app.rb'
+  if ARGV.count == 2
+    RepsheetVisualizer.set :redis_host, ARGV[0]
+    RepsheetVisualizer.set :redis_port, ARGV[1]
+  end
   RepsheetVisualizer.run!
 rescue LoadError => e
   require 'rubygems'
   path = File.expand_path '../../lib', __FILE__
   $:.unshift(path) if File.directory?(path) && !$:.include?(path)
   require 'repsheet_visualizer/application/app.rb'
+  if ARGV.count == 2
+    RepsheetVisualizer.set :redis_host, ARGV[0]
+    RepsheetVisualizer.set :redis_port, ARGV[1]
+  end
   RepsheetVisualizer.run!
 end

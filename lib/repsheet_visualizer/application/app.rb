@@ -13,8 +13,15 @@ class RepsheetVisualizer < Sinatra::Base
     end
   end
 
+  def redis_connection
+    host = defined?(settings.redis_host) ? settings.redis_host : "localhost"
+    port = defined?(settings.redis_port) ? settings.redis_port : 6379
+
+    Redis.new(:host => host, :port => port)
+  end
+
   get '/' do
-    redis = Redis.new(:host => "localhost", :port => 6379)
+    redis = redis_connection
     data = redis.keys("*:requests").map {|d| d.split(":").first}.reject {|ip| ip.empty?}
     @actors = {}
     data.each do |actor|
@@ -27,14 +34,14 @@ class RepsheetVisualizer < Sinatra::Base
   end
 
   get '/activity/:ip' do
-    redis = Redis.new(:host => "localhost", :port => 6379)
+    redis = redis_connection
     @ip = params[:ip]
     @activity = redis.lrange("#{@ip}:requests", 0, -1)
     erb :activity
   end
 
   post '/action' do
-    redis = Redis.new(:host => "localhost", :port => 6379)
+    redis = redis_connection
     if params["action"] == "allow"
       redis.set("#{params[:ip]}:repsheet:blacklist", "false")
     else
@@ -44,7 +51,7 @@ class RepsheetVisualizer < Sinatra::Base
   end
 
   get '/breakdown' do
-    redis = Redis.new(:host => "localhost", :port => 6379)
+    redis = redis_connection
     @data = {}
     offenders = redis.keys("*:repsheet").map {|o| o.split(":").first}
     offenders.each do |offender|
