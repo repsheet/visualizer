@@ -20,6 +20,10 @@ class RepsheetVisualizer < Sinatra::Base
     Redis.new(:host => host, :port => port)
   end
 
+  def mount
+    defined?(settings.mount) ? settings.mount : ""
+  end
+
   get '/' do
     redis = redis_connection
     data = redis.keys("*:requests").map {|d| d.split(":").first}.reject {|ip| ip.empty?}
@@ -30,6 +34,7 @@ class RepsheetVisualizer < Sinatra::Base
       @actors[actor][:blacklist] = redis.get("#{actor}:repsheet:blacklist")
       @actors[actor][:detected] = redis.smembers("#{actor}:detected").join(", ")
     end
+    @mount = mount
     erb :actors
   end
 
@@ -37,6 +42,7 @@ class RepsheetVisualizer < Sinatra::Base
     redis = redis_connection
     @ip = params[:ip]
     @activity = redis.lrange("#{@ip}:requests", 0, -1)
+    @mount = mount
     erb :activity
   end
 
@@ -47,6 +53,7 @@ class RepsheetVisualizer < Sinatra::Base
     else
       redis.set("#{params[:ip]}:repsheet:blacklist", "true")
     end
+    @mount = mount
     redirect back
   end
 
@@ -62,6 +69,7 @@ class RepsheetVisualizer < Sinatra::Base
     end
     @aggregate = Hash.new 0
     @data.each {|ip,data| data["totals"].each {|rule,count| @aggregate[rule] += count.to_i}}
+    @mount = mount
     erb :breakdown
   end
 end
