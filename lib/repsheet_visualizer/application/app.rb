@@ -21,7 +21,7 @@ class RepsheetVisualizer < Sinatra::Base
   end
 
   def mount
-    defined?(settings.mount) ? settings.mount : ""
+    defined?(settings.mount) ? (settings.mount + "/") : "/"
   end
 
   get '/' do
