@@ -72,4 +72,8 @@ class RepsheetVisualizer < Sinatra::Base
     @mount = mount
     erb :breakdown
   end
+
+  get '/worldview' do
+    erb :worldview
+  end
 end

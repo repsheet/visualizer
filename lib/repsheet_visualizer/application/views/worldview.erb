@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <title>Google Maps Multiple Markers</title>
+    <script src="http://maps.google.com/maps/api/js?sensor=false"
+            type="text/javascript"></script>
+  </head>
+  <body>
+    <div id="map" style="width: 1024px; height: 768px;"></div>
+
+    <script type="text/javascript">
+      var locations = [
+        ['222.221.240.233', 25.038900, 102.718300, 1],
+        ['116.55.13.90', 25.036400, 101.545601, 2],
+        ['37.153.99.142', 52.500000, 5.750000, 3],
+        ['41.186.3.22', -2.000000, 30.000000, 4],
+        ['94.102.51.246', 52.349998, 4.916700, 5]
+      ];
+
+      var map = new google.maps.Map(document.getElementById('map'), {
+        zoom: 2,
+        center: new google.maps.LatLng(41.833, -87.731),
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+      });
+
+      var infowindow = new google.maps.InfoWindow();
+
+      var marker, i;
+
+      for (i = 0; i < locations.length; i++) {
+        marker = new google.maps.Marker({
+          position: new google.maps.LatLng(locations[i][1], locations[i][2]),
+          map: map
+        });
+
+        google.maps.event.addListener(marker, 'click', (function(marker, i) {
+          return function() {
+            infowindow.setContent(locations[i][0]);
+            infowindow.open(map, marker);
+          }
+        })(marker, i));
+      }
+
+      google.maps.event.trigger(map, 'resize')
+    </script>
+  </body>
+</html>
