@@ -2,9 +2,10 @@
 
 begin
   require 'repsheet_visualizer/application/app.rb'
-  if ARGV.count == 2
+  if ARGV.count == 3
     RepsheetVisualizer.set :redis_host, ARGV[0]
     RepsheetVisualizer.set :redis_port, ARGV[1]
+    RepsheetVisualizer.set :geoip_database, ARGV[2]
   end
   RepsheetVisualizer.run!
 rescue LoadError => e
@@ -12,9 +13,10 @@ rescue LoadError => e
   path = File.expand_path '../../lib', __FILE__
   $:.unshift(path) if File.directory?(path) && !$:.include?(path)
   require 'repsheet_visualizer/application/app.rb'
-  if ARGV.count == 2
+  if ARGV.count == 3
     RepsheetVisualizer.set :redis_host, ARGV[0]
     RepsheetVisualizer.set :redis_port, ARGV[1]
+    RepsheetVisualizer.set :geoip_database, ARGV[2]
   end
   RepsheetVisualizer.run!
 end

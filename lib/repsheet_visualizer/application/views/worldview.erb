@@ -1,48 +1,84 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-    <title>Google Maps Multiple Markers</title>
-    <script src="http://maps.google.com/maps/api/js?sensor=false"
-            type="text/javascript"></script>
-  </head>
-  <body>
-    <div id="map" style="width: 1024px; height: 768px;"></div>
+    <meta charset="utf-8">
+    <title>Repsheet::Visualizer</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="Aaron Bedra">
 
-    <script type="text/javascript">
-      var locations = [
-        ['222.221.240.233', 25.038900, 102.718300, 1],
-        ['116.55.13.90', 25.036400, 101.545601, 2],
-        ['37.153.99.142', 52.500000, 5.750000, 3],
-        ['41.186.3.22', -2.000000, 30.000000, 4],
-        ['94.102.51.246', 52.349998, 4.916700, 5]
-      ];
-
-      var map = new google.maps.Map(document.getElementById('map'), {
-        zoom: 2,
-        center: new google.maps.LatLng(41.833, -87.731),
-        mapTypeId: google.maps.MapTypeId.ROADMAP
-      });
-
-      var infowindow = new google.maps.InfoWindow();
-
-      var marker, i;
-
-      for (i = 0; i < locations.length; i++) {
-        marker = new google.maps.Marker({
-          position: new google.maps.LatLng(locations[i][1], locations[i][2]),
-          map: map
-        });
-
-        google.maps.event.addListener(marker, 'click', (function(marker, i) {
-          return function() {
-            infowindow.setContent(locations[i][0]);
-            infowindow.open(map, marker);
-          }
-        })(marker, i));
+    <link href="<%= @mount %>css/bootstrap.css" rel="stylesheet">
+    <link href="<%= @mount %>css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="<%= @mount %>css/blue/style.css" rel="stylesheet">
+    <style>
+      body {
+        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
       }
 
-      google.maps.event.trigger(map, 'resize')
-    </script>
+      .actors {
+        border-color: #FFF;
+      }
+    </style>
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="<%= @mount %>javascripts/html5shiv.js"></script>
+    <![endif]-->
+
+    <link rel="shortcut icon" href="<%= @mount %>images/favicon.ico">
+
+    <script src="http://maps.google.com/maps/api/js?sensor=false" type="text/javascript"></script>
+  </head>
+
+  <body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="brand" href="<%= @mount %>">Repsheet</a>
+	  <div class="nav-collapse collapse">
+	    <ul class="nav">
+	      <li><a href="<%= @mount %>">Actors</a></li>
+	      <li><a href="<%= @mount %>breakdown">Breakdown</a></li>
+	      <li class="active"><a href="<%= @mount %>worldview">Worldview</a></li>
+	    </ul>
+	  </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div id="map" style="width: 1024px; height: 768px;"></div>
+
+      <script type="text/javascript">
+	var locations = [
+          <% @data.each do |address, geodetails| %>
+          ['<%= address %>', <%= geodetails[0] %>, <%= geodetails[1] %>],
+	  <% end %>
+	];
+
+	var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 2,
+          center: new google.maps.LatLng(41.833, -87.731),
+          mapTypeId: google.maps.MapTypeId.ROADMAP
+	});
+
+	var infowindow = new google.maps.InfoWindow();
+	var marker, i;
+
+	for (i = 0; i < locations.length; i++) {
+          marker = new google.maps.Marker({
+            position: new google.maps.LatLng(locations[i][1], locations[i][2]),
+            map: map
+          });
+
+          google.maps.event.addListener(marker, 'click', (function(marker, i) {
+            return function() {
+              infowindow.setContent(locations[i][0]);
+              infowindow.open(map, marker);
+            }
+          })(marker, i));
+        }
+      </script>
+    </div>
   </body>
 </html>

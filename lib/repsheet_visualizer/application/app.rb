@@ -1,3 +1,4 @@
+require 'geoip'
 require 'sinatra'
 require 'redis'
 require 'json'
@@ -18,6 +19,13 @@ class RepsheetVisualizer < Sinatra::Base
     port = defined?(settings.redis_port) ? settings.redis_port : 6379
 
     Redis.new(:host => host, :port => port)
+  end
+
+  def geoip_database
+    geoip_database = defined?(settings.geoip_database) ? settings.geoip_database : nil
+    raise "Missing GeoIP database settings" if geoip_database.nil?
+    raise "Could not locate GeoIP database" unless File.exist?(geoip_database)
+    GeoIP.new(settings.geoip_database)
   end
 
   def mount
@@ -74,6 +82,14 @@ class RepsheetVisualizer < Sinatra::Base
   end
 
   get '/worldview' do
+    db = geoip_database
+    redis = redis_connection
+    @data = {}
+    offenders = redis.keys("*:repsheet*").map {|o| o.split(":").first}
+    offenders.each do |address|
+      details = db.country(address)
+      @data[address] = [details.latitude, details.longitude]
+    end
     erb :worldview
   end
 end

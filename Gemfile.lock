@@ -2,6 +2,7 @@ PATH
   remote: .
   specs:
     repsheet_visualizer (0.0.6)
+      geoip
       json
       redis
       sinatra
@@ -9,6 +10,7 @@ PATH
 GEM
   remote: https://rubygems.org/
   specs:
+    geoip (1.2.1)
     json (1.8.0)
     kgio (2.8.0)
     rack (1.5.2)
