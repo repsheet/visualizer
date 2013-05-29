@@ -56,24 +56,26 @@
 	    <th>Repsheet?</th>
 	    <th>Blacklist?</th>
       	    <th>Triggered Rules</th>
+	    <th>Offenses</th>
 	    <th>Activity</th>
 	    <th>Action</th>
 	  </tr>
 	</thead>
 	<tbody>
-	  <% @actors.each do |actor,data| %>
+	  <% @data.each do |actor,details| %>
 	    <tr>
 	      <td><%= actor %></td>
-	      <td><%= data[:repsheet] %></td>
-	      <td><%= data[:blacklist] %></td>
-	      <td><%= data[:detected] %></td>
+	      <td><%= details[:repsheet] %></td>
+	      <td><%= details[:blacklist] %></td>
+	      <td><%= details[:detected] %></td>
+	      <td><%= details[:total] %></td>
 	      <td><a href="<%= @mount %>activity/<%= actor %>">Click to see activity</a>
 	      <td>
 		<form method="post" action="<%= @mount %>action" class="button_to">
 		  <div>
-		    <input value="<%= action(data) %>" type="submit" />
+		    <input value="<%= action(details) %>" type="submit" />
 		    <input type="hidden" name="ip" value="<%= actor %>"/>
-		    <input type="hidden" name="action" value="<%= action(data) %>"/>
+		    <input type="hidden" name="action" value="<%= action(details) %>"/>
 		  </div>
 		</form>
 	      </td>
