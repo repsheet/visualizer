@@ -75,6 +75,7 @@ class RepsheetVisualizer < Sinatra::Base
     offenders = connection.keys("*:repsheet*").map {|o| o.split(":").first}
     offenders.each do |address|
       details = database.country(address)
+      next if details.nil?
       data[address] = [details.latitude, details.longitude]
     end
     data
