@@ -1,0 +1,26 @@
+#!/usr/bin/env ruby
+
+require 'redis'
+
+r = Redis.new
+r.flushdb
+
+255.times do |i|
+  r.set("1.1.1.#{i}:950001:count", rand(1000))
+  r.lpush("1.1.1.#{i}:requests", "request")
+  r.sadd("1.1.1.#{i}:detected", "950001")
+  if i > 220
+    r.set("1.1.1.#{i}:repsheet:blacklist", "true")
+  end
+end
+
+255.times do |i|
+  r.lpush("2.2.2.#{i}:requests", "request")
+end
+
+
+20.times do |i|
+  r.sadd("1.1.1.1:detected", "9900#{i + 10}")
+  r.set("1.1.1.1:9900#{i + 10}:count", 1000)
+end
+
