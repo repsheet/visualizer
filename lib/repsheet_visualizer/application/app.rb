@@ -11,8 +11,6 @@ class RepsheetVisualizer < Sinatra::Base
 
   helpers do
     def action(ip, blacklist=nil)
-      puts ip.inspect
-      puts blacklist.inspect
       blacklist = redis_connection.get("#{ip}:repsheet:blacklist") if blacklist.nil?
       if blacklist.nil? || blacklist == "false"
         "blacklist"
