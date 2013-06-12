@@ -10,8 +10,11 @@ class RepsheetVisualizer < Sinatra::Base
   end
 
   helpers do
-    def action(data)
-      if data[:blacklist].nil? || data[:blacklist] == "false"
+    def action(ip, blacklist=nil)
+      puts ip.inspect
+      puts blacklist.inspect
+      blacklist = redis_connection.get("#{ip}:repsheet:blacklist") if blacklist.nil?
+      if blacklist.nil? || blacklist == "false"
         "blacklist"
       else
         "allow"
@@ -39,17 +42,31 @@ class RepsheetVisualizer < Sinatra::Base
 
   # TODO: These methods should get moved out to another place
   def summary(connection)
-    actors = {}
+    suspects = {}
+    blacklisted = {}
+
     connection.keys("*:requests").map {|d| d.split(":").first}.reject {|ip| ip.empty?}.each do |actor|
-      actors[actor] = Hash.new 0
-      actors[actor][:repsheet] = connection.get("#{actor}:repsheet")
-      actors[actor][:blacklist] = connection.get("#{actor}:repsheet:blacklist")
-      actors[actor][:detected] = connection.smembers("#{actor}:detected").join(", ")
-      connection.smembers("#{actor}:detected").each do |rule|
-        actors[actor][:total] += connection.get("#{actor}:#{rule}:count").to_i
+      detected = connection.smembers("#{actor}:detected").join(", ")
+      blacklist = connection.get("#{actor}:repsheet:blacklist")
+
+      if !detected.empty? && blacklist != "true"
+        suspects[actor] = Hash.new 0
+        suspects[actor][:detected] = detected
+        connection.smembers("#{actor}:detected").each do |rule|
+          suspects[actor][:total] += connection.get("#{actor}:#{rule}:count").to_i
+        end
+      end
+
+      if blacklist == "true"
+        blacklisted[actor] = Hash.new 0
+        blacklisted[actor][:detected] = detected
+        connection.smembers("#{actor}:detected").each do |rule|
+          blacklisted[actor][:total] += connection.get("#{actor}:#{rule}:count").to_i
+        end
       end
     end
-    actors
+
+    [suspects.sort_by{|k,v| -v[:total]}.take(10), blacklisted]
   end
 
   def breakdown(connection)
@@ -83,7 +100,7 @@ class RepsheetVisualizer < Sinatra::Base
 
   # This is the actual application
   get '/' do
-    @data = summary(redis_connection)
+    @suspects, @blacklisted = summary(redis_connection)
     erb :actors
   end
 

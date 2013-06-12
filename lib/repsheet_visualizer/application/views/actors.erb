@@ -15,8 +15,44 @@
         padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
       }
 
+      #search {
+        padding-bottom: 20px;
+      }
+
       .actors {
         border-color: #FFF;
+      }
+
+      #suspects-wrapper {
+        float: left;
+      }
+
+      #suspects-table-wrapper {
+        overflow: auto;
+        max-height: 800px;
+
+      }
+
+      #suspects {
+        width: 550px;
+      }
+
+      #blacklisted-wrapper {
+        float: right;
+      }
+
+      #blacklisted-table-wrapper {
+        overflow: auto;
+        max-height: 570px;
+      }
+
+      #blacklisted {
+        width: 550px;
+      }
+
+      .clearfix {
+        display: inline-block;
+        clear: both;
       }
     </style>
     
@@ -49,40 +85,85 @@
     </div>
 
     <div class="container">
-      <table id="actors" class="tablesorter actors">
-        <thead>
-	  <tr>
-	    <th>IP</th>
-	    <th>Repsheet?</th>
-	    <th>Blacklist?</th>
-      	    <th>Triggered Rules</th>
-	    <th>Offenses</th>
-	    <th>Activity</th>
-	    <th>Action</th>
-	  </tr>
-	</thead>
-	<tbody>
-	  <% @data.each do |actor,details| %>
-	    <tr>
-	      <td><%= actor %></td>
-	      <td><%= details[:repsheet] %></td>
-	      <td><%= details[:blacklist] %></td>
-	      <td><%= details[:detected] %></td>
-	      <td><%= details[:total] %></td>
-	      <td><a href="<%= @mount %>activity/<%= actor %>">Click to see activity</a>
-	      <td>
-		<form method="post" action="<%= @mount %>action" class="button_to">
-		  <div>
-		    <input value="<%= action(details) %>" type="submit" />
-		    <input type="hidden" name="ip" value="<%= actor %>"/>
-		    <input type="hidden" name="action" value="<%= action(details) %>"/>
-		  </div>
-		</form>
-	      </td>
-	    </tr>
-	  <% end %>
-	</tbody>
-      </table>
+      <div id="search">
+	<label-for="ip"><b>Find Activity For an IP</b> </label>
+	<input name="ip" id="ip" type="text-field"/>
+	<input type="submit" id="search-button" value="Search"/>
+      </div>
+
+      <div id="suspects-wrapper">
+	<h2>Top 10 Suspect Actors</h2>
+	<div id="suspects-table-wrapper">
+	  <table id="suspects" class="tablesorter actors">
+            <thead>
+	      <tr>
+		<th>IP</th>
+                <th>Triggered Rules</th>
+		<th>Offenses</th>
+		<th>Activity</th>
+		<th>Action</th>
+	      </tr>
+	    </thead>
+	    <tbody>
+	      <% @suspects.each do |actor,details| %>
+	      <tr>
+		<td><%= actor %></td>
+		<td><%= details[:detected] %></td>
+		<td><%= details[:total] %></td>
+		<td width=100><a href="<%= @mount %>activity/<%= actor %>">Click to see activity</a>
+		<td width=90>
+		  <form method="post" action="<%= @mount %>action" class="button_to">
+		    <div>
+		      <input value="<%= action(actor) %>" type="submit" />
+		      <input type="hidden" name="ip" value="<%= actor %>"/>
+		      <input type="hidden" name="action" value="<%= action(actor) %>"/>
+		    </div>
+		  </form>
+		</td>
+	      </tr>
+	      <% end %>
+	    </tbody>
+	  </table>
+	</div>
+      </div>
+
+      <div class="clearfix"></div>
+
+      <div id="blacklisted-wrapper">
+	<h2>Blacklisted Actors</h2>
+	<div id="blacklisted-table-wrapper">
+	  <table id="blacklisted" class="tablesorter actors">
+            <thead>
+	      <tr>
+		<th>IP</th>
+                <th>Triggered Rules</th>
+		<th>Offenses</th>
+		<th>Activity</th>
+		<th>Action</th>
+	      </tr>
+	    </thead>
+	    <tbody>
+	      <% @blacklisted.each do |actor,details| %>
+	      <tr>
+		<td><%= actor %></td>
+		<td><%= details[:detected] %></td>
+		<td><%= details[:total] %></td>
+		<td width=100><a href="<%= @mount %>activity/<%= actor %>">Click to see activity</a>
+		<td width=70>
+		  <form method="post" action="<%= @mount %>action" class="button_to">
+		    <div>
+		      <input value="<%= action(actor, details[:blacklist]) %>" type="submit" />
+		      <input type="hidden" name="ip" value="<%= actor %>"/>
+		      <input type="hidden" name="action" value="<%= action(actor, details[:blacklist]) %>"/>
+		    </div>
+		  </form>
+		</td>
+	      </tr>
+	      <% end %>
+	    </tbody>
+	  </table>
+	</div>
+      </div>
     </div>
   </body>
 </html>
