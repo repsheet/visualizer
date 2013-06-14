@@ -38,6 +38,10 @@ class RepsheetVisualizer < Sinatra::Base
     defined?(settings.mount) ? (settings.mount + "/") : "/"
   end
 
+  def redis_expiry
+    defined?(settings.redis_expiry) ? (settings.redis_expiry) : (24 * 60 * 60)
+  end
+
   # TODO: These methods should get moved out to another place
   def summary(connection)
     suspects = {}
@@ -124,6 +128,7 @@ class RepsheetVisualizer < Sinatra::Base
       connection.set("#{params[:ip]}:repsheet:blacklist", "false")
     else
       connection.set("#{params[:ip]}:repsheet:blacklist", "true")
+      connection.expire("#{params[:ip]}:repsheet:blacklist", redis_expiry)
     end
     redirect back
   end
