@@ -47,23 +47,40 @@ class RepsheetVisualizer < Sinatra::Base
     suspects = {}
     blacklisted = {}
 
-    connection.keys("*:requests").map {|d| d.split(":").first}.reject {|ip| ip.empty?}.each do |actor|
-      detected = connection.smembers("#{actor}:detected").join(", ")
-      blacklist = connection.get("#{actor}:repsheet:blacklist")
-
-      if !detected.empty? && blacklist != "true"
+    if connection.exists("offenders")
+      connection.zrevrangebyscore("offenders", "+inf", "0").each do |actor|
         suspects[actor] = Hash.new 0
-        suspects[actor][:detected] = detected
-        connection.smembers("#{actor}:detected").each do |rule|
-          suspects[actor][:total] += connection.get("#{actor}:#{rule}:count").to_i
-        end
+        suspects[actor][:detected] = connection.smembers("#{actor}:detected").join(", ")
+        suspects[actor][:total] = connection.zscore("offenders", actor)
       end
 
-      if blacklist == "true"
+      connection.keys("*:*:blacklist").map {|d| d.split(":").first}.reject {|ip| ip.empty?}.each do |actor|
+        connection.get("#{actor}:repsheet:blacklist") == "true"
         blacklisted[actor] = Hash.new 0
-        blacklisted[actor][:detected] = detected
+        blacklisted[actor][:detected] = connection.smembers("#{actor}:detected").join(", ")
         connection.smembers("#{actor}:detected").each do |rule|
           blacklisted[actor][:total] += connection.get("#{actor}:#{rule}:count").to_i
+        end
+      end
+    else
+      connection.keys("*:requests").map {|d| d.split(":").first}.reject {|ip| ip.empty?}.each do |actor|
+        detected = connection.smembers("#{actor}:detected").join(", ")
+        blacklist = connection.get("#{actor}:repsheet:blacklist")
+
+        if !detected.empty? && blacklist != "true"
+          suspects[actor] = Hash.new 0
+          suspects[actor][:detected] = detected
+          connection.smembers("#{actor}:detected").each do |rule|
+            suspects[actor][:total] += connection.get("#{actor}:#{rule}:count").to_i
+          end
+        end
+
+        if blacklist == "true"
+          blacklisted[actor] = Hash.new 0
+          blacklisted[actor][:detected] = detected
+          connection.smembers("#{actor}:detected").each do |rule|
+            blacklisted[actor][:total] += connection.get("#{actor}:#{rule}:count").to_i
+          end
         end
       end
     end
