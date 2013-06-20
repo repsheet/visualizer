@@ -49,9 +49,10 @@ class RepsheetVisualizer < Sinatra::Base
 
     if connection.exists("offenders")
       connection.zrevrangebyscore("offenders", "+inf", "0").each do |actor|
+        next if connection.get("#{actor}:repsheet:blacklist") == "true"
         suspects[actor] = Hash.new 0
         suspects[actor][:detected] = connection.smembers("#{actor}:detected").join(", ")
-        suspects[actor][:total] = connection.zscore("offenders", actor)
+        suspects[actor][:total] = connection.zscore("offenders", actor).to_i
       end
 
       connection.keys("*:*:blacklist").map {|d| d.split(":").first}.reject {|ip| ip.empty?}.each do |actor|
@@ -142,7 +143,7 @@ class RepsheetVisualizer < Sinatra::Base
   post '/action' do
     connection = redis_connection
     if params["action"] == "allow"
-      connection.set("#{params[:ip]}:repsheet:blacklist", "false")
+      connection.del("#{params[:ip]}:repsheet:blacklist")
     else
       connection.set("#{params[:ip]}:repsheet:blacklist", "true")
       connection.expire("#{params[:ip]}:repsheet:blacklist", redis_expiry)
