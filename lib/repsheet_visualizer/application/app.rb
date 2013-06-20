@@ -39,7 +39,7 @@ class RepsheetVisualizer < Sinatra::Base
   end
 
   def redis_expiry
-    defined?(settings.redis_expiry) ? (settings.redis_expiry) : (24 * 60 * 60)
+    defined?(settings.redis_expiry) ? (settings.redis_expiry * 60 * 60) : (24 * 60 * 60)
   end
 
   # TODO: These methods should get moved out to another place
