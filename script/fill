@@ -7,15 +7,16 @@ r.flushdb
 
 255.times do |i|
   r.set("1.1.1.#{i}:950001:count", rand(1000))
-  r.lpush("1.1.1.#{i}:requests", "request")
+  r.lpush("1.1.1.#{i}:requests", "123, Chrome, GET, foo, bar")
   r.sadd("1.1.1.#{i}:detected", "950001")
   if i > 220
     r.set("1.1.1.#{i}:repsheet:blacklist", "true")
   end
+  r.expire("1.1.1.#{i}:requests", (24 * 60 * 60))
 end
 
 255.times do |i|
-  r.lpush("2.2.2.#{i}:requests", "request")
+  r.lpush("1.1.1.#{i}:requests", "123, Chrome, POST, foo, bar")
 end
 
 
@@ -24,3 +25,9 @@ end
   r.set("1.1.1.1:9900#{i + 10}:count", 1000)
 end
 
+r.lpush("1.1.1.1:requests", "123, Chrome, PUT, foo, bar")
+r.lpush("1.1.1.1:requests", "123, Chrome, DELETE, foo, bar")
+r.lpush("1.1.1.1:requests", "123, Chrome, HEAD, foo, bar")
+r.lpush("1.1.1.1:requests", "123, Chrome, TRACE, foo, bar")
+r.lpush("1.1.1.1:requests", "123, Chrome, OPTIONS, foo, bar")
+r.lpush("1.1.1.1:requests", "123, Chrome, CONNECT, foo, bar")
