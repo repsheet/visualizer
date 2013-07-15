@@ -56,13 +56,13 @@ class Backend
     suspects = {}
 
     connection.keys("*:requests").map {|d| d.split(":").first}.reject {|ip| ip.empty?}.each do |actor|
-      detected = connection.smembers("#{actor}:detected").join(", ")
+      detected = connection.smembers("#{actor}:detected")
       blacklist = connection.get("#{actor}:repsheet:blacklist")
 
       if !detected.empty? && blacklist != "true"
         suspects[actor] = Hash.new 0
-        suspects[actor][:detected] = detected
-        connection.smembers("#{actor}:detected").each do |rule|
+        suspects[actor][:detected] = detected.join(", ")
+        suspects[actor][:detected].each do |rule|
           suspects[actor][:total] += connection.get("#{actor}:#{rule}:count").to_i
         end
       end

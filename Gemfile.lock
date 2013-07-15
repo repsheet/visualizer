@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    repsheet_visualizer (0.1.6)
+    repsheet_visualizer (0.1.7)
       geoip
       json
       redis
@@ -10,6 +10,7 @@ PATH
 GEM
   remote: https://rubygems.org/
   specs:
+    diff-lcs (1.2.4)
     geoip (1.2.1)
     json (1.8.0)
     kgio (2.8.0)
@@ -19,6 +20,14 @@ GEM
     raindrops (0.11.0)
     rake (10.0.4)
     redis (3.0.4)
+    rspec (2.14.1)
+      rspec-core (~> 2.14.0)
+      rspec-expectations (~> 2.14.0)
+      rspec-mocks (~> 2.14.0)
+    rspec-core (2.14.3)
+    rspec-expectations (2.14.0)
+      diff-lcs (>= 1.1.3, < 2.0)
+    rspec-mocks (2.14.1)
     sinatra (1.4.3)
       rack (~> 1.4)
       rack-protection (~> 1.4)
@@ -36,4 +45,5 @@ DEPENDENCIES
   bundler
   rake
   repsheet_visualizer!
+  rspec
   unicorn
