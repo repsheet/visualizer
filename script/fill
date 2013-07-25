@@ -6,13 +6,15 @@ r = Redis.new
 r.flushdb
 
 255.times do |i|
-  r.set("1.1.1.#{i}:950001:count", rand(1000))
+  r.zincrby("1.1.1.#{i}:detected", rand(1000), "950001")
   r.lpush("1.1.1.#{i}:requests", "123, Chrome, GET, foo, bar")
-  r.sadd("1.1.1.#{i}:detected", "950001")
+
   if i > 220
     r.set("1.1.1.#{i}:repsheet:blacklist", "true")
   end
+
   r.expire("1.1.1.#{i}:requests", (24 * 60 * 60))
+  r.expire("1.1.1.#{i}:detected", (24 * 60 * 60))
 end
 
 255.times do |i|
@@ -21,8 +23,7 @@ end
 
 
 20.times do |i|
-  r.sadd("1.1.1.1:detected", "9900#{i + 10}")
-  r.set("1.1.1.1:9900#{i + 10}:count", 1000)
+  r.zincrby("1.1.1.1:detected", 1000, "9900#{i + 10}")
 end
 
 r.lpush("1.1.1.1:requests", "123, Chrome, PUT, foo, bar")
