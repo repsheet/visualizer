@@ -51,7 +51,7 @@ class Backend
     connection.zrevrangebyscore("offenders", "+inf", "0").each do |actor|
       next if connection.get("#{actor}:repsheet:blacklist") == "true"
       suspects[actor] = Hash.new 0
-      suspects[actor][:detected] = detected.join(", ")
+      suspects[actor][:detected] = triggered_rules(connection, actor).join(", ")
       suspects[actor][:total] = connection.zscore("offenders", actor).to_i
     end
 
