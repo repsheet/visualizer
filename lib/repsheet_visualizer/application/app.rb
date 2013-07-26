@@ -18,6 +18,10 @@ class RepsheetVisualizer < Sinatra::Base
         "allow"
       end
     end
+
+    def h(text)
+      Rack::Utils.escape_html(text)
+    end
   end
 
   def redis_connection
@@ -41,7 +45,6 @@ class RepsheetVisualizer < Sinatra::Base
     defined?(settings.redis_expiry) ? (settings.redis_expiry * 60 * 60) : (24 * 60 * 60)
   end
 
-  # This is the actual application
   get '/' do
     @suspects, @blacklisted = Backend.summary(redis_connection)
     erb :actors
@@ -59,7 +62,8 @@ class RepsheetVisualizer < Sinatra::Base
 
   get '/activity/:ip' do
     @ip = params[:ip]
-    @data = Backend.activity(redis_connection)
+    @data = Backend.activity(redis_connection, @ip)
+    @action = action(@ip)
     erb :activity
   end
 

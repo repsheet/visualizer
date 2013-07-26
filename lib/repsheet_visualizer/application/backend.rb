@@ -24,8 +24,8 @@ class Backend
     [{},{}]
   end
 
-  def self.activity(connection)
-    connection.lrange("#{@ip}:requests", 0, -1)
+  def self.activity(connection, actor)
+    connection.lrange("#{actor}:requests", 0, -1)
   end
 
   def self.worldview(connection, database)
@@ -52,10 +52,10 @@ class Backend
       next if connection.get("#{actor}:repsheet:blacklist") == "true"
       suspects[actor] = Hash.new 0
       suspects[actor][:detected] = triggered_rules(connection, actor).join(", ")
-      suspects[actor][:total] = connection.zscore("offenders", actor).to_i
+      suspects[actor][:total] = score_actor(connection, actor, nil, true)
     end
 
-    [suspects, blacklist(connection)]
+    [suspects, blacklist(connection, true)]
   end
 
   def self.standard(connection)
@@ -68,29 +68,31 @@ class Backend
       if !detected.empty? && blacklist != "true"
         suspects[actor] = Hash.new 0
         suspects[actor][:detected] = detected.join(", ")
-        suspects[actor][:total] = score_actor(connection, actor)
+        suspects[actor][:total] = score_actor(connection, actor, detected)
       end
     end
 
     [suspects, blacklist(connection)]
   end
 
-  def self.blacklist(connection)
+  def self.blacklist(connection, optimized=false)
     blacklisted = {}
 
     connection.keys("*:*:blacklist").map {|d| d.split(":").first}.reject {|ip| ip.empty?}.each do |actor|
       next unless connection.get("#{actor}:repsheet:blacklist") == "true"
-
+      detected = triggered_rules(connection, actor)
       blacklisted[actor] = Hash.new 0
-      blacklisted[actor][:detected] = triggered_rules(connection, actor).join(", ")
-      blacklisted[actor][:total] = score_actor(connection, actor)
+      blacklisted[actor][:detected] = detected.join(", ")
+      blacklisted[actor][:total] = score_actor(connection, actor, detected, optimized)
     end
 
     blacklisted
   end
 
-  def self.score_actor(connection, actor)
-    connection.zrange("#{actor}:detected", 0, -1).reduce(0) do |memo, rule|
+  def self.score_actor(connection, actor, detected, optimized=false)
+    return connection.zscore("offenders", "#{actor}").to_i
+
+    detected.reduce(0) do |memo, rule|
       memo += connection.zscore("#{actor}:detected", rule).to_i
     end
   end

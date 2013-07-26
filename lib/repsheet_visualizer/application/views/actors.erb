@@ -128,9 +128,9 @@
 		<td width=90>
 		  <form method="post" action="<%= @mount %>action" class="button_to">
 		    <div>
-		      <input value="<%= action(actor) %>" type="submit" />
+		      <input value="<%= action(actor, 'false') %>" type="submit" />
 		      <input type="hidden" name="ip" value="<%= actor %>"/>
-		      <input type="hidden" name="action" value="<%= action(actor) %>"/>
+		      <input type="hidden" name="action" value="<%= action(actor, 'false') %>"/>
 		    </div>
 		  </form>
 		</td>
@@ -166,9 +166,9 @@
 		<td width=70>
 		  <form method="post" action="<%= @mount %>action" class="button_to">
 		    <div>
-		      <input value="<%= action(actor, details[:blacklist]) %>" type="submit" />
+		      <input value="<%= action(actor, 'true') %>" type="submit" />
 		      <input type="hidden" name="ip" value="<%= actor %>"/>
-		      <input type="hidden" name="action" value="<%= action(actor, details[:blacklist]) %>"/>
+		      <input type="hidden" name="action" value="<%= action(actor, 'true') %>"/>
 		    </div>
 		  </form>
 		</td>
