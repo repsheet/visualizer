@@ -55,7 +55,7 @@ class Backend
       suspects[actor][:total] = score_actor(connection, actor, nil, true)
     end
 
-    [suspects, blacklist(connection, true)]
+    [suspects, blacklist(connection)]
   end
 
   def self.standard(connection)
@@ -90,7 +90,7 @@ class Backend
   end
 
   def self.score_actor(connection, actor, detected, optimized=false)
-    return connection.zscore("offenders", "#{actor}").to_i
+    return connection.zscore("offenders", "#{actor}").to_i if optimized
 
     detected.reduce(0) do |memo, rule|
       memo += connection.zscore("#{actor}:detected", rule).to_i
