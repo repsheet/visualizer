@@ -72,8 +72,9 @@ class RepsheetVisualizer < Sinatra::Base
     if params["action"] == "allow"
       connection.del("#{params[:ip]}:repsheet:blacklist")
     else
+      ttl = connection.ttl("#{params[:ip]}:requests")
       connection.set("#{params[:ip]}:repsheet:blacklist", "true")
-      connection.expire("#{params[:ip]}:repsheet:blacklist", redis_expiry)
+      connection.expire("#{params[:ip]}:repsheet:blacklist", ttl)
     end
     redirect back
   end
