@@ -10,18 +10,14 @@ class Backend
   end
 
   def self.breakdown(connection)
-    # data = {}
-    # offenders = connection.keys("*:repsheet").map {|o| o.split(":").first}
-    # offenders.each do |offender|
-    #   data[offender] = {"totals" => {}}
-    #   connection.smembers("#{offender}:detected").each do |rule|
-    #     data[offender]["totals"][rule] = connection.get "#{offender}:#{rule}:count"
-    #   end
-    # end
-    # aggregate = Hash.new 0
-    # data.each {|ip,data| data["totals"].each {|rule,count| aggregate[rule] += count.to_i}}
-    # [data, aggregate]
-    [{},{}]
+    data = Hash.new(0)
+    offenders = connection.keys("*:repsheet").map {|o| o.split(":").first}
+    offenders.each do |offender|
+      connection.zrange("#{offender}:detected", 0, -1).each do |rule|
+        data[rule] += connection.zscore("#{offender}:detected", rule).to_i
+      end
+    end
+    data.take(10)
   end
 
   def self.activity(connection, actor)

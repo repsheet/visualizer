@@ -6,8 +6,9 @@ r = Redis.new
 r.flushdb
 
 255.times do |i|
-  r.zincrby("1.1.1.#{i}:detected", rand(1000), "950001")
+  r.zincrby("1.1.1.#{i}:detected", rand(100), "950001")
   r.lpush("1.1.1.#{i}:requests", "123, Chrome, GET, foo, bar")
+  r.set("1.1.1.#{i}:repsheet", true)
 
   if i > 220
     r.set("1.1.1.#{i}:repsheet:blacklist", "true")

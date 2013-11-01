@@ -29,7 +29,7 @@
       }
     </style>
     <link href="<%= @mount %>css/bootstrap-responsive.css" rel="stylesheet">
-    
+
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
       <script src="<%= @mount %>javascripts/html5shiv.js"></script>
@@ -59,15 +59,8 @@
 
     <div class="container">
       <div id="total">
-        <p class="announce">Mod Security Rule Breakdown</p>
-	<script>pie(<%= @aggregate.collect {|k,v| {"legendLabel" => k, "magnitude" => v}}.to_json %>);</script>
-      </div>
-
-      <div id="individual">
-        <p class="announce">Breakdown by IP</p>
-	<% @data.each do |ip, data| %>
-	  <script>donut(<%= data["totals"].keys.to_json %>, <%= {:label => ip, :pct => data["totals"].values}.to_json %>);</script>
-        <% end %>
+        <p class="announce">Top 10 Mod Security Rules Triggered</p>
+	<script>pie(<%= @data.collect {|k,v| {"legendLabel" => k, "magnitude" => v}}.to_json %>);</script>
       </div>
     </div>
   </body>

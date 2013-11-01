@@ -51,7 +51,7 @@ class RepsheetVisualizer < Sinatra::Base
   end
 
   get '/breakdown' do
-    @data, @aggregate = Backend.breakdown(redis_connection)
+    @data = Backend.breakdown(redis_connection)
     erb :breakdown
   end
 
