@@ -1,4 +1,4 @@
-# Mod Repsheet Vizualizer
+# Mod Repsheet Vizualizer [![Build Status](https://secure.travis-ci.org/repsheet/visualizer.png)](http://travis-ci.org/repsheet/visualizer?branch=master)
 
 ## Setup
 
