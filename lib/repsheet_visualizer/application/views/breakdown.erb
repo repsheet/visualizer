@@ -27,6 +27,11 @@
         font-size: 20px;
         font-weight: bold;
       }
+
+     svg {
+       display: block;
+       margin: auto;
+     }
     </style>
     <link href="<%= @mount %>css/bootstrap-responsive.css" rel="stylesheet">
 
@@ -60,7 +65,9 @@
     <div class="container">
       <div id="total">
         <p class="announce">Top 10 Mod Security Rules Triggered</p>
-	<script>pie(<%= @data.collect {|k,v| {"legendLabel" => k, "magnitude" => v}}.to_json %>);</script>
+	<div id="chart" class="offset3 span6">
+	  <script>pie(<%= @data.collect {|k,v| {"legendLabel" => k, "magnitude" => v}}.to_json %>);</script>
+	</div>
       </div>
     </div>
   </body>
