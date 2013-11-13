@@ -1,35 +1,28 @@
 $(function () {
-
-	if (!$('#area-chart').length) { return false; }
-	
-	area ();	
-
-	$(window).resize (App.debounce (area, 250));
-
+    if (!$('#area-chart').length) { return false; }
+    area();
+    $(window).resize (App.debounce (area, 250));
 });
 
 function area () {
-	$('#area-chart').empty ();
+    $('#area-chart').empty ();
 
-	Morris.Area ({
-		element: 'area-chart',
-		data: [
-			{period: '2010 Q1', iphone: 2666, ipad: null, itouch: 2647},
-			{period: '2010 Q2', iphone: 2778, ipad: 2294, itouch: 2441},
-			{period: '2010 Q3', iphone: 4912, ipad: 1969, itouch: 2501},
-			{period: '2010 Q4', iphone: 3767, ipad: 3597, itouch: 5689},
-			{period: '2011 Q1', iphone: 6810, ipad: 1914, itouch: 2293},
-			{period: '2011 Q2', iphone: 5670, ipad: 4293, itouch: 1881},
-			{period: '2011 Q3', iphone: 4820, ipad: 3795, itouch: 1588},
-			{period: '2011 Q4', iphone: 15073, ipad: 5967, itouch: 5175},
-			{period: '2012 Q1', iphone: 10687, ipad: 4460, itouch: 2028},
-			{period: '2012 Q2', iphone: 8432, ipad: 5713, itouch: 1791}
-		],
-		xkey: 'period',
-		ykeys: ['iphone', 'ipad', 'itouch'],
-		labels: ['iPhone', 'iPad', 'iPod Touch'],
-		pointSize: 3,
-		hideHover: 'auto',
-		lineColors: [App.chartColors[0], App.chartColors[1], App.chartColors[3]]
-	});
+    Morris.Area ({
+        element: 'area-chart',
+        data: [
+            {date: '2013-11-06', blacklisted: 15, suspect: 90, whitelisted: 2},
+            {date: '2013-11-07', blacklisted: 5, suspect: 89, whitelisted: 1},
+            {date: '2013-11-08', blacklisted: 34, suspect: 196, whitelisted: 0},
+            {date: '2013-11-09', blacklisted: 37, suspect: 359, whitelisted: 0},
+            {date: '2013-11-10', blacklisted: 68, suspect: 560, whitelisted: 0},
+            {date: '2013-11-11', blacklisted: 23, suspect: 201, whitelisted: 1},
+            {date: '2013-11-12', blacklisted: 50, suspect: 379, whitelisted: 0}
+        ],
+        xkey: 'date',
+        ykeys: ['blacklisted', 'suspect', 'whitelisted'],
+        labels: ['Blacklisted', 'Suspect', 'Whitelisted'],
+        pointSize: 5,
+        hideHover: 'auto',
+        lineColors: [App.chartColors[0], App.chartColors[1], App.chartColors[3]]
+    });
 }
