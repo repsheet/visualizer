@@ -21,6 +21,11 @@
 
     <script src="<%= @mount %>javascripts/d3.v3.min.js" type="text/javascript"></script>
     <script src="<%= @mount %>javascripts/application.js" type="text/javascript"></script>
+    <script>
+     function activity(ip) {
+       return "<%= @mount %>activity/" + ip;
+     }
+    </script>
   </head>
 
   <body>
