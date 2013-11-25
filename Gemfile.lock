@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    repsheet_visualizer (0.2.1)
+    repsheet_visualizer (0.2.2)
       geoip
       json
       redis
