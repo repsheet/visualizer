@@ -26,7 +26,7 @@ class Backend
 
   def self.worldview(connection, database)
     data = {}
-    offenders = connection.keys("*:repsheet*").map {|o| o.split(":").first}
+    offenders = connection.keys("*:repsheet:blacklist").map {|o| o.split(":").first}
     offenders.each do |address|
       details = database.country(address)
       next if details.nil?
