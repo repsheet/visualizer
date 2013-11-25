@@ -82,8 +82,8 @@ class RepsheetVisualizer < Sinatra::Base
       connection.srem("repsheet:blacklist:history", params[:ip])
     elsif params["action"] == "blacklist"
       ttl = connection.ttl("#{params[:ip]}:requests")
-      connection.set("#{params[:ip]}:repsheet:blacklist", "true")
-      connection.expire("#{params[:ip]}:repsheet:blacklist", ttl)
+      connection.setex("#{params[:ip]}:repsheet:blacklist", ttl, "true")
+      connection.sadd("repsheet:blacklist:history", params[:ip])
       connection.del("#{params[:ip]}:repsheet:whitelist")
     end
     redirect back
