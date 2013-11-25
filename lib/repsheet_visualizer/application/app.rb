@@ -15,7 +15,7 @@ class RepsheetVisualizer < Sinatra::Base
       if blacklist.nil? || blacklist == "false"
         "blacklist"
       else
-        "allow"
+        "whitelist"
       end
     end
 
@@ -74,12 +74,17 @@ class RepsheetVisualizer < Sinatra::Base
 
   post '/action' do
     connection = redis_connection
-    if params["action"] == "allow"
+    if params["action"] == "whitelist"
+      connection.set("#{params[:ip]}:repsheet:whitelist", "true")
       connection.del("#{params[:ip]}:repsheet:blacklist")
-    else
+      connection.del("#{params[:ip]}:repsheet")
+      connection.del("#{params[:ip]}:detected")
+      connection.srem("repsheet:blacklist:history", params[:ip])
+    elsif params["action"] == "blacklist"
       ttl = connection.ttl("#{params[:ip]}:requests")
       connection.set("#{params[:ip]}:repsheet:blacklist", "true")
       connection.expire("#{params[:ip]}:repsheet:blacklist", ttl)
+      connection.del("#{params[:ip]}:repsheet:whitelist")
     end
     redirect back
   end

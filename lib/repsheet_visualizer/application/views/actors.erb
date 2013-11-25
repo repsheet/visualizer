@@ -67,7 +67,7 @@
 		<td><%= details[:detected] %></td>
 		<td><%= details[:total] %></td>
 		<td width=100><a href="<%= @mount %>activity/<%= actor %>">Click to see activity</a>
-		<td width=90>
+		<td width=90 align="center">
 		  <form method="post" action="<%= @mount %>action" class="button_to">
 		    <div>
 		      <input value="<%= action(actor, 'false') %>" type="submit" />
@@ -105,7 +105,7 @@
 		<td><%= details[:detected] %></td>
 		<td><%= details[:total] %></td>
 		<td width=100><a href="<%= @mount %>activity/<%= actor %>">Click to see activity</a>
-		<td width=70>
+		<td width=90 align="center">
 		  <form method="post" action="<%= @mount %>action" class="button_to">
 		    <div>
 		      <input value="<%= action(actor, 'true') %>" type="submit" />
