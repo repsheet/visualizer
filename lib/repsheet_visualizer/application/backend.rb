@@ -85,6 +85,10 @@ class Backend
     blacklisted
   end
 
+  def self.whitelist(connection)
+    connection.keys("*:*:whitelist").map {|record| record.split(":").first}.reject {|ip| ip.empty?}
+  end
+
   def self.score_actor(connection, actor, detected, optimized=false)
     return connection.zscore("offenders", "#{actor}").to_i if optimized
 

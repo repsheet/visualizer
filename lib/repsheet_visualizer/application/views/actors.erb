@@ -10,51 +10,7 @@
     <link href="<%= @mount %>css/bootstrap.css" rel="stylesheet">
     <link href="<%= @mount %>css/bootstrap-responsive.css" rel="stylesheet">
     <link href="<%= @mount %>css/blue/style.css" rel="stylesheet">
-    <style>
-      body {
-        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
-      }
-
-      #search {
-        padding-bottom: 20px;
-      }
-
-      .actors {
-        border-color: #FFF;
-      }
-
-      #suspects-wrapper {
-        float: left;
-      }
-
-      #suspects-table-wrapper {
-        overflow: auto;
-        max-height: 800px;
-
-      }
-
-      #suspects {
-        width: 550px;
-      }
-
-      #blacklisted-wrapper {
-        float: right;
-      }
-
-      #blacklisted-table-wrapper {
-        overflow: auto;
-        max-height: 570px;
-      }
-
-      #blacklisted {
-        width: 550px;
-      }
-
-      .clearfix {
-        display: inline-block;
-        clear: both;
-      }
-    </style>
+    <link href="<%= @mount %>css/application.css" rel="stylesheet">
 
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
@@ -66,20 +22,6 @@
     <script src="<%= @mount %>javascripts/jquery-latest.js" type="text/javascript"></script>
     <script src="<%= @mount %>javascripts/jquery.tablesorter.min.js" type="text/javascript"></script>
     <script src="<%= @mount %>javascripts/application.js" type="text/javascript"></script>
-
-    <script type="text/javascript">
-      function activity(ip) {
-        return "<%= @mount %>activity/" + ip;
-      }
-
-      $(document).ready(function() {
-        $("#search-button").click(function() {
-          ip = $("#ip").val();
-          if (ip === "") return;
-          window.location = activity(ip);
-        });
-      });
-    </script>
   </head>
 
   <body>
@@ -90,20 +32,20 @@
 	  <div class="nav-collapse collapse">
 	    <ul class="nav">
 	      <li class="active"><a href="<%= @mount %>">Actors</a></li>
+	      <li><a href="<%= @mount %>whitelist">Whitelist</a></li>
 	      <li><a href="<%= @mount %>breakdown">Breakdown</a></li>
 	      <li><a href="<%= @mount %>worldview">Worldview</a></li>
 	    </ul>
+	  </div>
+	  <div id="search">
+	    <input name="ip" id="ip" type="text-field" placeholder="Find Activity For an IP"/>
+	    <input type="submit" id="search-button" value="Search"/>
 	  </div>
         </div>
       </div>
     </div>
 
     <div class="container">
-      <div id="search">
-	<label-for="ip"><b>Find Activity For an IP</b> </label>
-	<input name="ip" id="ip" type="text-field"/>
-	<input type="submit" id="search-button" value="Search"/>
-      </div>
 
       <div id="suspects-wrapper">
 	<h2>Top 10 Suspect Actors</h2>

@@ -50,6 +50,11 @@ class RepsheetVisualizer < Sinatra::Base
     erb :actors
   end
 
+  get '/whitelist' do
+    @whitelist = Backend.whitelist(redis_connection)
+    erb :whitelist
+  end
+
   get '/breakdown' do
     @data = Backend.breakdown(redis_connection)
     erb :breakdown

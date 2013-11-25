@@ -1,0 +1,64 @@
+body {
+    padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+}
+
+#search {
+    float: right;
+    padding-top: 7px;
+}
+
+.actors {
+    border-color: #FFF;
+}
+
+#suspects-wrapper {
+    float: left;
+}
+
+#suspects-table-wrapper {
+    overflow: auto;
+    max-height: 800px;
+
+}
+
+#suspects {
+    width: 550px;
+}
+
+#blacklisted-wrapper {
+    float: right;
+}
+
+#blacklisted-table-wrapper {
+    overflow: auto;
+    max-height: 570px;
+}
+
+#blacklisted {
+    width: 550px;
+}
+
+.clearfix {
+    display: inline-block;
+    clear: both;
+}
+
+.chartLabel {
+    font: 16px sans-serif;
+    fill: #666;
+}
+
+.arcLabel {
+    font: 10px sans-serif;
+    fill: #fff;
+}
+
+.announce {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+svg {
+    display: block;
+    margin: auto;
+}
