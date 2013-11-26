@@ -22,17 +22,24 @@
 
     <link rel="stylesheet" href="./css/App.css" type="text/css" />
     <link rel="stylesheet" href="./css/custom.css" type="text/css" />
-  </head>
+    <style>
+     #header {
+       padding-top: 20px;
+       padding-left: 10px;
+     }
 
+     h3.logo-head {
+       color: white;
+     }
+    </style>
+  </head>
   <body>
 
     <div id="wrapper">
       <header id="header">
-        <h1 id="site-logo">
-          <a href="./index.html">
-            <img src="./img/logos/logo.png" alt="Site Logo" />
-          </a>
-        </h1>
+        <a href="index.html" style="text-decoration:none;">
+	  <h3 class="logo-head">Repsheet Visualizer</h2>
+        </a>
 
         <a href="javascript:;" data-toggle="collapse" data-target=".top-bar-collapse" id="top-bar-toggle" class="navbar-toggle collapsed">
           <i class="fa fa-cog"></i>
@@ -94,14 +101,14 @@
 
             <li>
               <a href="javascript:;">
-                <i class="fa fa-table"></i>
+                <i class="fa fa-bar-chart-o"></i>
 		ModSecurity Analysis
               </a>
             </li>
 
             <li>
               <a href="javascript:;">
-                <i class="fa fa-list-alt"></i>
+                <i class="fa fa-globe"></i>
 		World View
               </a>
             </li>
@@ -123,7 +130,7 @@
 
           <div class="row">
             <div class="col-md-3 col-sm-6">
-              <a href="javascript:;" class="dashboard-stat primary">
+              <a href="blacklist.html" class="dashboard-stat primary">
                 <div class="details">
                   <span class="content">Blacklisted Actors</span>
                   <span class="value">27</span>
@@ -134,7 +141,7 @@
             </div>
 
             <div class="col-md-3 col-sm-6">
-              <a href="javascript:;" class="dashboard-stat secondary">
+              <a href="suspects.html" class="dashboard-stat secondary">
                 <div class="details">
                   <span class="content">Suspect Actors</span>
                   <span class="value">94</span>
@@ -145,7 +152,7 @@
             </div>
 
             <div class="col-md-3 col-sm-6">
-              <a href="javascript:;" class="dashboard-stat tertiary">
+              <a href="whitelist.html" class="dashboard-stat tertiary">
                 <div class="details">
                   <span class="content">Whitelisted Actors</span>
                   <span class="value">10</span>
@@ -161,11 +168,9 @@
                   <span class="content">Blacklist Total</span>
                   <span class="value">2,789</span>
                 </div>
-
-                <i class="fa fa-play-circle more"></i>
               </a>
             </div>
-          </div> <!-- /.row -->
+          </div>
 
           <div class="row">
             <div class="col-md-12">

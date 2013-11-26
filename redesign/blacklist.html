@@ -22,17 +22,26 @@
 
     <link rel="stylesheet" href="./css/App.css" type="text/css" />
     <link rel="stylesheet" href="./css/custom.css" type="text/css" />
+
+    <style>
+     #header {
+       padding-top: 20px;
+       padding-left: 10px;
+     }
+
+     h3.logo-head {
+       color: white;
+     }
+    </style>
   </head>
 
   <body>
 
     <div id="wrapper">
       <header id="header">
-        <h1 id="site-logo">
-          <a href="./index.html">
-            <img src="./img/logos/logo.png" alt="Site Logo" />
-          </a>
-        </h1>
+        <a href="index.html" style="text-decoration:none;">
+	  <h3 class="logo-head">Repsheet Visualizer</h2>
+        </a>
 
         <a href="javascript:;" data-toggle="collapse" data-target=".top-bar-collapse" id="top-bar-toggle" class="navbar-toggle collapsed">
           <i class="fa fa-cog"></i>
@@ -94,14 +103,14 @@
 
             <li>
               <a href="javascript:;">
-                <i class="fa fa-table"></i>
+                <i class="fa fa-bar-chart-o"></i>
 		ModSecurity Analysis
               </a>
             </li>
 
             <li>
               <a href="javascript:;">
-                <i class="fa fa-list-alt"></i>
+                <i class="fa fa-globe"></i>
 		World View
               </a>
             </li>
