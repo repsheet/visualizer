@@ -1,4 +1,8 @@
 class Backend
+  def self.blacklist_total(connection)
+    connection.smembers("repsheet:blacklist:history").size
+  end
+  
   def self.summary(connection)
     if connection.exists("offenders")
       suspects, blacklisted = optimized(connection)
@@ -49,6 +53,7 @@ class Backend
       suspects[actor] = Hash.new 0
       suspects[actor][:detected] = triggered_rules(connection, actor).join(", ")
       suspects[actor][:total] = score_actor(connection, actor, nil, true)
+      suspects[actor][:requests] = connection.llen("#{actor}:requests")
     end
 
     [suspects, blacklist(connection)]
@@ -65,6 +70,7 @@ class Backend
         suspects[actor] = Hash.new 0
         suspects[actor][:detected] = detected.join(", ")
         suspects[actor][:total] = score_actor(connection, actor, detected)
+        suspects[actor][:requests] = connection.llen("#{actor}:requests")
       end
     end
 
@@ -80,6 +86,7 @@ class Backend
       blacklisted[actor] = Hash.new 0
       blacklisted[actor][:detected] = detected.join(", ")
       blacklisted[actor][:total] = score_actor(connection, actor, detected, optimized)
+      blacklisted[actor][:requests] = connection.llen("#{actor}:requests")
     end
 
     blacklisted

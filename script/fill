@@ -12,6 +12,7 @@ r.flushdb
 
   if i > 220
     r.set("1.1.1.#{i}:repsheet:blacklist", "true")
+    r.sadd("repsheet:blacklist:history", "1.1.1.#{i}")
   end
 
   r.expire("1.1.1.#{i}:requests", (24 * 60 * 60))
@@ -38,3 +39,4 @@ r.set("5.5.5.5:repsheet:whitelist", "true")
 r.set("5.5.5.6:repsheet:whitelist", "true")
 r.set("5.5.5.7:repsheet:whitelist", "true")
 r.set("5.5.5.8:repsheet:whitelist", "true")
+

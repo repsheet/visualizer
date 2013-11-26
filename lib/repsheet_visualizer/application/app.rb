@@ -47,7 +47,9 @@ class RepsheetVisualizer < Sinatra::Base
 
   get '/' do
     @suspects, @blacklisted = Backend.summary(redis_connection)
-    erb :actors
+    @whitelist = Backend.whitelist(redis_connection)
+    @blacklist_total = Backend.blacklist_total(redis_connection)
+    erb :index
   end
 
   get '/whitelist' do
