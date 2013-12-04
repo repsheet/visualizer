@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+  <head>
+    <title>Repsheet::Visualizer</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="">
+    <meta name="author" content="Aaron Bedra" />
+
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400italic,600italic,800italic,400,600,800" type="text/css">
+
+    <link rel="stylesheet" href="<%= @mount %>stylesheets/font-awesome.min.css" type="text/css" />
+    <link rel="stylesheet" href="<%= @mount %>stylesheets/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="<%= @mount %>js/libs/css/ui-lightness/jquery-ui-1.9.2.custom.css" type="text/css" />
+
+    <link rel="stylesheet" href="<%= @mount %>js/plugins/icheck/skins/minimal/blue.css" type="text/css" />
+    <link rel="stylesheet" href="<%= @mount %>js/plugins/select2/select2.css" type="text/css" />
+    <link rel="stylesheet" href="<%= @mount %>js/plugins/fullcalendar/fullcalendar.css" type="text/css" />
+
+    <link rel="stylesheet" href="<%= @mount %>stylesheets/App.css" type="text/css" />
+    <link rel="stylesheet" href="<%= @mount %>stylesheets/custom.css" type="text/css" />
+    <style>
+     #header {
+       padding-top: 20px;
+       padding-left: 10px;
+     }
+
+     h3.logo-head {
+       color: white;
+     }
+    </style>
+  </head>
+  <body>
+
+    <div id="wrapper">
+      <header id="header">
+        <a href="index.html" style="text-decoration:none;">
+          <h3 class="logo-head">Repsheet Visualizer</h3>
+        </a>
+
+        <a href="javascript:;" data-toggle="collapse" data-target=".top-bar-collapse" id="top-bar-toggle" class="navbar-toggle collapsed">
+          <i class="fa fa-cog"></i>
+        </a>
+
+        <a href="javascript:;" data-toggle="collapse" data-target=".sidebar-collapse" id="sidebar-toggle" class="navbar-toggle collapsed">
+          <i class="fa fa-reorder"></i>
+        </a>
+      </header>
+
+      <nav id="top-bar" class="collapse top-bar-collapse">
+        <ul class="nav navbar-nav pull-left">
+          <li class="">
+            <a href="./index.html">
+              <i class="fa fa-home"></i>
+              Home
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <%= yield %>
+
+    </div>
+
+    <footer id="footer">
+      <ul class="nav pull-right">
+        <li>
+          Copyright &copy; 2013, Aaron Bedra.
+        </li>
+      </ul>
+    </footer>
+
+    <script src="./js/libs/jquery-1.9.1.min.js"></script>
+    <script src="./js/libs/jquery-ui-1.9.2.custom.min.js"></script>
+    <script src="./js/libs/bootstrap.min.js"></script>
+
+    <script src="./js/plugins/icheck/jquery.icheck.min.js"></script>
+    <script src="./js/plugins/select2/select2.js"></script>
+    <script src="./js/plugins/tableCheckable/jquery.tableCheckable.js"></script>
+
+    <script src="./js/App.js"></script>
+
+    <script src="./js/libs/raphael-2.1.2.min.js"></script>
+    <script src="./js/plugins/morris/morris.min.js"></script>
+
+    <script src="./js/demos/charts/morris/area.js"></script>
+    <script src="./js/demos/charts/morris/donut.js"></script>
+
+    <script src="./js/plugins/sparkline/jquery.sparkline.min.js"></script>
+
+    <script src="./js/plugins/fullcalendar/fullcalendar.min.js"></script>
+    <script src="./js/demos/calendar.js"></script>
+
+    <script src="./js/demos/dashboard.js"></script>
+  </body>
+</html>

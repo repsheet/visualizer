@@ -57,6 +57,16 @@ class RepsheetVisualizer < Sinatra::Base
     erb :whitelist
   end
 
+  get '/blacklist' do
+    @blacklist = Backend.blacklist(redis_connection)
+    erb :blacklist
+  end
+
+  get '/suspects' do
+    @suspects, _ = Backend.suspects(redis_connection)
+    erb :suspects
+  end
+
   get '/breakdown' do
     @data = Backend.breakdown(redis_connection)
     erb :breakdown

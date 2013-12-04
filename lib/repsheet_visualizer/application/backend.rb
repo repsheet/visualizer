@@ -2,7 +2,7 @@ class Backend
   def self.blacklist_total(connection)
     connection.smembers("repsheet:blacklist:history").size
   end
-  
+
   def self.summary(connection)
     if connection.exists("offenders")
       suspects, blacklisted = optimized(connection)
@@ -11,6 +11,14 @@ class Backend
     end
 
     [suspects.sort_by{|k,v| -v[:total]}.take(10), blacklisted]
+  end
+
+  def self.suspects(connection)
+    if connection.exists("offenders")
+      suspects = optimized(connection)
+    else
+      suspects = standard(connection)
+    end
   end
 
   def self.breakdown(connection)

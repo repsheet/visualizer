@@ -1,284 +1,188 @@
-<!DOCTYPE html>
-<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
-  <head>
-    <title>Repsheet::Visualizer</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="">
-    <meta name="author" content="Aaron Bedra" />
+<div id="sidebar-wrapper" class="collapse sidebar-collapse">
+  <div id="search">
+    <form>
+      <input class="form-control input-sm" type="text" name="search" placeholder="Search..." />
+      <button type="submit" id="search-btn" class="btn"><i class="fa fa-search"></i></button>
+    </form>
+  </div>
 
-    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400italic,600italic,800italic,400,600,800" type="text/css">
-
-    <link rel="stylesheet" href="<%= @mount %>stylesheets/font-awesome.min.css" type="text/css" />
-    <link rel="stylesheet" href="<%= @mount %>stylesheets/bootstrap.min.css" type="text/css" />
-    <link rel="stylesheet" href="<%= @mount %>js/libs/css/ui-lightness/jquery-ui-1.9.2.custom.css" type="text/css" />
-
-    <link rel="stylesheet" href="<%= @mount %>js/plugins/icheck/skins/minimal/blue.css" type="text/css" />
-    <link rel="stylesheet" href="<%= @mount %>js/plugins/select2/select2.css" type="text/css" />
-    <link rel="stylesheet" href="<%= @mount %>js/plugins/fullcalendar/fullcalendar.css" type="text/css" />
-
-    <link rel="stylesheet" href="<%= @mount %>stylesheets/App.css" type="text/css" />
-    <link rel="stylesheet" href="<%= @mount %>stylesheets/custom.css" type="text/css" />
-    <style>
-     #header {
-       padding-top: 20px;
-       padding-left: 10px;
-     }
-
-     h3.logo-head {
-       color: white;
-     }
-    </style>
-  </head>
-  <body>
-
-    <div id="wrapper">
-      <header id="header">
-        <a href="index.html" style="text-decoration:none;">
-          <h3 class="logo-head">Repsheet Visualizer</h2>
+  <nav id="sidebar">
+    <ul id="main-nav" class="open-active">
+      <li class="active">
+        <a href="<%= @mount %>">
+          <i class="fa fa-dashboard"></i>
+          Dashboard
         </a>
+      </li>
 
-        <a href="javascript:;" data-toggle="collapse" data-target=".top-bar-collapse" id="top-bar-toggle" class="navbar-toggle collapsed">
-          <i class="fa fa-cog"></i>
+      <li>
+        <a href="<%= @mount%>blacklist">
+          <i class="fa fa-ban"></i>
+          Blacklist
         </a>
+      </li>
 
-        <a href="javascript:;" data-toggle="collapse" data-target=".sidebar-collapse" id="sidebar-toggle" class="navbar-toggle collapsed">
-          <i class="fa fa-reorder"></i>
+      <li>
+        <a href="<%= @mount%>suspects">
+          <i class="fa fa-gavel"></i>
+          Suspects
         </a>
-      </header>
+      </li>
 
-      <nav id="top-bar" class="collapse top-bar-collapse">
-        <ul class="nav navbar-nav pull-left">
-          <li class="">
-            <a href="./index.html">
-              <i class="fa fa-home"></i>
-              Home
-            </a>
-          </li>
-        </ul>
-      </nav>
+      <li>
+        <a href="<%= @mount%>whitelist">
+          <i class="fa fa-thumbs-o-up"></i>
+          Whitelist
+        </a>
+      </li>
 
-      <div id="sidebar-wrapper" class="collapse sidebar-collapse">
-        <div id="search">
-          <form>
-            <input class="form-control input-sm" type="text" name="search" placeholder="Search..." />
-            <button type="submit" id="search-btn" class="btn"><i class="fa fa-search"></i></button>
-          </form>
-        </div>
+      <li>
+        <a href="javascript:;">
+          <i class="fa fa-bar-chart-o"></i>
+          ModSecurity Analysis
+        </a>
+      </li>
 
-        <nav id="sidebar">
-          <ul id="main-nav" class="open-active">
-            <li class="active">
-              <a href="./index.html">
-                <i class="fa fa-dashboard"></i>
-                Dashboard
-              </a>
-            </li>
+      <li>
+        <a href="javascript:;">
+          <i class="fa fa-globe"></i>
+          World View
+        </a>
+      </li>
+    </ul>
+  </nav>
+</div>
 
-            <li>
-              <a href="blacklist.html">
-                <i class="fa fa-ban"></i>
-                Blacklist
-              </a>
-            </li>
+<div id="content">
+  <div id="content-header">
+    <h1>Dashboard</h1>
+  </div>
 
-            <li>
-              <a href="suspects.html">
-                <i class="fa fa-gavel"></i>
-                Suspects
-              </a>
-            </li>
+  <div id="content-container">
+    <div>
+      <h4 class="heading-inline">Daily Stats</h4>
+    </div>
 
-            <li>
-              <a href="whitelist.html">
-                <i class="fa fa-thumbs-o-up"></i>
-                Whitelist
-              </a>
-            </li>
+    <br />
 
-            <li>
-              <a href="javascript:;">
-                <i class="fa fa-bar-chart-o"></i>
-                ModSecurity Analysis
-              </a>
-            </li>
+    <div class="row">
+      <div class="col-md-3 col-sm-6">
+        <a href="<%= @mount%>blacklist" class="dashboard-stat primary">
+          <div class="details">
+            <span class="content">Blacklisted Actors</span>
+            <span class="value"><%= @blacklisted.size %></span>
+          </div>
 
-            <li>
-              <a href="javascript:;">
-                <i class="fa fa-globe"></i>
-                World View
-              </a>
-            </li>
-          </ul>
-        </nav>
+          <i class="fa fa-play-circle more"></i>
+        </a>
       </div>
 
-      <div id="content">
-        <div id="content-header">
-          <h1>Dashboard</h1>
+      <div class="col-md-3 col-sm-6">
+        <a href="<%= @mount%>suspects" class="dashboard-stat secondary">
+          <div class="details">
+            <span class="content">Suspect Actors</span>
+            <span class="value"><%= @suspects.size %></span>
+          </div>
+
+          <i class="fa fa-play-circle more"></i>
+        </a>
+      </div>
+
+      <div class="col-md-3 col-sm-6">
+        <a href="<%= @mount%>whitelist" class="dashboard-stat tertiary">
+          <div class="details">
+            <span class="content">Whitelisted Actors</span>
+            <span class="value"><%= @whitelist.size %></span>
+          </div>
+
+          <i class="fa fa-play-circle more"></i>
+        </a>
+      </div>
+
+      <div class="col-md-3 col-sm-6">
+        <a href="javascript:;" class="dashboard-stat">
+          <div class="details">
+            <span class="content">Blacklist Total</span>
+            <span class="value"><%= @blacklist_total %></span>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-6">
+        <div class="portlet">
+          <div class="portlet-header">
+            <h3>Top 10 Suspect Actors</h3>
+          </div>
+
+          <div class="portlet-content">
+            <div class="table-responsive">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>IP Address</th>
+                    <th>Offenses</th>
+                    <th>Requests</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% @suspects.each do |actor, details| %>
+                    <tr>
+                      <td><%= actor %></td>
+                      <td><%= details[:total] %></td>
+                      <td><%= details[:requests] %></td>
+                      <td><a href="actor.html" class="btn btn-xs btn-tertiary">View &nbsp;&nbsp;<i class="fa fa-chevron-right"></i></a></td>
+                    </tr>
+                  <% end %>
+                </tbody>
+              </table>
+            </div>
+
+            <hr />
+
+            <a href="<%= @mount%>suspects" class="btn btn-sm btn-secondary">View All Suspect Actors</a>
+          </div>
         </div>
+      </div>
 
-        <div id="content-container">
-          <div>
-            <h4 class="heading-inline">Daily Stats</h4>
+      <div class="col-md-6">
+        <div class="portlet">
+          <div class="portlet-header">
+            <h3>Top 10 Blacklisted Actors</h3>
           </div>
 
-          <br />
-
-          <div class="row">
-            <div class="col-md-3 col-sm-6">
-              <a href="blacklist.html" class="dashboard-stat primary">
-                <div class="details">
-                  <span class="content">Blacklisted Actors</span>
-                  <span class="value"><%= @blacklisted.size %></span>
-                </div>
-
-                <i class="fa fa-play-circle more"></i>
-              </a>
+          <div class="portlet-content">
+            <div class="table-responsive">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>IP Address</th>
+                    <th>Offenses</th>
+                    <th>Requests</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% @blacklisted.take(10).each do |actor, details| %>
+                    <tr>
+                      <td><%= actor %></td>
+                      <td><%= details[:total] %></td>
+                      <td><%= details[:requests] %></td>
+                      <td><a href="actor.html" class="btn btn-xs btn-tertiary">View &nbsp;&nbsp;<i class="fa fa-chevron-right"></i></a></td>
+                    </tr>
+                  <% end %>
+                </tbody>
+              </table>
             </div>
 
-            <div class="col-md-3 col-sm-6">
-              <a href="suspects.html" class="dashboard-stat secondary">
-                <div class="details">
-                  <span class="content">Suspect Actors</span>
-                  <span class="value"><%= @suspects.size %></span>
-                </div>
+            <hr />
 
-                <i class="fa fa-play-circle more"></i>
-              </a>
-            </div>
-
-            <div class="col-md-3 col-sm-6">
-              <a href="whitelist.html" class="dashboard-stat tertiary">
-                <div class="details">
-                  <span class="content">Whitelisted Actors</span>
-                  <span class="value"><%= @whitelist.size %></span>
-                </div>
-
-                <i class="fa fa-play-circle more"></i>
-              </a>
-            </div>
-
-            <div class="col-md-3 col-sm-6">
-              <a href="javascript:;" class="dashboard-stat">
-                <div class="details">
-                  <span class="content">Blacklist Total</span>
-                  <span class="value"><%= @blacklist_total %></span>
-                </div>
-              </a>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col-md-6">
-              <div class="portlet">
-                <div class="portlet-header">
-                  <h3>Top 10 Suspect Actors</h3>
-                </div>
-
-                <div class="portlet-content">
-                  <div class="table-responsive">
-                    <table class="table">
-                      <thead>
-                        <tr>
-                          <th>IP Address</th>
-                          <th>Offenses</th>
-                          <th>Requests</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-			<% @suspects.each do |actor, details| %>
-                        <tr>
-                          <td><%= actor %></td>
-                          <td><%= details[:total] %></td>
-                          <td><%= details[:requests] %></td>
-                          <td><a href="actor.html" class="btn btn-xs btn-tertiary">View &nbsp;&nbsp;<i class="fa fa-chevron-right"></i></a></td>
-                        </tr>
-			<% end %>
-                      </tbody>
-                    </table>
-                  </div>
-
-                  <hr />
-
-                  <a href="suspects.html" class="btn btn-sm btn-secondary">View All Suspect Actors</a>
-                </div>
-              </div>
-            </div>
-
-            <div class="col-md-6">
-              <div class="portlet">
-                <div class="portlet-header">
-                  <h3>Top 10 Blacklisted Actors</h3>
-                </div>
-
-                <div class="portlet-content">
-                  <div class="table-responsive">
-                    <table class="table">
-                      <thead>
-                        <tr>
-                          <th>IP Address</th>
-                          <th>Offenses</th>
-                          <th>Requests</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-			<% @blacklisted.take(10).each do |actor, details| %>
-                        <tr>
-                          <td><%= actor %></td>
-                          <td><%= details[:total] %></td>
-                          <td><%= details[:requests] %></td>
-                          <td><a href="actor.html" class="btn btn-xs btn-tertiary">View &nbsp;&nbsp;<i class="fa fa-chevron-right"></i></a></td>
-                        </tr>
-			<% end %>
-                      </tbody>
-                    </table>
-                  </div>
-
-                  <hr />
-
-                  <a href="blacklist.html" class="btn btn-sm btn-primary">View All Blacklisted Actors</a>
-                </div>
-              </div>
-            </div>
+            <a href="<%= @mount %>blacklist" class="btn btn-sm btn-primary">View All Blacklisted Actors</a>
           </div>
         </div>
       </div>
     </div>
-
-    <footer id="footer">
-      <ul class="nav pull-right">
-        <li>
-          Copyright &copy; 2013, Aaron Bedra.
-        </li>
-      </ul>
-    </footer>
-
-    <script src="./js/libs/jquery-1.9.1.min.js"></script>
-    <script src="./js/libs/jquery-ui-1.9.2.custom.min.js"></script>
-    <script src="./js/libs/bootstrap.min.js"></script>
-
-    <script src="./js/plugins/icheck/jquery.icheck.min.js"></script>
-    <script src="./js/plugins/select2/select2.js"></script>
-    <script src="./js/plugins/tableCheckable/jquery.tableCheckable.js"></script>
-
-    <script src="./js/App.js"></script>
-
-    <script src="./js/libs/raphael-2.1.2.min.js"></script>
-    <script src="./js/plugins/morris/morris.min.js"></script>
-
-    <script src="./js/demos/charts/morris/area.js"></script>
-    <script src="./js/demos/charts/morris/donut.js"></script>
-
-    <script src="./js/plugins/sparkline/jquery.sparkline.min.js"></script>
-
-    <script src="./js/plugins/fullcalendar/fullcalendar.min.js"></script>
-    <script src="./js/demos/calendar.js"></script>
-
-    <script src="./js/demos/dashboard.js"></script>
-
-  </body>
-</html>
+  </div>
+</div>
