@@ -3,6 +3,18 @@ class Backend
     connection.smembers("repsheet:blacklist:history").size
   end
 
+  def self.whitelisted?(connection, ip)
+    connection.exists("#{ip}:repsheet:whitelist")
+  end
+
+  def self.blacklisted?(connection, ip)
+    connection.exists("#{ip}:repsheet:blacklist")
+  end
+
+  def self.ofdp_score(connection, ip)
+    connection.get("#{ip}:score")
+  end
+
   def self.summary(connection)
     if connection.exists("offenders")
       suspects, blacklisted = optimized(connection)

@@ -84,8 +84,8 @@
                     <td><%= actor %></td>
 		    <td><%= data[:detected] %></td>
                     <td><%= data[:total] %></td>
-		    <td><%= data[:requetsts] %></td>
-                    <td><a href="actor.html" class="btn btn-xs btn-tertiary">View &nbsp;&nbsp;<i class="fa fa-chevron-right"></i></a></td>
+		    <td><%= data[:requests] %></td>
+                    <td><a href="<%= @mount %>actors/<%= actor %>" class="btn btn-xs btn-tertiary">View &nbsp;&nbsp;<i class="fa fa-chevron-right"></i></a></td>
                   </tr>
 		  <% end %>
                 </tbody>

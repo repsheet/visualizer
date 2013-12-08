@@ -77,11 +77,27 @@ class RepsheetVisualizer < Sinatra::Base
     erb :worldview
   end
 
-  get '/activity/:ip' do
+  get '/actors/:ip' do
     @ip = params[:ip]
-    @data = Backend.activity(redis_connection, @ip)
+    @activity = Backend.activity(redis_connection, @ip)
+    triggered = Backend.triggered_rules(redis_connection, @ip)
+    offenses = Backend.score_actor(redis_connection, @ip, triggered, false)
+    @modsecurity = {:triggered => triggered.join(", "), :offenses => offenses}
+    @ofdp_score = Backend.ofdp_score(redis_connection, @ip) || 0
+    @whitelisted = Backend.whitelisted?(redis_connection, @ip)
+    @blacklisted = Backend.blacklisted?(redis_connection, @ip)
+
+    details = geoip_database.country(@ip)
+    unless details.nil?
+      @lat = details.latitude
+      @lng = details.longitude
+      @country = details.country_name
+      @region = details.region_name
+      @city = details.city_name
+    end
+
     @action = action(@ip)
-    erb :activity
+    erb :actor
   end
 
   post '/action' do

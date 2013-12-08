@@ -79,7 +79,7 @@
 		  <% @whitelist.each do |actor| %>
                   <tr>
                     <td><%= actor %></td>
-                    <td><a href="actor.html" class="btn btn-xs btn-tertiary">View &nbsp;&nbsp;<i class="fa fa-chevron-right"></i></a></td>
+                    <td><a href="<%= @mount %>actors/<%= actor %>" class="btn btn-xs btn-tertiary">View &nbsp;&nbsp;<i class="fa fa-chevron-right"></i></a></td>
                   </tr>
 		  <% end %>
                 </tbody>
