@@ -19,8 +19,16 @@ class RepsheetVisualizer < Sinatra::Base
       end
     end
 
+    def replace_invalid_chars(str)
+      str.encode('UTF-16le', :invalid => :replace, :replace => '?').encode('UTF-8')
+    end
+
     def h(text)
-      Rack::Utils.escape_html(text)
+      begin
+        Rack::Utils.escape_html(text)
+      rescue ArgumentError
+        replace_invalid_chars(text)
+      end
     end
   end
 
