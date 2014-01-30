@@ -102,39 +102,43 @@
 
             <hr />
 
-            <p>
-	      <% if !@blacklisted %>
-		<a href="#" id="blacklist" class="btn btn-primary">Blacklist</a>
-	      <% end %>
-	      <% if !@whitelisted %>
-		<% if !@blacklisted %>
-		  &nbsp;&nbsp;
-		<% end %>
-		<a href="javascript:;" class="btn btn-secondary">Whitelist</a>
-	      <% end %>
-            </p>
-
-            <hr />
-
             <h4>ModSecurity Rules Triggered</h4>
             <p><%= @modsecurity[:triggered] %></p>
 
             <hr />
 
-            <br />
-          </div>
-
-          <div class="col-md-12">
-            <h3 class="heading">Activity</h3>
-            <div>
-              <ul class="icons-list">
-                <% @activity.each do |action| %>
-                  <li><%= h action %></li>
+            <p>
+	      <script>
+	       function act(action) {
+		 $.post('<%= @mount%>action', {'action':action, 'ip': '<%= @ip %>'}, function(data) {
+		   window.location = '<%= @mount %>actors/<%= @ip %>';
+		 });
+	       }
+	      </script>
+              <% if !@blacklisted %>
+                <a href="javascript:act('blacklist');" class="btn btn-primary">Blacklist</a>
+              <% end %>
+              <% if !@whitelisted %>
+                <% if !@blacklisted %>
+                  &nbsp;&nbsp;
                 <% end %>
-              </ul>
-            </div>
+                <a href="javascript:act('whitelist');" class="btn btn-secondary">Whitelist</a>
+              <% end %>
+            </p>
           </div>
         </div>
+
+        <div class="col-md-12">
+          <h3 class="heading">Activity</h3>
+          <div>
+            <ul class="icons-list">
+              <% @activity.each do |action| %>
+                <li><%= h action %></li>
+              <% end %>
+            </ul>
+          </div>
+        </div>
+
       </div>
 
       <div class="col-md-3 col-sm-6 col-sidebar-right">
@@ -162,3 +166,4 @@
       </div>
     </div>
   </div>
+</div>
