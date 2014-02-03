@@ -38,16 +38,8 @@
 
     <div id="wrapper">
       <header id="header">
-        <a href="index.html" style="text-decoration:none;">
+        <a href="<%= @mount %>" style="text-decoration:none;">
           <h3 class="logo-head">Repsheet Visualizer</h3>
-        </a>
-
-        <a href="javascript:;" data-toggle="collapse" data-target=".top-bar-collapse" id="top-bar-toggle" class="navbar-toggle collapsed">
-          <i class="fa fa-cog"></i>
-        </a>
-
-        <a href="javascript:;" data-toggle="collapse" data-target=".sidebar-collapse" id="sidebar-toggle" class="navbar-toggle collapsed">
-          <i class="fa fa-reorder"></i>
         </a>
       </header>
 
@@ -75,12 +67,7 @@
     </footer>
 
     <script src="<%= @mount %>js/libs/jquery-1.9.1.min.js"></script>
-    <script src="<%= @mount %>js/libs/jquery-ui-1.9.2.custom.min.js"></script>
     <script src="<%= @mount %>js/libs/bootstrap.min.js"></script>
-    <script src="<%= @mount %>js/plugins/icheck/jquery.icheck.min.js"></script>
-    <script src="<%= @mount %>js/plugins/select2/select2.js"></script>
-    <script src="<%= @mount %>js/plugins/tableCheckable/jquery.tableCheckable.js"></script>
     <script src="<%= @mount %>js/App.js"></script>
-    <script src="<%= @mount %>js/plugins/morris/morris.min.js"></script>
   </body>
 </html>
