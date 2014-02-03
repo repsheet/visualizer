@@ -2,6 +2,7 @@ require 'geoip'
 require 'sinatra'
 require 'redis'
 require 'json'
+require 'ipaddress'
 require_relative 'backend'
 
 class RepsheetVisualizer < Sinatra::Base
@@ -106,6 +107,15 @@ class RepsheetVisualizer < Sinatra::Base
 
     @action = action(@ip)
     erb :actor
+  end
+
+  post '/search' do
+    @ip = params[:ip]
+    if IPAddress.valid?(@ip)
+      redirect "#{@mount}actors/#{@ip}"
+    else
+      redirect "#{@mount}"
+    end
   end
 
   post '/action' do

@@ -1,7 +1,7 @@
 <div id="sidebar-wrapper" class="collapse sidebar-collapse">
   <div id="search">
-    <form>
-      <input class="form-control input-sm" type="text" name="search" placeholder="Search..." />
+    <form method="post" action="<%= @mount %>search">
+      <input name="ip" id="ip" class="form-control input-sm" type="text" name="search" placeholder="Search for an Actor" />
       <button type="submit" id="search-btn" class="btn"><i class="fa fa-search"></i></button>
     </form>
   </div>

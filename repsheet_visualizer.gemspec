@@ -22,6 +22,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "json"
   spec.add_dependency "redis"
   spec.add_dependency "sinatra"
+  spec.add_dependency "ipaddress"
 
   spec.add_development_dependency "bundler"
   spec.add_development_dependency "rake"
