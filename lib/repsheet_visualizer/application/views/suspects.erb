@@ -62,6 +62,7 @@
     <div class="row">
       <div class="col-md-12">
         <div class="portlet">
+	  <% if @suspects.size > 0 %>
           <div class="portlet-header">
             <h3>All Suspect Actors</h3>
           </div>
@@ -92,6 +93,11 @@
               </table>
             </div>
           </div>
+	  <% else %>
+	  <div class="alert alert-info">
+	    There are currently no suspects. Check back later.
+	  </div>
+	  <% end %>
         </div>
       </div>
     </div>
