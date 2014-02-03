@@ -1,0 +1,188 @@
+<div id="sidebar-wrapper" class="collapse sidebar-collapse">
+  <div id="search">
+    <form method="post" action="<%= @mount %>search">
+      <input name="ip" id="ip" class="form-control input-sm" type="text" name="search" placeholder="Search for an Actor" />
+      <button type="submit" id="search-btn" class="btn"><i class="fa fa-search"></i></button>
+    </form>
+  </div>
+
+  <nav id="sidebar">
+    <ul id="main-nav" class="open-active">
+      <li class="active">
+        <a href="<%= @mount %>">
+          <i class="fa fa-dashboard"></i>
+          Dashboard
+        </a>
+      </li>
+
+      <li>
+        <a href="<%= @mount%>blacklist">
+          <i class="fa fa-ban"></i>
+          Blacklist
+        </a>
+      </li>
+
+      <li>
+        <a href="<%= @mount%>suspects">
+          <i class="fa fa-gavel"></i>
+          Suspects
+        </a>
+      </li>
+
+      <li>
+        <a href="<%= @mount%>whitelist">
+          <i class="fa fa-thumbs-o-up"></i>
+          Whitelist
+        </a>
+      </li>
+
+      <!-- <li>
+      <a href="javascript:;">
+      <i class="fa fa-bar-chart-o"></i>
+      ModSecurity Analysis
+      </a>
+      </li> -->
+
+      <li>
+        <a href="<%= @mount %>worldview">
+          <i class="fa fa-globe"></i>
+          World View
+        </a>
+      </li>
+    </ul>
+  </nav>
+</div>
+
+<div id="content">
+  <div id="content-header">
+    <h1>Dashboard</h1>
+  </div>
+
+  <div id="content-container">
+    <div>
+      <h4 class="heading-inline">Daily Stats</h4>
+    </div>
+
+    <br />
+
+    <div class="row">
+      <div class="col-md-3 col-sm-6">
+        <a href="<%= @mount%>blacklist" class="dashboard-stat primary">
+          <div class="details">
+            <span class="content">Blacklisted Actors</span>
+            <span class="value"><%= @blacklisted.size %></span>
+          </div>
+
+          <i class="fa fa-play-circle more"></i>
+        </a>
+      </div>
+
+      <div class="col-md-3 col-sm-6">
+        <a href="<%= @mount%>suspects" class="dashboard-stat secondary">
+          <div class="details">
+            <span class="content">Suspect Actors</span>
+            <span class="value"><%= @suspects.size %></span>
+          </div>
+
+          <i class="fa fa-play-circle more"></i>
+        </a>
+      </div>
+
+      <div class="col-md-3 col-sm-6">
+        <a href="<%= @mount%>whitelist" class="dashboard-stat tertiary">
+          <div class="details">
+            <span class="content">Whitelisted Actors</span>
+            <span class="value"><%= @whitelist.size %></span>
+          </div>
+
+          <i class="fa fa-play-circle more"></i>
+        </a>
+      </div>
+
+      <div class="col-md-3 col-sm-6">
+        <a href="javascript:;" class="dashboard-stat">
+          <div class="details">
+            <span class="content">Blacklist Total</span>
+            <span class="value"><%= @blacklist_total %></span>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-6">
+        <div class="portlet">
+          <div class="portlet-header">
+            <h3>Top Suspect Actors</h3>
+          </div>
+
+          <div class="portlet-content">
+            <div class="table-responsive">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>IP Address</th>
+                    <th>Offenses</th>
+                    <th>Requests</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% @suspects.each do |actor, details| %>
+                    <tr>
+                      <td><%= actor %></td>
+                      <td><%= details[:total] %></td>
+                      <td><%= details[:requests] %></td>
+		      <td><a href="<%= @mount %>actors/<%= actor %>" class="btn btn-xs btn-tertiary">View &nbsp;&nbsp;<i class="fa fa-chevron-right"></i></a></td>
+                    </tr>
+                  <% end %>
+                </tbody>
+              </table>
+            </div>
+
+            <hr />
+
+            <a href="<%= @mount%>suspects" class="btn btn-sm btn-secondary">View All Suspect Actors</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="portlet">
+          <div class="portlet-header">
+            <h3>Top Blacklisted Actors</h3>
+          </div>
+
+          <div class="portlet-content">
+            <div class="table-responsive">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>IP Address</th>
+                    <th>Offenses</th>
+                    <th>Requests</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% @blacklisted.take(10).each do |actor, details| %>
+                    <tr>
+                      <td><%= actor %></td>
+                      <td><%= details[:total] %></td>
+                      <td><%= details[:requests] %></td>
+                      <td><a href="<%= @mount %>actors/<%= actor %>" class="btn btn-xs btn-tertiary">View &nbsp;&nbsp;<i class="fa fa-chevron-right"></i></a></td>
+                    </tr>
+                  <% end %>
+                </tbody>
+              </table>
+            </div>
+
+            <hr />
+
+            <a href="<%= @mount %>blacklist" class="btn btn-sm btn-primary">View All Blacklisted Actors</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

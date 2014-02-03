@@ -2,6 +2,7 @@ require 'geoip'
 require 'sinatra'
 require 'redis'
 require 'json'
+require 'ipaddress'
 require_relative 'backend'
 
 class RepsheetVisualizer < Sinatra::Base
@@ -19,8 +20,16 @@ class RepsheetVisualizer < Sinatra::Base
       end
     end
 
+    def replace_invalid_chars(str)
+      str.encode('UTF-16le', :invalid => :replace, :replace => '?').encode('UTF-8')
+    end
+
     def h(text)
-      Rack::Utils.escape_html(text)
+      begin
+        Rack::Utils.escape_html(text)
+      rescue ArgumentError
+        replace_invalid_chars(text)
+      end
     end
   end
 
@@ -47,12 +56,24 @@ class RepsheetVisualizer < Sinatra::Base
 
   get '/' do
     @suspects, @blacklisted = Backend.summary(redis_connection)
-    erb :actors
+    @whitelist = Backend.whitelist(redis_connection)
+    @blacklist_total = Backend.blacklist_total(redis_connection)
+    erb :index
   end
 
   get '/whitelist' do
     @whitelist = Backend.whitelist(redis_connection)
     erb :whitelist
+  end
+
+  get '/blacklist' do
+    @blacklist = Backend.blacklist(redis_connection)
+    erb :blacklist
+  end
+
+  get '/suspects' do
+    @suspects, _ = Backend.suspects(redis_connection)
+    erb :suspects
   end
 
   get '/breakdown' do
@@ -65,11 +86,36 @@ class RepsheetVisualizer < Sinatra::Base
     erb :worldview
   end
 
-  get '/activity/:ip' do
+  get '/actors/:ip' do
     @ip = params[:ip]
-    @data = Backend.activity(redis_connection, @ip)
+    @activity = Backend.activity(redis_connection, @ip)
+    triggered = Backend.triggered_rules(redis_connection, @ip)
+    offenses = Backend.score_actor(redis_connection, @ip, triggered, false)
+    @modsecurity = {:triggered => triggered.join(", "), :offenses => offenses}
+    @ofdp_score = Backend.ofdp_score(redis_connection, @ip) || 0
+    @whitelisted = Backend.whitelisted?(redis_connection, @ip)
+    @blacklisted = Backend.blacklisted?(redis_connection, @ip)
+
+    details = geoip_database.country(@ip)
+    unless details.nil?
+      @lat = details.latitude
+      @lng = details.longitude
+      @country = details.country_name
+      @region = details.region_name
+      @city = details.city_name
+    end
+
     @action = action(@ip)
-    erb :activity
+    erb :actor
+  end
+
+  post '/search' do
+    @ip = params[:ip]
+    if IPAddress.valid?(@ip)
+      redirect "#{@mount}actors/#{@ip}"
+    else
+      redirect "#{@mount}"
+    end
   end
 
   post '/action' do
