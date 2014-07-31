@@ -2,3 +2,4 @@ repsheet_visualizer-0.0.1.gem
 pkg
 dump.rdb
 .bundle
+node_modules
