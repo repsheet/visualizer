@@ -1,0 +1,42 @@
+{{ define "content" }}
+
+<div id="content-header">
+  <h1>Whitelisted Actors</h1>
+</div>
+
+<div id="content-container">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="portlet">
+        <div class="portlet-header">
+          <h3>All Whitelisted Actors</h3>
+        </div>
+
+        <div class="portlet-content">
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>IP Address</th>
+                  <th>Reason</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                {{range .Summary.Whitelisted}}
+                <tr>
+                  <td>{{.}}</td>
+                  <td>placeholder</td>
+                  <td><a href="/actors/{{.}}" class="btn btn-xs btn-tertiary">View &nbsp;&nbsp;<i class="fa fa-chevron-right"></i></a></td>
+                </tr>
+                {{ end }}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{{ end }}

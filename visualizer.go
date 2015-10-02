@@ -30,6 +30,7 @@ func main() {
         r := mux.NewRouter()
         r.Handle("/", handlers.LoggingHandler(logFile, http.HandlerFunc(DashboardHandler)))
 	r.Handle("/blacklist", handlers.LoggingHandler(logFile, http.HandlerFunc(BlacklistHandler)))
+	r.Handle("/whitelist", handlers.LoggingHandler(logFile, http.HandlerFunc(WhitelistHandler)))
         r.PathPrefix("/public/").Handler(http.StripPrefix("/public/", http.FileServer(http.Dir("public"))))
         http.Handle("/", r)
 
