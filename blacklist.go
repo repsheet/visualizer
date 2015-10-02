@@ -16,5 +16,5 @@ func BlacklistHandler(response http.ResponseWriter, request *http.Request) {
         blacklisted := replyToArray(connection.Cmd("KEYS", "*:repsheet:ip:blacklisted"))
         templates, _ := template.ParseFiles("layout.html", "blacklist.html")
         summary := Summary{Blacklisted: blacklisted}
-        templates.ExecuteTemplate(response, "layout", Page{Summary: summary})
+        templates.ExecuteTemplate(response, "layout", Page{Summary: summary, Active: "blacklist"})
 }

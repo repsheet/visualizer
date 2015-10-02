@@ -16,5 +16,5 @@ func MarklistHandler(response http.ResponseWriter, request *http.Request) {
         marked := replyToArray(connection.Cmd("KEYS", "*:repsheet:ip:marked"))
         templates, _ := template.ParseFiles("layout.html", "marklist.html")
         summary := Summary{Marked: marked}
-        templates.ExecuteTemplate(response, "layout", Page{Summary: summary})
+        templates.ExecuteTemplate(response, "layout", Page{Summary: summary, Active: "marklist"})
 }

@@ -16,7 +16,7 @@ type Summary struct {
 }
 
 type Page struct {
-        Title string
+	Active string
         Summary Summary
 }
 

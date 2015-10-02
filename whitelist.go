@@ -16,5 +16,5 @@ func WhitelistHandler(response http.ResponseWriter, request *http.Request) {
         whitelisted := replyToArray(connection.Cmd("KEYS", "*:repsheet:ip:whitelisted"))
         templates, _ := template.ParseFiles("layout.html", "whitelist.html")
         summary := Summary{Whitelisted: whitelisted}
-        templates.ExecuteTemplate(response, "layout", Page{Summary: summary})
+        templates.ExecuteTemplate(response, "layout", Page{Summary: summary, Active: "whitelist"})
 }
