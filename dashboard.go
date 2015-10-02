@@ -16,7 +16,7 @@ func DashboardHandler(response http.ResponseWriter, request *http.Request) {
         blacklisted := replyToArray(connection.Cmd("KEYS", "*:repsheet:ip:blacklisted"))
 	whitelisted := replyToArray(connection.Cmd("KEYS", "*:repsheet:ip:whitelisted"))
 	marked := replyToArray(connection.Cmd("KEYS", "*:repsheet:ip:marked"))
-        templates, _ := template.ParseFiles("layout.html", "index.html")
+        templates, _ := template.ParseFiles("layout.html", "dashboard.html")
         summary := Summary{Blacklisted: blacklisted, Whitelisted: whitelisted, Marked: marked}
         templates.ExecuteTemplate(response, "layout", Page{Summary: summary, Active: "dashboard"})
 }
