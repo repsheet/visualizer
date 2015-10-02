@@ -3,26 +3,34 @@ package main
 import (
         "log"
         "fmt"
-        "github.com/gorilla/mux"
-        "github.com/gorilla/handlers"
         "html/template"
         "net/http"
         "os"
+	"github.com/gorilla/mux"
+        "github.com/gorilla/handlers"
 )
+
+type Summary struct {
+	Blacklisted []string
+	Whitelisted []string
+	Marked      []string
+	Total       int
+}
 
 type Page struct {
         Title string
+	Summary Summary
 }
 
-var templates = template.Must(template.ParseFiles("index.html"))
-
-func IndexHandler(response http.ResponseWriter, request *http.Request) {
+func DashboardHandler(response http.ResponseWriter, request *http.Request) {
         response.Header().Set("Content-type", "text/html")
         err := request.ParseForm()
         if err != nil {
                 http.Error(response, fmt.Sprintf("error parsing url %v", err), 500)
         }
-        templates.ExecuteTemplate(response, "index.html", Page{Title: "Index"})
+	templates, _ := template.ParseFiles("layout.html", "index.html")
+	summary := Summary{Blacklisted: []string{"1.1.1.1", "1.1.1.2"}, Whitelisted: []string{"2.2.2.1", "2.2.2.2"}, Marked: []string{"3.3.3.1", "3.3.3.2"}, Total: 6}
+        templates.ExecuteTemplate(response, "layout", Page{Title: "Dashboard", Summary: summary})
 }
 
 func main() {
@@ -33,7 +41,7 @@ func main() {
 	}
 
         r := mux.NewRouter()
-        r.Handle("/", handlers.LoggingHandler(logFile, http.HandlerFunc(IndexHandler)))
+        r.Handle("/", handlers.LoggingHandler(logFile, http.HandlerFunc(DashboardHandler)))
         r.PathPrefix("/public/").Handler(http.StripPrefix("/public/", http.FileServer(http.Dir("public"))))
         http.Handle("/", r)
 
