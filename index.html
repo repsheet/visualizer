@@ -6,13 +6,13 @@
 
 <div id="content-container">
   <div>
-    <h4 class="heading-inline">Daily Stats</h4>
+    <h4 class="heading-inline">Summary</h4>
   </div>
 
   <br />
 
   <div class="row">
-    <div class="col-md-3 col-sm-6">
+    <div class="col-md-4 col-sm-6">
       <a href="blacklist" class="dashboard-stat primary">
         <div class="details">
           <span class="content">Blacklisted Actors</span>
@@ -23,7 +23,7 @@
       </a>
     </div>
 
-    <div class="col-md-3 col-sm-6">
+    <div class="col-md-4 col-sm-6">
       <a href="suspects" class="dashboard-stat secondary">
         <div class="details">
           <span class="content">Suspect Actors</span>
@@ -34,7 +34,7 @@
       </a>
     </div>
 
-    <div class="col-md-3 col-sm-6">
+    <div class="col-md-4 col-sm-6">
       <a href="whitelist" class="dashboard-stat tertiary">
         <div class="details">
           <span class="content">Whitelisted Actors</span>
@@ -44,19 +44,10 @@
         <i class="fa fa-play-circle more"></i>
       </a>
     </div>
-
-    <div class="col-md-3 col-sm-6">
-      <a href="javascript:;" class="dashboard-stat">
-        <div class="details">
-          <span class="content">Blacklist Total</span>
-          <span class="value">{{.Summary.Total}}</span>
-        </div>
-      </a>
-    </div>
   </div>
 
   <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-4">
       <div class="portlet">
         <div class="portlet-header">
           <h3>Blacklisted Actors</h3>
@@ -68,8 +59,6 @@
               <thead>
                 <tr>
                   <th>IP Address</th>
-                  <th>Offenses</th>
-                  <th>Requests</th>
                   <th></th>
                 </tr>
               </thead>
@@ -77,8 +66,6 @@
 		{{range .Summary.Blacklisted}}
                 <tr>
                   <td>{{.}}</td>
-                  <td>10</td>
-                  <td>stuff</td>
                   <td><a href="actors/{{.}}" class="btn btn-xs btn-tertiary">View &nbsp;&nbsp;<i class="fa fa-chevron-right"></i></a></td>
                 </tr>
 		{{end}}
@@ -93,7 +80,7 @@
       </div>
     </div>
 
-    <div class="col-md-6">
+    <div class="col-md-4">
       <div class="portlet">
         <div class="portlet-header">
           <h3>Marked Actors</h3>
@@ -105,8 +92,6 @@
               <thead>
                 <tr>
                   <th>IP Address</th>
-                  <th>Offenses</th>
-                  <th>Requests</th>
                   <th></th>
                 </tr>
               </thead>
@@ -114,8 +99,6 @@
 		{{range .Summary.Whitelisted}}
                 <tr>
                   <td>{{.}}</td>
-                  <td>10</td>
-                  <td>stuff</td>
                   <td><a href="actors/{{.}}" class="btn btn-xs btn-tertiary">View &nbsp;&nbsp;<i class="fa fa-chevron-right"></i></a></td>
                 </tr>
 		{{ end }}
@@ -129,6 +112,40 @@
         </div>
       </div>
     </div>
+
+    <div class="col-md-4">
+      <div class="portlet">
+        <div class="portlet-header">
+          <h3>Marked Actors</h3>
+        </div>
+
+        <div class="portlet-content">
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>IP Address</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+		{{range .Summary.Marked}}
+                <tr>
+                  <td>{{.}}</td>
+                  <td><a href="actors/{{.}}" class="btn btn-xs btn-tertiary">View &nbsp;&nbsp;<i class="fa fa-chevron-right"></i></a></td>
+                </tr>
+		{{end}}
+              </tbody>
+            </table>
+          </div>
+
+          <hr />
+
+          <a href="blacklist" class="btn btn-sm btn-tertiary">View All Blacklisted Actors</a>
+        </div>
+      </div>
+    </div>
+
   </div>
 </div>
 
