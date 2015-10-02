@@ -15,9 +15,17 @@ type Summary struct {
         Marked      []string
 }
 
+type Actor struct {
+	Id          string
+	Whitelisted bool
+	Blacklisted bool
+	Marked      bool
+}
+
 type Page struct {
-	Active string
+	Active  string
         Summary Summary
+	Actor   Actor
 }
 
 func main() {
@@ -32,6 +40,7 @@ func main() {
 	r.Handle("/blacklist", handlers.LoggingHandler(logFile, http.HandlerFunc(BlacklistHandler)))
 	r.Handle("/whitelist", handlers.LoggingHandler(logFile, http.HandlerFunc(WhitelistHandler)))
 	r.Handle("/marklist", handlers.LoggingHandler(logFile, http.HandlerFunc(MarklistHandler)))
+	r.Handle("/actors/{id}", handlers.LoggingHandler(logFile, http.HandlerFunc(ActorHandler)))
         r.PathPrefix("/public/").Handler(http.StripPrefix("/public/", http.FileServer(http.Dir("public"))))
         http.Handle("/", r)
 

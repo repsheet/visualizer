@@ -1,0 +1,90 @@
+{{ define "content" }}
+<div id="content-header">
+  <h1>Activity For {{.Actor.Id}}</h1>
+</div>
+
+<div id="content-container">
+  <div class="row">
+    <div class="col-md-9">
+      <div class="row">
+        <div class="col-md-4 col-sm-5">
+          <div id="map" style="width: 263px; height: 234px;" class="thumbnail"></div>
+          <script type="text/javascript">
+            var myLatlng = new google.maps.LatLng(0, 0);
+            var mapOptions = {
+            zoom: 9,
+            center: myLatlng
+            }
+            var map = new google.maps.Map(document.getElementById('map'), mapOptions);
+
+            var marker = new google.maps.Marker({
+            position: myLatlng,
+            map: map,
+            });
+          </script>
+        </div>
+
+        <div class="col-md-8 col-sm-7">
+          <h4>City, Region, Country</h4>
+
+          <ul class="icons-list">
+            <li>
+              <i class="icon-li fa fa-map-marker"></i> 0, 0
+            </li>
+          </ul>
+
+	  <p>
+	    <script>
+	       function act(action) {
+		 $.post('/action', {'action':action, 'ip': '{{.Actor.Id}}'}, function(data) {
+		   window.location = '/actors/{{.Actor.Id}}';
+		 });
+	       }
+	    </script>
+            <a href="javascript:act('blacklist');" class="btn btn-primary">Blacklist</a>
+            &nbsp;&nbsp;
+            <a href="javascript:act('whitelist');" class="btn btn-secondary">Whitelist</a>
+          </p>
+        </div>
+      </div>
+
+      <div class="col-md-12">
+        <h3 class="heading">Activity</h3>
+        <div>
+          <ul class="icons-list">
+	    {{ if .Actor.Blacklisted }}
+            <li>Blacklisted</li>
+	    {{ end }}
+	    {{ if .Actor.Whitelisted }}
+	    <li>Whitelisted</li>
+	    {{ end }}
+	    {{ if .Actor.Marked }}
+	    <li>Marked</li>
+	    {{ end }}
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3 col-sm-6 col-sidebar-right">
+
+      <h4>Analysis</h4>
+
+      <div class="list-group">
+        <a href="javascript:;" class="list-group-item"><h3 class="pull-right"><i class="fa fa-eye"></i></h3>
+          <h4 class="list-group-item-heading">0</h4>
+          <p class="list-group-item-text">Requests</p>
+        </a>
+
+        <a href="javascript:;" class="list-group-item"><h3 class="pull-right"><i class="fa fa-eye"></i></h3>
+          <h4 class="list-group-item-heading">50</h4>
+          <p class="list-group-item-text">Score</p>
+        </a>
+      </div>
+
+      <br />
+    </div>
+  </div>
+</div>
+
+{{ end }}
