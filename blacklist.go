@@ -6,7 +6,7 @@ import (
 	"net/http"
 )
 
-func DashboardHandler(response http.ResponseWriter, request *http.Request) {
+func BlacklistHandler(response http.ResponseWriter, request *http.Request) {
         response.Header().Set("Content-type", "text/html")
         err := request.ParseForm()
         if err != nil {
@@ -14,9 +14,7 @@ func DashboardHandler(response http.ResponseWriter, request *http.Request) {
         }
         connection := connect("localhost", 6379)
         blacklisted := replyToArray(connection.Cmd("KEYS", "*:repsheet:ip:blacklisted"))
-	whitelisted := replyToArray(connection.Cmd("KEYS", "*:repsheet:ip:whitelisted"))
-	marked := replyToArray(connection.Cmd("KEYS", "*:repsheet:ip:marked"))
-        templates, _ := template.ParseFiles("layout.html", "index.html")
-        summary := Summary{Blacklisted: blacklisted, Whitelisted: whitelisted, Marked: marked}
+        templates, _ := template.ParseFiles("layout.html", "blacklist.html")
+        summary := Summary{Blacklisted: blacklisted}
         templates.ExecuteTemplate(response, "layout", Page{Summary: summary})
 }
