@@ -5,6 +5,5 @@ go:
 
 install:
   - go get github.com/gorilla/mux
-  - go get github.com/gorilla/handler
-  - go get github.com/gorilla/context
+  - go get github.com/gorilla/handlers
   - go get github.com/fzzy/radix/redis
