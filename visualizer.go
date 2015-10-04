@@ -6,6 +6,7 @@ import (
         "net/http"
         "os"
 	"flag"
+	"html/template"
         "github.com/gorilla/mux"
         "github.com/gorilla/handlers"
 )
@@ -14,6 +15,12 @@ type Page struct {
 	Active  string
         Summary Summary
 	Actor   Actor
+}
+
+func NotFoundHandler(response http.ResponseWriter, request *http.Request) {
+        response.Header().Set("Content-type", "text/html")
+        templates, _ := template.ParseFiles("templates/layout.html", "templates/404.html")
+        templates.ExecuteTemplate(response, "layout", Page{})
 }
 
 func main() {
@@ -38,6 +45,7 @@ func main() {
         }
 
         r := mux.NewRouter()
+	r.NotFoundHandler = http.HandlerFunc(NotFoundHandler)
         r.Handle("/",            handlers.LoggingHandler(logFile, configurationHandler{configuration, DashboardHandler}))
 	r.Handle("/blacklist",   handlers.LoggingHandler(logFile, configurationHandler{configuration, BlacklistHandler}))
 	r.Handle("/whitelist",   handlers.LoggingHandler(logFile, configurationHandler{configuration, WhitelistHandler}))
