@@ -5,6 +5,7 @@ import (
         "fmt"
         "net/http"
         "os"
+	"flag"
         "github.com/gorilla/mux"
         "github.com/gorilla/handlers"
 )
@@ -29,7 +30,10 @@ type Page struct {
 }
 
 func main() {
-        logFile, err := os.OpenFile("logs/app.log", os.O_WRONLY | os.O_CREATE | os.O_APPEND, 0666)
+	logFilePtr := flag.String("logfile", "logs/visualizer.log", "Path to log file")
+	flag.Parse()
+
+	logFile, err := os.OpenFile(*logFilePtr, os.O_WRONLY | os.O_CREATE | os.O_APPEND, 0666)
         if err != nil {
                 fmt.Println("Error accessing log file:", err)
                 os.Exit(1)
