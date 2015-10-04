@@ -9,6 +9,19 @@ import (
 	"github.com/fzzy/radix/redis"
 )
 
+type Actor struct {
+	Id          string
+	Whitelisted bool
+	Blacklisted bool
+	Marked      bool
+}
+
+type Summary struct {
+        Blacklisted []string
+        Whitelisted []string
+        Marked      []string
+}
+
 func makeActor(id string, reply *redis.Reply) Actor {
 	var actor Actor
 	actor.Id = id

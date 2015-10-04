@@ -8,47 +8,12 @@ import (
 	"flag"
         "github.com/gorilla/mux"
         "github.com/gorilla/handlers"
-	"github.com/fzzy/radix/redis"
 )
-
-type Redis struct {
-	Host string
-	Port int
-	Connection *redis.Client
-}
-
-type Configuration struct {
-	Redis   Redis
-	LogFile string
-	Port    int
-}
-
-type Summary struct {
-        Blacklisted []string
-        Whitelisted []string
-        Marked      []string
-}
-
-type Actor struct {
-	Id          string
-	Whitelisted bool
-	Blacklisted bool
-	Marked      bool
-}
 
 type Page struct {
 	Active  string
         Summary Summary
 	Actor   Actor
-}
-
-type configurationHandler struct {
-	*Configuration
-	h func(*Configuration, http.ResponseWriter, *http.Request) (int, error)
-}
-
-func (h configurationHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	h.h(h.Configuration, w, r)
 }
 
 func main() {
