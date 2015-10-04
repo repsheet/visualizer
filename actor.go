@@ -48,7 +48,7 @@ func ActorHandler(configuration *Configuration, response http.ResponseWriter, re
         vars         := mux.Vars(request)
         actorString  := fmt.Sprintf("%s:repsheet:ip:*", vars["id"])
         actor        := makeActor(vars["id"], configuration.Redis.Connection.Cmd("KEYS", actorString))
-        templates, _ := template.ParseFiles("layout.html", "actor.html")
+        templates, _ := template.ParseFiles("templates/layout.html", "templates/actor.html")
         templates.ExecuteTemplate(response, "layout", Page{Actor: actor})
 
 	return 200, nil

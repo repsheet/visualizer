@@ -15,7 +15,7 @@ func BlacklistHandler(configuration *Configuration, response http.ResponseWriter
         }
 
         blacklisted  := replyToArray(configuration.Redis.Connection.Cmd("KEYS", "*:repsheet:ip:blacklisted"))
-        templates, _ := template.ParseFiles("layout.html", "blacklist.html")
+        templates, _ := template.ParseFiles("templates/layout.html", "templates/blacklist.html")
         summary      := Summary{Blacklisted: blacklisted}
         templates.ExecuteTemplate(response, "layout", Page{Summary: summary, Active: "blacklist"})
 
