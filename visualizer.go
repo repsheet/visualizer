@@ -10,6 +10,17 @@ import (
         "github.com/gorilla/handlers"
 )
 
+type Redis struct {
+	Host string
+	Port int
+}
+
+type Configuration struct {
+	Redis   Redis
+	LogFile string
+	Port    int
+}
+
 type Summary struct {
         Blacklisted []string
         Whitelisted []string
@@ -31,9 +42,18 @@ type Page struct {
 
 func main() {
 	logFilePtr := flag.String("logfile", "logs/visualizer.log", "Path to log file")
+	redisHostPtr := flag.String("redisHost", "localhost", "Redis hostname")
+	redisPortPtr := flag.Int("redisPort", 6379, "Redis port")
+	portPtr := flag.Int("port", 8080, "Visualizer http port")
 	flag.Parse()
 
-	logFile, err := os.OpenFile(*logFilePtr, os.O_WRONLY | os.O_CREATE | os.O_APPEND, 0666)
+	configuration := Configuration{
+		LogFile: *logFilePtr,
+		Port: *portPtr,
+		Redis: Redis{Host: *redisHostPtr, Port: *redisPortPtr},
+	}
+
+	logFile, err := os.OpenFile(configuration.LogFile, os.O_WRONLY | os.O_CREATE | os.O_APPEND, 0666)
         if err != nil {
                 fmt.Println("Error accessing log file:", err)
                 os.Exit(1)
@@ -48,7 +68,8 @@ func main() {
         r.PathPrefix("/public/").Handler(http.StripPrefix("/public/", http.FileServer(http.Dir("public"))))
         http.Handle("/", r)
 
-        err = http.ListenAndServe("localhost:8080", r)
+	serverString := fmt.Sprintf("localhost:%d", configuration.Port)
+        err = http.ListenAndServe(serverString, r)
         if err != nil {
                 log.Fatal("Error starting server: ", err)
         }
