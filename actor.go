@@ -24,16 +24,17 @@ func makeActor(id string, reply *redis.Reply) Actor {
 	return actor
 }
 
-func ActorHandler(response http.ResponseWriter, request *http.Request) {
+func ActorHandler(configuration *Configuration, response http.ResponseWriter, request *http.Request) (int, error) {
         response.Header().Set("Content-type", "text/html")
         err := request.ParseForm()
         if err != nil {
                 http.Error(response, fmt.Sprintf("error parsing url %v", err), 500)
         }
-        connection := connect("localhost", 6379)
+        connection := connect(configuration.Redis.Host, configuration.Redis.Port)
         vars := mux.Vars(request)
         actorString := fmt.Sprintf("%s:repsheet:ip:*", vars["id"])
         actor := makeActor(vars["id"], connection.Cmd("KEYS", actorString))
         templates, _ := template.ParseFiles("layout.html", "actor.html")
         templates.ExecuteTemplate(response, "layout", Page{Actor: actor})
+	return 200, nil
 }

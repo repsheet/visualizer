@@ -40,14 +40,23 @@ type Page struct {
 	Actor   Actor
 }
 
+type configurationHandler struct {
+	*Configuration
+	h func(*Configuration, http.ResponseWriter, *http.Request) (int, error)
+}
+
+func (h configurationHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	h.h(h.Configuration, w, r)
+}
+
 func main() {
 	logFilePtr := flag.String("logfile", "logs/visualizer.log", "Path to log file")
 	redisHostPtr := flag.String("redisHost", "localhost", "Redis hostname")
 	redisPortPtr := flag.Int("redisPort", 6379, "Redis port")
-	portPtr := flag.Int("port", 8080, "Visualizer http port")
+ 	portPtr := flag.Int("port", 8080, "Visualizer http port")
 	flag.Parse()
 
-	configuration := Configuration{
+	configuration := &Configuration{
 		LogFile: *logFilePtr,
 		Port: *portPtr,
 		Redis: Redis{Host: *redisHostPtr, Port: *redisPortPtr},
@@ -60,11 +69,11 @@ func main() {
         }
 
         r := mux.NewRouter()
-        r.Handle("/", handlers.LoggingHandler(logFile, http.HandlerFunc(DashboardHandler)))
-	r.Handle("/blacklist", handlers.LoggingHandler(logFile, http.HandlerFunc(BlacklistHandler)))
-	r.Handle("/whitelist", handlers.LoggingHandler(logFile, http.HandlerFunc(WhitelistHandler)))
-	r.Handle("/marklist", handlers.LoggingHandler(logFile, http.HandlerFunc(MarklistHandler)))
-	r.Handle("/actors/{id}", handlers.LoggingHandler(logFile, http.HandlerFunc(ActorHandler)))
+        r.Handle("/", handlers.LoggingHandler(logFile, configurationHandler{configuration, DashboardHandler}))
+	r.Handle("/blacklist",   handlers.LoggingHandler(logFile, configurationHandler{configuration, BlacklistHandler}))
+	r.Handle("/whitelist",   handlers.LoggingHandler(logFile, configurationHandler{configuration, WhitelistHandler}))
+	r.Handle("/marklist",    handlers.LoggingHandler(logFile, configurationHandler{configuration, MarklistHandler}))
+	r.Handle("/actors/{id}", handlers.LoggingHandler(logFile, configurationHandler{configuration, ActorHandler}))
         r.PathPrefix("/public/").Handler(http.StripPrefix("/public/", http.FileServer(http.Dir("public"))))
         http.Handle("/", r)
 
