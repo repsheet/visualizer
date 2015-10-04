@@ -42,7 +42,7 @@ func ActorHandler(configuration *Configuration, response http.ResponseWriter, re
 
         err := request.ParseForm()
         if err != nil {
-                http.Error(response, fmt.Sprintf("error parsing url %v", err), 500)
+		http.Redirect(response, request, "/error", 307)
         }
 
         vars         := mux.Vars(request)

@@ -23,6 +23,13 @@ func NotFoundHandler(response http.ResponseWriter, request *http.Request) {
         templates.ExecuteTemplate(response, "layout", Page{})
 }
 
+func ErrorHandler(response http.ResponseWriter, request *http.Request) {
+        response.Header().Set("Content-type", "text/html")
+	response.WriteHeader(500)
+        templates, _ := template.ParseFiles("templates/layout.html", "templates/500.html")
+        templates.ExecuteTemplate(response, "layout", Page{})
+}
+
 func main() {
 	logFilePtr   := flag.String("logfile", "logs/visualizer.log", "Path to log file")
 	redisHostPtr := flag.String("redisHost", "localhost", "Redis hostname")
@@ -51,6 +58,7 @@ func main() {
 	r.Handle("/whitelist",   handlers.LoggingHandler(logFile, configurationHandler{configuration, WhitelistHandler}))
 	r.Handle("/marklist",    handlers.LoggingHandler(logFile, configurationHandler{configuration, MarklistHandler}))
 	r.Handle("/actors/{id}", handlers.LoggingHandler(logFile, configurationHandler{configuration, ActorHandler}))
+	r.Handle("/error",       handlers.LoggingHandler(logFile, http.HandlerFunc(ErrorHandler)))
         r.PathPrefix("/public/").Handler(http.StripPrefix("/public/", http.FileServer(http.Dir("public"))))
         http.Handle("/", r)
 
