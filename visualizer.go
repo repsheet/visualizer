@@ -8,11 +8,13 @@ import (
 	"flag"
         "github.com/gorilla/mux"
         "github.com/gorilla/handlers"
+	"github.com/fzzy/radix/redis"
 )
 
 type Redis struct {
 	Host string
 	Port int
+	Connection *redis.Client
 }
 
 type Configuration struct {
@@ -50,16 +52,18 @@ func (h configurationHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) 
 }
 
 func main() {
-	logFilePtr := flag.String("logfile", "logs/visualizer.log", "Path to log file")
+	logFilePtr   := flag.String("logfile", "logs/visualizer.log", "Path to log file")
 	redisHostPtr := flag.String("redisHost", "localhost", "Redis hostname")
 	redisPortPtr := flag.Int("redisPort", 6379, "Redis port")
- 	portPtr := flag.Int("port", 8080, "Visualizer http port")
+ 	portPtr      := flag.Int("port", 8080, "Visualizer http port")
 	flag.Parse()
+
+	connection := connect(*redisHostPtr, *redisPortPtr)
 
 	configuration := &Configuration{
 		LogFile: *logFilePtr,
 		Port: *portPtr,
-		Redis: Redis{Host: *redisHostPtr, Port: *redisPortPtr},
+		Redis: Redis{Host: *redisHostPtr, Port: *redisPortPtr, Connection: connection},
 	}
 
 	logFile, err := os.OpenFile(configuration.LogFile, os.O_WRONLY | os.O_CREATE | os.O_APPEND, 0666)
@@ -69,7 +73,7 @@ func main() {
         }
 
         r := mux.NewRouter()
-        r.Handle("/", handlers.LoggingHandler(logFile, configurationHandler{configuration, DashboardHandler}))
+        r.Handle("/",            handlers.LoggingHandler(logFile, configurationHandler{configuration, DashboardHandler}))
 	r.Handle("/blacklist",   handlers.LoggingHandler(logFile, configurationHandler{configuration, BlacklistHandler}))
 	r.Handle("/whitelist",   handlers.LoggingHandler(logFile, configurationHandler{configuration, WhitelistHandler}))
 	r.Handle("/marklist",    handlers.LoggingHandler(logFile, configurationHandler{configuration, MarklistHandler}))

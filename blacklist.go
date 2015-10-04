@@ -8,14 +8,16 @@ import (
 
 func BlacklistHandler(configuration *Configuration, response http.ResponseWriter, request *http.Request) (int, error) {
         response.Header().Set("Content-type", "text/html")
+
         err := request.ParseForm()
         if err != nil {
                 http.Error(response, fmt.Sprintf("error parsing url %v", err), 500)
         }
-        connection := connect(configuration.Redis.Host, configuration.Redis.Port)
-        blacklisted := replyToArray(connection.Cmd("KEYS", "*:repsheet:ip:blacklisted"))
+
+        blacklisted  := replyToArray(configuration.Redis.Connection.Cmd("KEYS", "*:repsheet:ip:blacklisted"))
         templates, _ := template.ParseFiles("layout.html", "blacklist.html")
-        summary := Summary{Blacklisted: blacklisted}
+        summary      := Summary{Blacklisted: blacklisted}
         templates.ExecuteTemplate(response, "layout", Page{Summary: summary, Active: "blacklist"})
+
 	return 200, nil
 }
