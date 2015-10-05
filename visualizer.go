@@ -63,6 +63,7 @@ func main() {
 	r.Handle("/whitelist",   handlers.LoggingHandler(logFile, configurationHandler{configuration, WhitelistHandler}))
 	r.Handle("/marklist",    handlers.LoggingHandler(logFile, configurationHandler{configuration, MarklistHandler}))
 	r.Handle("/actors/{id}", handlers.LoggingHandler(logFile, configurationHandler{configuration, ActorHandler}))
+	r.Handle("/search",      handlers.LoggingHandler(logFile, configurationHandler{configuration, SearchHandler}))
 	r.Handle("/heartbeat",   handlers.LoggingHandler(logFile, http.HandlerFunc(HeartbeatHandler)))
 	r.Handle("/error",       handlers.LoggingHandler(logFile, http.HandlerFunc(ErrorHandler)))
         r.PathPrefix("/public/").Handler(http.StripPrefix("/public/", http.FileServer(http.Dir("public"))))
