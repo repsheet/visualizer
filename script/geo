@@ -1,0 +1,6 @@
+#!/bin/sh
+
+mkdir db
+cd db
+curl -O http://geolite.maxmind.com/download/geoip/database/GeoLiteCity.dat.gz
+gunzip -d GeoLiteCity.dat.gz
