@@ -3,6 +3,12 @@ language: go
 go:
   - tip
 
+addons:
+  apt:
+    packages:
+      - geoip-bin
+      - libgeoip-dev
+
 install:
   - go get github.com/gorilla/mux
   - go get github.com/gorilla/handlers
