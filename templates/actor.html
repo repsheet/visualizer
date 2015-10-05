@@ -10,7 +10,7 @@
         <div class="col-md-4 col-sm-5">
           <div id="map" style="width: 263px; height: 234px;" class="thumbnail"></div>
           <script type="text/javascript">
-            var myLatlng = new google.maps.LatLng(0, 0);
+            var myLatlng = new google.maps.LatLng({{.Actor.GeoIP.Latitude}}, {{.Actor.GeoIP.Longitude}});
             var mapOptions = {
             zoom: 9,
             center: myLatlng
@@ -25,26 +25,23 @@
         </div>
 
         <div class="col-md-8 col-sm-7">
-          <h4>City, Region, Country</h4>
+          <h4>
+	    {{ if .Actor.GeoIP.City }}
+	    {{.Actor.GeoIP.City}},
+	    {{ end }}
+	    {{ if .Actor.GeoIP.Region }}
+	    {{.Actor.GeoIP.Region}},
+	    {{ end }}
+	    {{ if .Actor.GeoIP.CountryName }}
+	    {{.Actor.GeoIP.CountryName}}
+	    {{ end }}
+	  </h4>
 
           <ul class="icons-list">
             <li>
-              <i class="icon-li fa fa-map-marker"></i> 0, 0
+              <i class="icon-li fa fa-map-marker"></i> {{.Actor.GeoIP.Latitude}}, {{.Actor.GeoIP.Longitude}}
             </li>
           </ul>
-
-	  <p>
-	    <script>
-	       function act(action) {
-		 $.post('/action', {'action':action, 'ip': '{{.Actor.Id}}'}, function(data) {
-		   window.location = '/actors/{{.Actor.Id}}';
-		 });
-	       }
-	    </script>
-            <a href="javascript:act('blacklist');" class="btn btn-primary">Blacklist</a>
-            &nbsp;&nbsp;
-            <a href="javascript:act('whitelist');" class="btn btn-secondary">Whitelist</a>
-          </p>
         </div>
       </div>
 
@@ -77,7 +74,7 @@
         </a>
 
         <a href="javascript:;" class="list-group-item"><h3 class="pull-right"><i class="fa fa-eye"></i></h3>
-          <h4 class="list-group-item-heading">50</h4>
+          <h4 class="list-group-item-heading">0</h4>
           <p class="list-group-item-text">Score</p>
         </a>
       </div>

@@ -3,9 +3,10 @@ package main
 import "net/http"
 
 type Configuration struct {
-	Redis   Redis
-	LogFile string
-	Port    int
+	Redis         Redis
+	LogFile       string
+	Port          int
+	GeoIPDatabase string
 }
 
 type configurationHandler struct {

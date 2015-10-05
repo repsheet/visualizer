@@ -40,6 +40,7 @@ func main() {
 	redisHostPtr := flag.String("redisHost", "localhost", "Redis hostname")
 	redisPortPtr := flag.Int("redisPort", 6379, "Redis port")
  	portPtr      := flag.Int("port", 8080, "Visualizer http port")
+	geoIpPtr     := flag.String("geoIpDb", "db/GeoLiteCity.dat", "Path to GeoIP database")
 	flag.Parse()
 
 	connection := connect(*redisHostPtr, *redisPortPtr)
@@ -48,6 +49,7 @@ func main() {
 		LogFile: *logFilePtr,
 		Port: *portPtr,
 		Redis: Redis{Host: *redisHostPtr, Port: *redisPortPtr, Connection: connection},
+		GeoIPDatabase: *geoIpPtr,
 	}
 
 	logFile, err := os.OpenFile(configuration.LogFile, os.O_WRONLY | os.O_CREATE | os.O_APPEND, 0666)
