@@ -27,7 +27,8 @@ type Summary struct {
 func geoipLookup(configuration *Configuration, actor string) *geoip.GeoIPRecord {
         gi, err := geoip.Open(configuration.GeoIPDatabase)
         if err != nil {
-                fmt.Printf("Could not open GeoIP database\n")
+                fmt.Printf("GeoIP: Could not open %s\n", configuration.GeoIPDatabase)
+                return &geoip.GeoIPRecord{}
         }
 
         return gi.GetRecord(actor)

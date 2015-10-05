@@ -8,6 +8,7 @@
     <div class="col-md-9">
       <div class="row">
         <div class="col-md-4 col-sm-5">
+	  {{ if and .Actor.GeoIP.Latitude .Actor.GeoIP.Longitude }}
           <div id="map" style="width: 263px; height: 234px;" class="thumbnail"></div>
           <script type="text/javascript">
             var myLatlng = new google.maps.LatLng({{.Actor.GeoIP.Latitude}}, {{.Actor.GeoIP.Longitude}});
@@ -22,6 +23,9 @@
             map: map,
             });
           </script>
+	  {{ else }}
+	  <div style="width: 263px; height: 234px;">Could not load GeoIP Database</div>
+	  {{ end }}
         </div>
 
         <div class="col-md-8 col-sm-7">
@@ -37,11 +41,13 @@
 	    {{ end }}
 	  </h4>
 
+	  {{ if and .Actor.GeoIP.Latitude .Actor.GeoIP.Longitude }}
           <ul class="icons-list">
             <li>
               <i class="icon-li fa fa-map-marker"></i> {{.Actor.GeoIP.Latitude}}, {{.Actor.GeoIP.Longitude}}
             </li>
           </ul>
+	  {{ end }}
         </div>
       </div>
 
