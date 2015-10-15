@@ -71,7 +71,7 @@ func main() {
         r.PathPrefix("/public/").Handler(http.StripPrefix("/public/", http.FileServer(http.Dir("public"))))
         http.Handle("/", r)
 
-	serverString := fmt.Sprintf("localhost:%d", configuration.Port)
+	serverString := fmt.Sprintf(":%d", configuration.Port)
         err = http.ListenAndServe(serverString, r)
         if err != nil {
                 log.Fatal("Error starting server: ", err)
