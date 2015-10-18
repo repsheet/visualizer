@@ -4,17 +4,18 @@ import (
         "fmt"
         "net/http"
         "html/template"
+        "github.com/fzzy/radix/redis"
 )
 
-func search(configuration *Configuration, actor string) bool {
+func search(connection *redis.Client, actor string) bool {
         searchString := fmt.Sprintf("%s:*", actor)
-        results := configuration.Redis.Connection.Cmd("KEYS", searchString)
+        results := connection.Cmd("KEYS", searchString)
 
-	if len(results.Elems) == 1 {
-		return true
-	} else {
-		return false
-	}
+        if len(results.Elems) == 1 {
+                return true
+        } else {
+                return false
+        }
 }
 
 func SearchHandler(configuration *Configuration, response http.ResponseWriter, request *http.Request) (int, error) {
@@ -25,8 +26,10 @@ func SearchHandler(configuration *Configuration, response http.ResponseWriter, r
                 http.Redirect(response, request, "/error", 307)
         }
 
+        connection := connect(configuration.Redis.Host, configuration.Redis.Port)
+
         query := request.PostFormValue("actor")
-        found := search(configuration, query)
+        found := search(connection, query)
 
         if found {
                 location := fmt.Sprintf("/actors/%s", query)
@@ -37,5 +40,5 @@ func SearchHandler(configuration *Configuration, response http.ResponseWriter, r
                 templates.ExecuteTemplate(response, "layout", Page{Actor: Actor{Id: query}})
         }
 
-	return 200, nil
+        return 200, nil
 }

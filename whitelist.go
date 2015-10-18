@@ -1,8 +1,8 @@
 package main
 
 import (
-	"html/template"
-	"net/http"
+        "html/template"
+        "net/http"
 )
 
 func WhitelistHandler(configuration *Configuration, response http.ResponseWriter, request *http.Request) (int, error) {
@@ -10,13 +10,15 @@ func WhitelistHandler(configuration *Configuration, response http.ResponseWriter
 
         err := request.ParseForm()
         if err != nil {
-		http.Redirect(response, request, "/error", 307)
+                http.Redirect(response, request, "/error", 307)
         }
 
-        whitelisted  := replyToArray(configuration.Redis.Connection.Cmd("KEYS", "*:repsheet:ip:whitelisted"))
+        connection := connect(configuration.Redis.Host, configuration.Redis.Port)
+
+        whitelisted  := replyToArray(connection.Cmd("KEYS", "*:repsheet:ip:whitelisted"))
         templates, _ := template.ParseFiles("templates/layout.html", "templates/whitelist.html")
         summary      := Summary{Whitelisted: whitelisted}
         templates.ExecuteTemplate(response, "layout", Page{Summary: summary, Active: "whitelist"})
 
-	return 200, nil
+        return 200, nil
 }

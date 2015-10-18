@@ -1,17 +1,16 @@
 package main
 
 import (
-	"fmt"
-	"syscall"
-	"os"
-	"strings"
+        "fmt"
+        "syscall"
+        "os"
+        "strings"
         "github.com/fzzy/radix/redis"
 )
 
 type Redis struct {
-	Host string
-	Port int
-	Connection *redis.Client
+        Host string
+        Port int
 }
 
 func connect(host string, port int) *redis.Client {
@@ -36,4 +35,3 @@ func replyToArray(reply *redis.Reply) []string {
 
         return results
 }
-

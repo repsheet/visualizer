@@ -58,10 +58,12 @@ func ActorHandler(configuration *Configuration, response http.ResponseWriter, re
                 http.Redirect(response, request, "/error", 307)
         }
 
+        connection := connect(configuration.Redis.Host, configuration.Redis.Port)
+
         vars         := mux.Vars(request)
         geo          := geoipLookup(configuration, vars["id"])
         actorString  := fmt.Sprintf("%s:repsheet:ip:*", vars["id"])
-        actor        := makeActor(vars["id"], configuration.Redis.Connection.Cmd("KEYS", actorString), geo)
+        actor        := makeActor(vars["id"], connection.Cmd("KEYS", actorString), geo)
 
         templates, _ := template.ParseFiles("templates/layout.html", "templates/actor.html")
         templates.ExecuteTemplate(response, "layout", Page{Actor: actor})

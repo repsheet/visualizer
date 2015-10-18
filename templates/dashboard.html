@@ -96,7 +96,7 @@
                 </tr>
               </thead>
               <tbody>
-		{{range .Summary.Whitelisted}}
+		{{range .Summary.Marked}}
                 <tr>
                   <td>{{.}}</td>
                   <td><a href="actors/{{.}}" class="btn btn-xs btn-tertiary">View &nbsp;&nbsp;<i class="fa fa-chevron-right"></i></a></td>
@@ -116,7 +116,7 @@
     <div class="col-md-4">
       <div class="portlet">
         <div class="portlet-header">
-          <h3>Marked Actors</h3>
+          <h3>Whitelisted Actors</h3>
         </div>
 
         <div class="portlet-content">
@@ -129,7 +129,7 @@
                 </tr>
               </thead>
               <tbody>
-		{{range .Summary.Marked}}
+		{{range .Summary.Whitelisted}}
                 <tr>
                   <td>{{.}}</td>
                   <td><a href="actors/{{.}}" class="btn btn-xs btn-tertiary">View &nbsp;&nbsp;<i class="fa fa-chevron-right"></i></a></td>

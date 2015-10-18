@@ -1,8 +1,8 @@
 package main
 
 import (
-	"html/template"
-	"net/http"
+        "html/template"
+        "net/http"
 )
 
 func MarklistHandler(configuration *Configuration, response http.ResponseWriter, request *http.Request) (int, error) {
@@ -10,13 +10,15 @@ func MarklistHandler(configuration *Configuration, response http.ResponseWriter,
 
         err := request.ParseForm()
         if err != nil {
-		http.Redirect(response, request, "/error", 307)
+                http.Redirect(response, request, "/error", 307)
         }
 
-        marked       := replyToArray(configuration.Redis.Connection.Cmd("KEYS", "*:repsheet:ip:marked"))
+        connection := connect(configuration.Redis.Host, configuration.Redis.Port)
+
+        marked       := replyToArray(connection.Cmd("KEYS", "*:repsheet:ip:marked"))
         templates, _ := template.ParseFiles("templates/layout.html", "templates/marklist.html")
         summary      := Summary{Marked: marked}
         templates.ExecuteTemplate(response, "layout", Page{Summary: summary, Active: "marklist"})
 
-	return 200, nil
+        return 200, nil
 }

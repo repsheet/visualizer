@@ -5,16 +5,16 @@ import (
         "fmt"
         "net/http"
         "os"
-	"flag"
-	"html/template"
+        "flag"
+        "html/template"
         "github.com/gorilla/mux"
         "github.com/gorilla/handlers"
 )
 
 type Page struct {
-	Active  string
+        Active  string
         Summary Summary
-	Actor   Actor
+        Actor   Actor
 }
 
 func NotFoundHandler(response http.ResponseWriter, request *http.Request) {
@@ -25,53 +25,51 @@ func NotFoundHandler(response http.ResponseWriter, request *http.Request) {
 
 func ErrorHandler(response http.ResponseWriter, request *http.Request) {
         response.Header().Set("Content-type", "text/html")
-	response.WriteHeader(500)
+        response.WriteHeader(500)
         templates, _ := template.ParseFiles("templates/layout.html", "templates/500.html")
         templates.ExecuteTemplate(response, "layout", Page{})
 }
 
 func HeartbeatHandler(response http.ResponseWriter, request *http.Request) {
-	response.Header().Set("Content-type", "text/html")
-	fmt.Fprintf(response, "OK")
+        response.Header().Set("Content-type", "text/html")
+        fmt.Fprintf(response, "OK")
 }
 
 func main() {
-	logFilePtr   := flag.String("logfile", "logs/visualizer.log", "Path to log file")
-	redisHostPtr := flag.String("redisHost", "localhost", "Redis hostname")
-	redisPortPtr := flag.Int("redisPort", 6379, "Redis port")
- 	portPtr      := flag.Int("port", 8080, "Visualizer http port")
-	geoIpPtr     := flag.String("geoIpDb", "db/GeoLiteCity.dat", "Path to GeoIP database")
-	flag.Parse()
+        logFilePtr   := flag.String("logfile", "logs/visualizer.log", "Path to log file")
+        redisHostPtr := flag.String("redisHost", "localhost", "Redis hostname")
+        redisPortPtr := flag.Int("redisPort", 6379, "Redis port")
+        portPtr      := flag.Int("port", 8080, "Visualizer http port")
+        geoIpPtr     := flag.String("geoIpDb", "db/GeoLiteCity.dat", "Path to GeoIP database")
+        flag.Parse()
 
-	connection := connect(*redisHostPtr, *redisPortPtr)
+        configuration := &Configuration{
+                LogFile: *logFilePtr,
+                Port: *portPtr,
+                Redis: Redis{Host: *redisHostPtr, Port: *redisPortPtr},
+                GeoIPDatabase: *geoIpPtr,
+        }
 
-	configuration := &Configuration{
-		LogFile: *logFilePtr,
-		Port: *portPtr,
-		Redis: Redis{Host: *redisHostPtr, Port: *redisPortPtr, Connection: connection},
-		GeoIPDatabase: *geoIpPtr,
-	}
-
-	logFile, err := os.OpenFile(configuration.LogFile, os.O_WRONLY | os.O_CREATE | os.O_APPEND, 0666)
+        logFile, err := os.OpenFile(configuration.LogFile, os.O_WRONLY | os.O_CREATE | os.O_APPEND, 0666)
         if err != nil {
                 fmt.Println("Error accessing log file:", err)
                 os.Exit(1)
         }
 
         r := mux.NewRouter()
-	r.NotFoundHandler = http.HandlerFunc(NotFoundHandler)
+        r.NotFoundHandler = http.HandlerFunc(NotFoundHandler)
         r.Handle("/",            handlers.LoggingHandler(logFile, configurationHandler{configuration, DashboardHandler}))
-	r.Handle("/blacklist",   handlers.LoggingHandler(logFile, configurationHandler{configuration, BlacklistHandler}))
-	r.Handle("/whitelist",   handlers.LoggingHandler(logFile, configurationHandler{configuration, WhitelistHandler}))
-	r.Handle("/marklist",    handlers.LoggingHandler(logFile, configurationHandler{configuration, MarklistHandler}))
-	r.Handle("/actors/{id}", handlers.LoggingHandler(logFile, configurationHandler{configuration, ActorHandler}))
-	r.Handle("/search",      handlers.LoggingHandler(logFile, configurationHandler{configuration, SearchHandler}))
-	r.Handle("/heartbeat",   handlers.LoggingHandler(logFile, http.HandlerFunc(HeartbeatHandler)))
-	r.Handle("/error",       handlers.LoggingHandler(logFile, http.HandlerFunc(ErrorHandler)))
+        r.Handle("/blacklist",   handlers.LoggingHandler(logFile, configurationHandler{configuration, BlacklistHandler}))
+        r.Handle("/whitelist",   handlers.LoggingHandler(logFile, configurationHandler{configuration, WhitelistHandler}))
+        r.Handle("/marklist",    handlers.LoggingHandler(logFile, configurationHandler{configuration, MarklistHandler}))
+        r.Handle("/actors/{id}", handlers.LoggingHandler(logFile, configurationHandler{configuration, ActorHandler}))
+        r.Handle("/search",      handlers.LoggingHandler(logFile, configurationHandler{configuration, SearchHandler}))
+        r.Handle("/heartbeat",   handlers.LoggingHandler(logFile, http.HandlerFunc(HeartbeatHandler)))
+        r.Handle("/error",       handlers.LoggingHandler(logFile, http.HandlerFunc(ErrorHandler)))
         r.PathPrefix("/public/").Handler(http.StripPrefix("/public/", http.FileServer(http.Dir("public"))))
         http.Handle("/", r)
 
-	serverString := fmt.Sprintf(":%d", configuration.Port)
+        serverString := fmt.Sprintf(":%d", configuration.Port)
         err = http.ListenAndServe(serverString, r)
         if err != nil {
                 log.Fatal("Error starting server: ", err)
