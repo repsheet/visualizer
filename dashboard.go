@@ -3,7 +3,6 @@ package main
 import (
         "html/template"
         "net/http"
-	"fmt"
 )
 
 func DashboardHandler(configuration *Configuration, response http.ResponseWriter, request *http.Request) (int, error) {
