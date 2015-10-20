@@ -65,7 +65,7 @@ func ActorHandler(configuration *Configuration, response http.ResponseWriter, re
         actorString  := fmt.Sprintf("%s:repsheet:ip:*", vars["id"])
         actor        := makeActor(vars["id"], connection.Cmd("KEYS", actorString), geo)
 
-        templates, _ := template.ParseFiles("templates/layout.html", "templates/actor.html")
+        templates, _ := template.ParseFiles(configuration.TemplateFor("layout"), configuration.TemplateFor("actor"))
         templates.ExecuteTemplate(response, "layout", Page{Actor: actor})
 
         return 200, nil

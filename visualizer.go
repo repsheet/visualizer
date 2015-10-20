@@ -17,17 +17,21 @@ type Page struct {
         Actor   Actor
 }
 
-func NotFoundHandler(response http.ResponseWriter, request *http.Request) {
+func NotFoundHandler(configuration *Configuration, response http.ResponseWriter, request *http.Request) (int, error) {
         response.Header().Set("Content-type", "text/html")
-        templates, _ := template.ParseFiles("templates/layout.html", "templates/404.html")
+        templates, _ := template.ParseFiles(configuration.TemplateFor("layout"), configuration.TemplateFor("404"))
         templates.ExecuteTemplate(response, "layout", Page{})
+
+        return 404, nil
 }
 
-func ErrorHandler(response http.ResponseWriter, request *http.Request) {
+func ErrorHandler(configuration *Configuration, response http.ResponseWriter, request *http.Request) (int, error) {
         response.Header().Set("Content-type", "text/html")
         response.WriteHeader(500)
-        templates, _ := template.ParseFiles("templates/layout.html", "templates/500.html")
+        templates, _ := template.ParseFiles(configuration.TemplateFor("layout"), configuration.TemplateFor("500"))
         templates.ExecuteTemplate(response, "layout", Page{})
+
+        return 500, nil
 }
 
 func HeartbeatHandler(response http.ResponseWriter, request *http.Request) {
@@ -41,6 +45,7 @@ func main() {
         redisPortPtr := flag.Int("redisPort", 6379, "Redis port")
         portPtr      := flag.Int("port", 8080, "Visualizer http port")
         geoIpPtr     := flag.String("geoIpDb", "db/GeoLiteCity.dat", "Path to GeoIP database")
+        assetsPtr    := flag.String("assets", ".", "Path to directory containing templates and public folders")
         flag.Parse()
 
         configuration := &Configuration{
@@ -48,6 +53,7 @@ func main() {
                 Port: *portPtr,
                 Redis: Redis{Host: *redisHostPtr, Port: *redisPortPtr},
                 GeoIPDatabase: *geoIpPtr,
+                AssetsDir: *assetsPtr,
         }
 
         logFile, err := os.OpenFile(configuration.LogFile, os.O_WRONLY | os.O_CREATE | os.O_APPEND, 0666)
@@ -57,16 +63,17 @@ func main() {
         }
 
         r := mux.NewRouter()
-        r.NotFoundHandler = http.HandlerFunc(NotFoundHandler)
+        r.NotFoundHandler = configurationHandler{configuration, NotFoundHandler}
         r.Handle("/",            handlers.LoggingHandler(logFile, configurationHandler{configuration, DashboardHandler}))
         r.Handle("/blacklist",   handlers.LoggingHandler(logFile, configurationHandler{configuration, BlacklistHandler}))
         r.Handle("/whitelist",   handlers.LoggingHandler(logFile, configurationHandler{configuration, WhitelistHandler}))
         r.Handle("/marklist",    handlers.LoggingHandler(logFile, configurationHandler{configuration, MarklistHandler}))
         r.Handle("/actors/{id}", handlers.LoggingHandler(logFile, configurationHandler{configuration, ActorHandler}))
         r.Handle("/search",      handlers.LoggingHandler(logFile, configurationHandler{configuration, SearchHandler}))
+        r.Handle("/error",       handlers.LoggingHandler(logFile, configurationHandler{configuration, ErrorHandler}))
         r.Handle("/heartbeat",   handlers.LoggingHandler(logFile, http.HandlerFunc(HeartbeatHandler)))
-        r.Handle("/error",       handlers.LoggingHandler(logFile, http.HandlerFunc(ErrorHandler)))
-        r.PathPrefix("/public/").Handler(http.StripPrefix("/public/", http.FileServer(http.Dir("public"))))
+        assets := fmt.Sprintf("%s/public", configuration.AssetsDir)
+        r.PathPrefix("/public/").Handler(http.StripPrefix("/public/", http.FileServer(http.Dir(assets))))
         http.Handle("/", r)
 
         serverString := fmt.Sprintf(":%d", configuration.Port)

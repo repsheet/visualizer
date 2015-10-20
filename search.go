@@ -36,7 +36,7 @@ func SearchHandler(configuration *Configuration, response http.ResponseWriter, r
                 http.Redirect(response, request, location, 307)
         } else {
 
-                templates, _ := template.ParseFiles("templates/layout.html", "templates/search.html")
+                templates, _ := template.ParseFiles(configuration.TemplateFor("layout"), configuration.TemplateFor("search"))
                 templates.ExecuteTemplate(response, "layout", Page{Actor: Actor{Id: query}})
         }
 

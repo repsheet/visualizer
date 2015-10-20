@@ -16,7 +16,7 @@ func MarklistHandler(configuration *Configuration, response http.ResponseWriter,
         connection := connect(configuration.Redis.Host, configuration.Redis.Port)
 
         marked       := replyToArray(connection.Cmd("KEYS", "*:repsheet:ip:marked"))
-        templates, _ := template.ParseFiles("templates/layout.html", "templates/marklist.html")
+        templates, _ := template.ParseFiles(configuration.TemplateFor("layout"), configuration.TemplateFor("marklist"))
         summary      := Summary{Marked: marked}
         templates.ExecuteTemplate(response, "layout", Page{Summary: summary, Active: "marklist"})
 

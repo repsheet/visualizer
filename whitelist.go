@@ -16,7 +16,7 @@ func WhitelistHandler(configuration *Configuration, response http.ResponseWriter
         connection := connect(configuration.Redis.Host, configuration.Redis.Port)
 
         whitelisted  := replyToArray(connection.Cmd("KEYS", "*:repsheet:ip:whitelisted"))
-        templates, _ := template.ParseFiles("templates/layout.html", "templates/whitelist.html")
+        templates, _ := template.ParseFiles(configuration.TemplateFor("layout"), configuration.TemplateFor("whitelist"))
         summary      := Summary{Whitelisted: whitelisted}
         templates.ExecuteTemplate(response, "layout", Page{Summary: summary, Active: "whitelist"})
 
