@@ -25,9 +25,9 @@
               <tbody>
                 {{range .Summary.Marked}}
                 <tr>
-                  <td>{{.}}</td>
-                  <td>placeholder</td>
-                  <td><a href="/actors/{{.}}" class="btn btn-xs btn-tertiary">View &nbsp;&nbsp;<i class="fa fa-chevron-right"></i></a></td>
+                  <td>{{.Id}}</td>
+                  <td>{{.Reason}}</td>
+                  <td><a href="/actors/{{.Id}}" class="btn btn-xs btn-tertiary">View &nbsp;&nbsp;<i class="fa fa-chevron-right"></i></a></td>
                 </tr>
                 {{ end }}
               </tbody>

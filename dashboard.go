@@ -15,9 +15,9 @@ func DashboardHandler(configuration *Configuration, response http.ResponseWriter
 
         connection := connect(configuration.Redis.Host, configuration.Redis.Port)
 
-        blacklisted  := replyToArray(connection.Cmd("KEYS", "*:repsheet:ip:blacklisted"))
-        whitelisted  := replyToArray(connection.Cmd("KEYS", "*:repsheet:ip:whitelisted"))
-        marked       := replyToArray(connection.Cmd("KEYS", "*:repsheet:ip:marked"))
+        blacklisted  := replyToActors(configuration, connection.Cmd("KEYS", "*:repsheet:ip:blacklisted"))
+        whitelisted  := replyToActors(configuration, connection.Cmd("KEYS", "*:repsheet:ip:whitelisted"))
+        marked       := replyToActors(configuration, connection.Cmd("KEYS", "*:repsheet:ip:marked"))
         templates, _ := template.ParseFiles(configuration.TemplateFor("layout"), configuration.TemplateFor("dashboard"))
         summary      := Summary{Blacklisted: blacklisted, Whitelisted: whitelisted, Marked: marked}
         templates.ExecuteTemplate(response, "layout", Page{Summary: summary, Active: "dashboard"})

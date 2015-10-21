@@ -12,6 +12,7 @@ import (
 
 type Actor struct {
         Id          string
+	Reason      string
         Whitelisted bool
         Blacklisted bool
         Marked      bool
@@ -19,9 +20,9 @@ type Actor struct {
 }
 
 type Summary struct {
-        Blacklisted []string
-        Whitelisted []string
-        Marked      []string
+        Blacklisted []Actor
+        Whitelisted []Actor
+        Marked      []Actor
 }
 
 func geoipLookup(configuration *Configuration, actor string) *geoip.GeoIPRecord {
