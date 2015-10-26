@@ -3434,3 +3434,11 @@ ul.support-list li {
 @media (min-width: 1200px) {
   
 }
+#pagination ul {
+    list-style-type: none;
+    text-align: center;
+}
+
+#pagination ul li {
+    display: inline;
+}

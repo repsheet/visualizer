@@ -12,9 +12,10 @@ import (
 )
 
 type Page struct {
-        Active  string
-        Summary Summary
-        Actor   Actor
+        Active     string
+        Summary    Summary
+        Actor      Actor
+        Pagination map[string]string
 }
 
 func NotFoundHandler(configuration *Configuration, response http.ResponseWriter, request *http.Request) (int, error) {

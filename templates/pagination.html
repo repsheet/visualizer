@@ -1,0 +1,11 @@
+{{ define "pagination" }}
+
+<div id="pagination">
+  <ul>
+    {{range $text, $href := .Pagination}}
+      <li><a href={{$href}}>{{$text}}</a></li>
+    {{end}}
+  </ul>
+</div>
+
+{{ end }}
