@@ -5,10 +5,11 @@ import (
         "strconv"
         "github.com/fzzy/radix/redis"
         "strings"
+        "math"
 )
 
-func calculateLimit(page int, limit int, size int) int {
-        end := page * limit + limit
+func calculateEnd(start int, limit int, size int) int {
+        end := start + limit
         if end > size {
                 return size
         } else {
@@ -16,12 +17,25 @@ func calculateLimit(page int, limit int, size int) int {
         }
 }
 
+func calculateStart(page int, limit int, size int) int {
+        if page == 0 || page == 1 {
+                return 0
+        } else {
+                start := page * limit - limit
+                if start > size {
+                        return 0
+                } else {
+                        return start
+                }
+        }
+}
+
 func Paginate(configuration *Configuration, reply *redis.Reply, page int, limit int) []Actor {
         connection := connect(configuration.Redis.Host, configuration.Redis.Port)
 
         var actors []Actor
-        start := page * limit
-        end := calculateLimit(page, limit, len(reply.Elems))
+        start := calculateStart(page, limit, len(reply.Elems))
+        end   := calculateEnd(start, limit, len(reply.Elems))
         for i := start; i < end; i++ {
                 actor, _ := reply.Elems[i].Str()
                 reason := connection.Cmd("GET", actor)
@@ -34,7 +48,7 @@ func Paginate(configuration *Configuration, reply *redis.Reply, page int, limit 
 
 func GeneratePaginationLinks(actors *redis.Reply, limit int, offset int, uri string) map[string]string {
         links := make(map[string]string)
-        last_page := len(actors.Elems) / limit
+        last_page := int(math.Ceil(float64(len(actors.Elems)) / float64(limit)))
         for i := 1; i < last_page; i++ {
                 link := fmt.Sprintf("%s?page=%d", uri, i)
                 links[strconv.Itoa(i)] = link
