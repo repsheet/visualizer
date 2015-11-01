@@ -14,3 +14,6 @@ install:
   - go get github.com/gorilla/handlers
   - go get github.com/fzzy/radix/redis
   - go get github.com/abh/geoip
+
+services:
+  - redis-server
