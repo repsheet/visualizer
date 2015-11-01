@@ -49,6 +49,19 @@ func replyToActors(configuration *Configuration, reply *redis.Reply) []Actor {
         return actors
 }
 
+func replyToMap(configuration *Configuration, reply *redis.Reply) map[string]string {
+        actors := make(map[string]string)
+        connection := connect(configuration.Redis.Host, configuration.Redis.Port)
+        for i := 0; i < len(reply.Elems); i++ {
+                actor, _ := reply.Elems[i].Str()
+                reason := connection.Cmd("GET", actor)
+                reasonString, _ := reason.Str()
+                actors[strings.Split(actor, ":")[0]] = reasonString
+        }
+
+        return actors
+}
+
 func arrayToActors(configuration *Configuration, actors []string) []Actor {
         var list []Actor
         connection := connect(configuration.Redis.Host, configuration.Redis.Port)
