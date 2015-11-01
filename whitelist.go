@@ -3,6 +3,7 @@ package main
 import (
         "html/template"
         "net/http"
+        "strconv"
 )
 
 func WhitelistHandler(configuration *Configuration, response http.ResponseWriter, request *http.Request) (int, error) {
@@ -13,17 +14,25 @@ func WhitelistHandler(configuration *Configuration, response http.ResponseWriter
                 http.Redirect(response, request, "/error", 307)
         }
 
-        connection := connect(configuration.Redis.Host, configuration.Redis.Port)
+        params := request.URL.Query()
+        var page int
+        if len(params["page"]) <= 0 {
+                page = 0
+        } else {
+                page, _ = strconv.Atoi(params["page"][0])
+        }
+
+        connection   := connect(configuration.Redis.Host, configuration.Redis.Port)
 
         whitelist    := connection.Cmd("KEYS", "*:repsheet:ip:whitelisted")
-        whitelisted  := Paginate(configuration, whitelist, 0, 10)
+        whitelisted  := Paginate(configuration, whitelist, page, 10)
         templates, _ := template.ParseFiles(
                 configuration.TemplateFor("layout"),
                 configuration.TemplateFor("pagination"),
                 configuration.TemplateFor("whitelist"),
         )
         summary      := Summary{Whitelisted: whitelisted}
-        pagination   := GeneratePaginationLinks(whitelist, 10, 0, "/whitelisted")
+        pagination   := GeneratePaginationLinks(whitelist, 10, 0, "/whitelist")
         templates.ExecuteTemplate(response, "layout", Page{Summary: summary, Active: "whitelist", Pagination: pagination})
 
         return 200, nil

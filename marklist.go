@@ -3,6 +3,7 @@ package main
 import (
         "html/template"
         "net/http"
+        "strconv"
 )
 
 func MarklistHandler(configuration *Configuration, response http.ResponseWriter, request *http.Request) (int, error) {
@@ -13,10 +14,18 @@ func MarklistHandler(configuration *Configuration, response http.ResponseWriter,
                 http.Redirect(response, request, "/error", 307)
         }
 
-        connection := connect(configuration.Redis.Host, configuration.Redis.Port)
+        params := request.URL.Query()
+        var page int
+        if len(params["page"]) <= 0 {
+                page = 0
+        } else {
+                page, _ = strconv.Atoi(params["page"][0])
+        }
+
+        connection   := connect(configuration.Redis.Host, configuration.Redis.Port)
 
         marklist     := connection.Cmd("KEYS", "*:repsheet:ip:marked")
-        marked       := Paginate(configuration, marklist, 0, 10)
+        marked       := Paginate(configuration, marklist, page, 10)
         templates, _ := template.ParseFiles(
                 configuration.TemplateFor("layout"),
                 configuration.TemplateFor("pagination"),
