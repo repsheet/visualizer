@@ -15,10 +15,16 @@ func MarklistHandler(configuration *Configuration, response http.ResponseWriter,
 
         connection := connect(configuration.Redis.Host, configuration.Redis.Port)
 
-        marked       := replyToActors(configuration, connection.Cmd("KEYS", "*:repsheet:ip:marked"))
-        templates, _ := template.ParseFiles(configuration.TemplateFor("layout"), configuration.TemplateFor("marklist"))
+        marklist     := connection.Cmd("KEYS", "*:repsheet:ip:marked")
+        marked       := Paginate(configuration, marklist, 0, 10)
+        templates, _ := template.ParseFiles(
+                configuration.TemplateFor("layout"),
+                configuration.TemplateFor("pagination"),
+                configuration.TemplateFor("marklist"),
+        )
         summary      := Summary{Marked: marked}
-        templates.ExecuteTemplate(response, "layout", Page{Summary: summary, Active: "marklist"})
+        pagination   := GeneratePaginationLinks(marklist, 10, 0, "/marklist")
+        templates.ExecuteTemplate(response, "layout", Page{Summary: summary, Active: "marklist", Pagination: pagination})
 
         return 200, nil
 }

@@ -37,14 +37,26 @@ func replyToArray(reply *redis.Reply) []string {
 }
 
 func replyToActors(configuration *Configuration, reply *redis.Reply) []Actor {
-	var actors []Actor
-	connection := connect(configuration.Redis.Host, configuration.Redis.Port)
-	for i := 0; i < len(reply.Elems); i++ {
-		actor, _ := reply.Elems[i].Str()
-		reason := connection.Cmd("GET", actor)
-		reasonString, _ := reason.Str()
-		actors = append(actors, Actor{Id: strings.Split(actor, ":")[0], Reason: reasonString})
-	}
+        var actors []Actor
+        connection := connect(configuration.Redis.Host, configuration.Redis.Port)
+        for i := 0; i < len(reply.Elems); i++ {
+                actor, _ := reply.Elems[i].Str()
+                reason := connection.Cmd("GET", actor)
+                reasonString, _ := reason.Str()
+                actors = append(actors, Actor{Id: strings.Split(actor, ":")[0], Reason: reasonString})
+        }
 
-	return actors
+        return actors
+}
+
+func arrayToActors(configuration *Configuration, actors []string) []Actor {
+        var list []Actor
+        connection := connect(configuration.Redis.Host, configuration.Redis.Port)
+        for _, a := range actors {
+                reason := connection.Cmd("GET", a)
+                reasonString, _ := reason.Str()
+                list = append(list, Actor{Id: a, Reason: reasonString})
+        }
+
+        return list
 }

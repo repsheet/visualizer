@@ -16,7 +16,7 @@
       <a href="blacklist" class="dashboard-stat primary">
         <div class="details">
           <span class="content">Blacklisted Actors</span>
-          <span class="value">{{len .Summary.Blacklisted}}</span>
+          <span class="value">{{index .Summary.Totals "blacklist"}}</span>
         </div>
 
         <i class="fa fa-play-circle more"></i>
@@ -27,7 +27,7 @@
       <a href="marklist" class="dashboard-stat secondary">
         <div class="details">
           <span class="content">Marked Actors</span>
-          <span class="value">{{len .Summary.Marked}}</span>
+          <span class="value">{{index .Summary.Totals "whitelist"}}</span>
         </div>
 
         <i class="fa fa-play-circle more"></i>
@@ -38,7 +38,7 @@
       <a href="whitelist" class="dashboard-stat tertiary">
         <div class="details">
           <span class="content">Whitelisted Actors</span>
-          <span class="value">{{len .Summary.Whitelisted}}</span>
+          <span class="value">{{index .Summary.Totals "marklist"}}</span>
         </div>
 
         <i class="fa fa-play-circle more"></i>

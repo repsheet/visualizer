@@ -15,11 +15,26 @@ func DashboardHandler(configuration *Configuration, response http.ResponseWriter
 
         connection := connect(configuration.Redis.Host, configuration.Redis.Port)
 
-        blacklisted  := replyToActors(configuration, connection.Cmd("KEYS", "*:repsheet:ip:blacklisted"))
-        whitelisted  := replyToActors(configuration, connection.Cmd("KEYS", "*:repsheet:ip:whitelisted"))
-        marked       := replyToActors(configuration, connection.Cmd("KEYS", "*:repsheet:ip:marked"))
+        blacklist    := connection.Cmd("KEYS", "*:repsheet:ip:blacklisted")
+        blacklisted  := Paginate(configuration, blacklist, 0, 10)
+        whitelist    := connection.Cmd("KEYS", "*:repsheet:ip:whitelisted")
+        whitelisted  := Paginate(configuration, whitelist, 0, 10)
+        marklist     := connection.Cmd("KEYS", "*:repsheet:ip:marked")
+        marked       := Paginate(configuration, marklist, 0, 10)
         templates, _ := template.ParseFiles(configuration.TemplateFor("layout"), configuration.TemplateFor("dashboard"))
-        summary      := Summary{Blacklisted: blacklisted, Whitelisted: whitelisted, Marked: marked}
+
+        totals := make(map[string]int)
+        totals["blacklist"] = len(blacklist.Elems)
+        totals["whitelist"] = len(whitelist.Elems)
+        totals["marklist"]  = len(marklist.Elems)
+
+        summary      := Summary {
+                Blacklisted: blacklisted,
+                Whitelisted: whitelisted,
+                Marked: marked,
+                Totals: totals,
+        }
+
         templates.ExecuteTemplate(response, "layout", Page{Summary: summary, Active: "dashboard"})
 
         return 200, nil

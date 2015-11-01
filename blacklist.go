@@ -13,13 +13,16 @@ func BlacklistHandler(configuration *Configuration, response http.ResponseWriter
                 http.Redirect(response, request, "/error", 307)
         }
 
-        connection := connect(configuration.Redis.Host, configuration.Redis.Port)
-
-        total := replyToArray(connection.Cmd("KEYS", "*:repsheet:ip:blacklisted"))
-        blacklisted  := replyToActors(configuration, connection.Cmd("KEYS", "*:repsheet:ip:blacklisted"))
-        templates, _ := template.ParseFiles(configuration.TemplateFor("layout"), configuration.TemplateFor("pagination"), configuration.TemplateFor("blacklist"))
+        connection   := connect(configuration.Redis.Host, configuration.Redis.Port)
+        blacklist    := connection.Cmd("KEYS", "*:repsheet:ip:blacklisted")
+        blacklisted  := Paginate(configuration, blacklist, 0, 10)
+        templates, _ := template.ParseFiles(
+                configuration.TemplateFor("layout"),
+                configuration.TemplateFor("pagination"),
+                configuration.TemplateFor("blacklist"),
+        )
         summary      := Summary{Blacklisted: blacklisted}
-        pagination   := GeneratePaginationLinks(total, 5, 0, "/blacklisted")
+        pagination   := GeneratePaginationLinks(blacklist, 10, 0, "/blacklisted")
         templates.ExecuteTemplate(response, "layout", Page{Summary: summary, Active: "blacklist", Pagination: pagination})
 
         return 200, nil
