@@ -2,8 +2,13 @@
 
 <div id="pagination">
   <ul>
+    {{ $page := .CurrentPage }}
     {{range $text, $href := .Pagination}}
-      <li><a href={{$href}}>{{$text}}</a></li>
+      {{ if eq $text $page }}
+        <li class="current"><a href={{$href}}>{{$text}}</a></li>
+      {{ else }}
+        <li><a href={{$href}}>{{$text}}</a></li>
+      {{end}}
     {{end}}
   </ul>
 </div>

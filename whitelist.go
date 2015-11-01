@@ -22,6 +22,13 @@ func WhitelistHandler(configuration *Configuration, response http.ResponseWriter
                 page, _ = strconv.Atoi(params["page"][0])
         }
 
+        var currentPage string
+        if page == 0 || page == 1 {
+                currentPage = "1"
+        } else {
+                currentPage = strconv.Itoa(page)
+        }
+
         connection   := connect(configuration.Redis.Host, configuration.Redis.Port)
 
         whitelist    := connection.Cmd("KEYS", "*:repsheet:ip:whitelisted")
@@ -33,7 +40,7 @@ func WhitelistHandler(configuration *Configuration, response http.ResponseWriter
         )
         summary      := Summary{Whitelisted: whitelisted}
         pagination   := GeneratePaginationLinks(whitelist, 10, 0, "/whitelist")
-        templates.ExecuteTemplate(response, "layout", Page{Summary: summary, Active: "whitelist", Pagination: pagination})
+        templates.ExecuteTemplate(response, "layout", Page{Summary: summary, Active: "whitelist", Pagination: pagination, CurrentPage: currentPage})
 
         return 200, nil
 }

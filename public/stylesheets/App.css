@@ -3442,3 +3442,7 @@ ul.support-list li {
 #pagination ul li {
     display: inline;
 }
+
+.current {
+    font-size: 1.5em;
+}

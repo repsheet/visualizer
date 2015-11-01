@@ -22,6 +22,13 @@ func MarklistHandler(configuration *Configuration, response http.ResponseWriter,
                 page, _ = strconv.Atoi(params["page"][0])
         }
 
+        var currentPage string
+        if page == 0 || page == 1 {
+                currentPage = "1"
+        } else {
+                currentPage = strconv.Itoa(page)
+        }
+
         connection   := connect(configuration.Redis.Host, configuration.Redis.Port)
 
         marklist     := connection.Cmd("KEYS", "*:repsheet:ip:marked")
@@ -33,7 +40,7 @@ func MarklistHandler(configuration *Configuration, response http.ResponseWriter,
         )
         summary      := Summary{Marked: marked}
         pagination   := GeneratePaginationLinks(marklist, 10, 0, "/marklist")
-        templates.ExecuteTemplate(response, "layout", Page{Summary: summary, Active: "marklist", Pagination: pagination})
+        templates.ExecuteTemplate(response, "layout", Page{Summary: summary, Active: "marklist", Pagination: pagination, CurrentPage: currentPage})
 
         return 200, nil
 }
