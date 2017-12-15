@@ -7,8 +7,8 @@ import RemoteData exposing (WebData)
 import Models exposing (Model, Dashboard)
 import Msgs exposing (Msg)
 
-maybeList : WebData Dashboard -> Html Msg
-maybeList response =
+maybeRender : WebData Dashboard -> Html Msg
+maybeRender response =
     case response of
         RemoteData.NotAsked ->
             text ""
@@ -20,11 +20,12 @@ maybeList response =
                 , statusBlock "secondary" "Marked"      dashboard.marked
                 , statusBlock "tertiary"  "Whitelisted" dashboard.whitelisted ]
         RemoteData.Failure error ->
-            text (toString error)
+            Debug.log (toString error)
+            text "ERROR"
 
 statusBlockSection : WebData Dashboard -> Html Msg
 statusBlockSection dashboard =
-    maybeList dashboard
+    maybeRender dashboard
 
 statusBlock : String -> String -> String -> Html Msg
 statusBlock color section count =
