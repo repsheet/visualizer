@@ -1,6 +1,6 @@
 module View exposing (..)
 
-import Html exposing (Html, div, h4, h3, h1, a, text, span, i, tr, th, thead, table, td, tbody)
+import Html exposing (Html, div, h4, h3, h1, a, text, span, i, tr, th, thead, table, td, tbody, hr)
 import Html.Attributes exposing (id, class, href)
 import RemoteData exposing (WebData)
 
@@ -47,9 +47,9 @@ maybeRenderList response =
             text "Loading..."
         RemoteData.Success dashboard ->
             div [ class "row" ]
-                [ listBlock "Blacklisted" dashboard.blacklist
-                , listBlock "Marked"      dashboard.marklist
-                , listBlock "Whitelisted" dashboard.whitelist ]
+                [ listBlock "Blacklisted" "primary"   dashboard.blacklist
+                , listBlock "Marked"      "secondary" dashboard.marklist
+                , listBlock "Whitelisted" "tertiary"  dashboard.whitelist ]
         RemoteData.Failure error ->
             Debug.log (toString error)
             text "ERROR"
@@ -59,10 +59,11 @@ actorRow actor =
     tr []
         [ td [] [ text actor.address ]
         , td [] [ text actor.reason ]
+        , td [] [ a [ href "#", class "btn-xs btn-tertiary"] [ text "View  ", i [ class "fa fa-chevron-right" ] []] ]
         ]
 
-listBlock : String -> List Actor -> Html Msg
-listBlock heading actors =
+listBlock : String -> String -> List Actor -> Html Msg
+listBlock heading color actors =
     div [ class "col-md-4" ]
         [ div [ class "portlet" ]
               [ div [ class "portlet-header" ]
@@ -73,12 +74,15 @@ listBlock heading actors =
                                [ thead []
                                      [ tr []
                                        [ th [] [ text "IP Address"]
+                                       , th [] [ text "Reason"]
                                        , th [] []
                                        ]
                                      ]
                                , tbody [] (List.map actorRow actors)
                                ]
                           ]
+                    , hr [] []
+                    , a [ href "#", class ("btn btn-sm btn-" ++ color) ] [ text ("View All " ++ heading ++  " Actors") ]
                     ]
               ]
         ]
