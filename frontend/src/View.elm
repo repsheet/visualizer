@@ -87,6 +87,31 @@ listBlock heading color actors =
               ]
         ]
 
+listPaginated : String -> WebData Dashboard -> Html Msg
+listPaginated section actors =
+    div [ class "row" ]
+        [ div [ class "col-md-12" ]
+              [ div [ class "portlet" ]
+                    [ div [ class "portlet-header" ]
+                          [ h3 [] [ text ("All " ++ section ++ " Actors") ] ]
+                    , div [ class "portlet-content" ]
+                          [ div [ class "table-responsive" ]
+                                [ table [ class "table" ]
+                                      [ thead []
+                                            [ tr []
+                                              [ th [] [ text "IP Address" ]
+                                              , th [] [ text "Reason" ]
+                                              ]
+                                            ]
+                                      , tbody [] []
+                                      ]
+                                ]
+                          ]
+                    ]
+              ]
+        ]
+
+
 listBlockSection : WebData Dashboard -> Html Msg
 listBlockSection dashboard =
     maybeRenderList dashboard
@@ -106,13 +131,25 @@ view model =
                 ]
         Models.BlacklistRoute ->
             div []
-                [ h1 [] [ text "Blacklist" ] ]
+                [ div [ id "content-header" ]
+                      [ h1 [] [text "Blacklisted Actors" ] ]
+                , div [ id "content-container" ]
+                      [ listPaginated "Blacklisted" model.dashboard ]
+                ]
         Models.WhitelistRoute ->
             div []
-                [ h1 [] [ text "Whitelist"] ]
+                [ div [ id "content-header" ]
+                      [ h1 [] [text "Whitelisted Actors" ] ]
+                , div [ id "content-container" ]
+                      [ listPaginated "Whitelisted" model.dashboard ]
+                ]
         Models.MarklistRoute ->
             div []
-                [ h1 [] [ text "Marklist" ] ]
+                [ div [ id "content-header" ]
+                      [ h1 [] [text "Marked Actors" ] ]
+                , div [ id "content-container" ]
+                      [ listPaginated "Marked" model.dashboard ]
+                ]
         Models.ActorRoute address ->
             div []
                 [ h1 [] [ text ("Actor " ++ address) ] ]
