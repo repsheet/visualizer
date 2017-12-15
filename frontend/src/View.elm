@@ -16,9 +16,9 @@ maybeRender response =
             text "Loading..."
         RemoteData.Success dashboard ->
             div [ class "row" ]
-                [ statusBlock "primary"   "Blacklisted" (dashboard.blacklist |> List.length |> toString)
-                , statusBlock "secondary" "Marked"      (dashboard.marklist  |> List.length |> toString)
-                , statusBlock "tertiary"  "Whitelisted" (dashboard.whitelist |> List.length |> toString) ]
+                [ statusBlock "primary"   "Blacklisted" "blacklist" (dashboard.blacklist |> List.length |> toString)
+                , statusBlock "secondary" "Marked"      "marklist"  (dashboard.marklist  |> List.length |> toString)
+                , statusBlock "tertiary"  "Whitelisted" "whitelist" (dashboard.whitelist |> List.length |> toString) ]
         RemoteData.Failure error ->
             Debug.log (toString error)
             text "ERROR"
@@ -27,10 +27,10 @@ statusBlockSection : WebData Dashboard -> Html Msg
 statusBlockSection dashboard =
     maybeRender dashboard
 
-statusBlock : String -> String -> String -> Html Msg
-statusBlock color section count =
+statusBlock : String -> String -> String -> String -> Html Msg
+statusBlock color section url count =
     div [ class "col-md-4 col-sm-6" ]
-        [ a [ href "#", class ("dashboard-stat " ++ color) ]
+        [ a [ href ("#" ++ url), class ("dashboard-stat " ++ color) ]
           [ div [ class "details" ]
             [ span [ class "content" ] [ text (section ++ " Actors") ]
             ,   span [ class "value" ] [ text count ] ]
@@ -59,7 +59,7 @@ actorRow actor =
     tr []
         [ td [] [ text actor.address ]
         , td [] [ text actor.reason ]
-        , td [] [ a [ href "#", class "btn-xs btn-tertiary"] [ text "View  ", i [ class "fa fa-chevron-right" ] []] ]
+        , td [] [ a [ href ("#/actors/" ++ actor.address), class "btn-xs btn-tertiary"] [ text "View  ", i [ class "fa fa-chevron-right" ] []] ]
         ]
 
 listBlock : String -> String -> List Actor -> Html Msg
@@ -93,12 +93,33 @@ listBlockSection dashboard =
 
 view : Model -> Html Msg
 view model =
+    case model.route of
+        Models.DashboardRoute ->
+            div []
+                [ div [ id "content-header" ]
+                      [ h1 [] [ text "Dashboard" ] ]
+                , div [ id "content-container" ]
+                      [ div [] [ h4 [] [ text "Summary" ] ]
+                      , statusBlockSection model.dashboard
+                      , listBlockSection model.dashboard
+                      ]
+                ]
+        Models.BlacklistRoute ->
+            div []
+                [ h1 [] [ text "Blacklist" ] ]
+        Models.WhitelistRoute ->
+            div []
+                [ h1 [] [ text "Whitelist"] ]
+        Models.MarklistRoute ->
+            div []
+                [ h1 [] [ text "Marklist" ] ]
+        Models.ActorRoute address ->
+            div []
+                [ h1 [] [ text ("Actor " ++ address) ] ]
+        Models.NotFoundRoute ->
+            notFoundView
+
+notFoundView : Html Msg
+notFoundView =
     div []
-        [ div [ id "content-header" ]
-            [ h1 [] [ text "Dashboard" ] ]
-        , div [ id "content-container" ]
-            [ div [] [ h4 [] [ text "Summary" ] ]
-            , statusBlockSection model.dashboard
-            , listBlockSection model.dashboard
-            ]
-        ]
+        [ text "Not found" ]

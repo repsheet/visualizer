@@ -4,15 +4,20 @@ import RemoteData exposing (WebData)
 
 type alias Model =
     { dashboard : WebData Dashboard
+    , route : Route
     }
 
-initialModel : Model
-initialModel =
+initialModel : Route -> Model
+initialModel route =
     { dashboard = RemoteData.Loading
+    , route = route
     }
+
+type alias Address =
+    String
 
 type alias Actor =
-    { address : String
+    { address : Address
     , reason  : String
     }
 
@@ -21,3 +26,11 @@ type alias Dashboard =
     , whitelist : List Actor
     , marklist  : List Actor
     }
+
+type Route
+    = DashboardRoute
+    | BlacklistRoute
+    | WhitelistRoute
+    | MarklistRoute
+    | ActorRoute Address
+    | NotFoundRoute
