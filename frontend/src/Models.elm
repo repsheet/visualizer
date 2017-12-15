@@ -11,8 +11,13 @@ initialModel =
     { dashboard = RemoteData.Loading
     }
 
+type alias Actor =
+    { address : String
+    , reason  : String
+    }
+
 type alias Dashboard =
-    { blacklisted : String
-    , whitelisted : String
-    , marked      : String
+    { blacklist : List Actor
+    , whitelist : List Actor
+    , marklist  : List Actor
     }
