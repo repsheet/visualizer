@@ -16,9 +16,9 @@ maybeRender response =
             text "Loading..."
         RemoteData.Success dashboard ->
             div [ class "row" ]
-                [ statusBlock "primary"   "Blacklisted" (toString (List.length dashboard.blacklist))
-                , statusBlock "secondary" "Marked"      (toString (List.length dashboard.marklist))
-                , statusBlock "tertiary"  "Whitelisted" (toString (List.length dashboard.whitelist)) ]
+                [ statusBlock "primary"   "Blacklisted" (dashboard.blacklist |> List.length |> toString)
+                , statusBlock "secondary" "Marked"      (dashboard.marklist  |> List.length |> toString)
+                , statusBlock "tertiary"  "Whitelisted" (dashboard.whitelist |> List.length |> toString) ]
         RemoteData.Failure error ->
             Debug.log (toString error)
             text "ERROR"
