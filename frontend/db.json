@@ -1,0 +1,7 @@
+{
+  "dashboard": {
+    "blacklisted": "100",
+    "whitelisted": "5",
+    "marked": "50"
+  }
+}
