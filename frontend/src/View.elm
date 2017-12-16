@@ -7,25 +7,28 @@ import RemoteData exposing (WebData)
 import Models exposing (Model, Dashboard, Actor)
 import Msgs exposing (Msg)
 
-maybeRender : WebData Dashboard -> Html Msg
-maybeRender response =
+maybeDashboard : WebData Dashboard -> Html Msg
+maybeDashboard response =
     case response of
         RemoteData.NotAsked ->
             text ""
         RemoteData.Loading ->
             text "Loading..."
         RemoteData.Success dashboard ->
-            div [ class "row" ]
-                [ statusBlock "primary"   "Blacklisted" "blacklist" (dashboard.blacklist |> List.length |> toString)
-                , statusBlock "secondary" "Marked"      "marklist"  (dashboard.marklist  |> List.length |> toString)
-                , statusBlock "tertiary"  "Whitelisted" "whitelist" (dashboard.whitelist |> List.length |> toString) ]
+            div [] 
+                [ h4 [] [ text "Summary" ]
+                , div [ class "row" ]
+                    [ statusBlock "primary"   "Blacklisted" "blacklist" (dashboard.blacklist |> List.length |> toString)
+                    , statusBlock "secondary" "Marked"      "marklist"  (dashboard.marklist  |> List.length |> toString)
+                    , statusBlock "tertiary"  "Whitelisted" "whitelist" (dashboard.whitelist |> List.length |> toString) ]
+                , div [ class "row" ]
+                    [ listBlock "Blacklisted" "primary"   dashboard.blacklist
+                    , listBlock "Marked"      "secondary" dashboard.marklist
+                    , listBlock "Whitelisted" "tertiary"  dashboard.whitelist ]
+                ]                
         RemoteData.Failure error ->
             Debug.log (toString error)
             text "ERROR"
-
-statusBlockSection : WebData Dashboard -> Html Msg
-statusBlockSection dashboard =
-    maybeRender dashboard
 
 statusBlock : String -> String -> String -> String -> Html Msg
 statusBlock color section url count =
@@ -36,30 +39,6 @@ statusBlock color section url count =
             ,   span [ class "value" ] [ text count ] ]
           , i [ class "fa fa-play-circle more" ] []
           ]
-        ]
-
-maybeRenderList : WebData Dashboard -> Html Msg
-maybeRenderList response =
-    case response of
-        RemoteData.NotAsked ->
-            text ""
-        RemoteData.Loading ->
-            text "Loading..."
-        RemoteData.Success dashboard ->
-            div [ class "row" ]
-                [ listBlock "Blacklisted" "primary"   dashboard.blacklist
-                , listBlock "Marked"      "secondary" dashboard.marklist
-                , listBlock "Whitelisted" "tertiary"  dashboard.whitelist ]
-        RemoteData.Failure error ->
-            Debug.log (toString error)
-            text "ERROR"
-
-actorRow : Actor -> Html Msg
-actorRow actor =
-    tr []
-        [ td [] [ text actor.address ]
-        , td [] [ text actor.reason ]
-        , td [] [ a [ href ("#/actors/" ++ actor.address), class "btn-xs btn-tertiary"] [ text "View  ", i [ class "fa fa-chevron-right" ] []] ]
         ]
 
 listBlock : String -> String -> List Actor -> Html Msg
@@ -87,7 +66,28 @@ listBlock heading color actors =
               ]
         ]
 
-listPaginated : String -> WebData Dashboard -> Html Msg
+maybeReport : String -> WebData Dashboard -> Html Msg
+maybeReport section response =
+    case response of
+        RemoteData.NotAsked ->
+            text ""
+        RemoteData.Loading ->
+            text "Loading..."
+        RemoteData.Success dashboard ->
+            case section of
+                "Blacklisted" ->
+                    listPaginated section dashboard.blacklist
+                "Whitelisted" ->
+                    listPaginated section dashboard.whitelist
+                "Marked" ->
+                    listPaginated section dashboard.marklist
+                _ ->
+                    listPaginated "Blacklisted" dashboard.blacklist
+        RemoteData.Failure error ->
+            Debug.log (toString error)
+            text "ERROR"
+
+listPaginated : String -> List Actor -> Html Msg
 listPaginated section actors =
     div [ class "row" ]
         [ div [ class "col-md-12" ]
@@ -103,7 +103,7 @@ listPaginated section actors =
                                               , th [] [ text "Reason" ]
                                               ]
                                             ]
-                                      , tbody [] []
+                                      , tbody [] (List.map actorRow actors)
                                       ]
                                 ]
                           ]
@@ -111,45 +111,43 @@ listPaginated section actors =
               ]
         ]
 
+actorRow : Actor -> Html Msg
+actorRow actor =
+    tr []
+        [ td [] [ text actor.address ]
+        , td [] [ text actor.reason ]
+        , td [] [ a [ href ("#/actors/" ++ actor.address), class "btn-xs btn-tertiary"] [ text "View  ", i [ class "fa fa-chevron-right" ] []] ]
+        ]
 
-listBlockSection : WebData Dashboard -> Html Msg
-listBlockSection dashboard =
-    maybeRenderList dashboard
+dashboard : WebData Dashboard -> Html Msg
+dashboard response =
+    div []
+        [ div [ id "content-header" ]
+            [ h1 [] [ text "Dashboard" ] ]
+        , div [ id "content-container" ]
+            [ maybeDashboard response ]        
+        ]
+
+report : String -> WebData Dashboard -> Html Msg
+report section response =
+    div []
+        [ div [ id "content-header" ]
+            [ h1 [] [ text (section ++ " Actors") ] ]
+        , div [ id "content-container" ]
+            [ maybeReport section response ]
+        ]
 
 view : Model -> Html Msg
 view model =
     case model.route of
         Models.DashboardRoute ->
-            div []
-                [ div [ id "content-header" ]
-                      [ h1 [] [ text "Dashboard" ] ]
-                , div [ id "content-container" ]
-                      [ div [] [ h4 [] [ text "Summary" ] ]
-                      , statusBlockSection model.dashboard
-                      , listBlockSection model.dashboard
-                      ]
-                ]
+            dashboard model.dashboard
         Models.BlacklistRoute ->
-            div []
-                [ div [ id "content-header" ]
-                      [ h1 [] [text "Blacklisted Actors" ] ]
-                , div [ id "content-container" ]
-                      [ listPaginated "Blacklisted" model.dashboard ]
-                ]
+            report "Blacklisted" model.dashboard
         Models.WhitelistRoute ->
-            div []
-                [ div [ id "content-header" ]
-                      [ h1 [] [text "Whitelisted Actors" ] ]
-                , div [ id "content-container" ]
-                      [ listPaginated "Whitelisted" model.dashboard ]
-                ]
+            report "Whitelisted" model.dashboard
         Models.MarklistRoute ->
-            div []
-                [ div [ id "content-header" ]
-                      [ h1 [] [text "Marked Actors" ] ]
-                , div [ id "content-container" ]
-                      [ listPaginated "Marked" model.dashboard ]
-                ]
+            report "Marked" model.dashboard
         Models.ActorRoute address ->
             div []
                 [ h1 [] [ text ("Actor " ++ address) ] ]
