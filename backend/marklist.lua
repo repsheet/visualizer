@@ -9,7 +9,7 @@ function split(str, sep)
     return words
 end
 
-function blacklist()
+function marklist()
     local red = redis:new()
     local ok, err = red:connect("127.0.0.1", 6379)
     if not ok then
@@ -17,7 +17,7 @@ function blacklist()
         return
     end
 
-    local response, err = red:keys("*:repsheet:ip:blacklisted")
+    local response, err = red:keys("*:repsheet:ip:marked")
     if not ok then
         ngx.say("Failed to get keys: ", err)
         return
@@ -29,10 +29,10 @@ function blacklist()
     end
     
     local t = {}
-    t["blacklist"] = response
+    t["marklist"] = response
     
     ngx.say(json.encode(t))
     return
 end
 
-blacklist()
+marklist()
