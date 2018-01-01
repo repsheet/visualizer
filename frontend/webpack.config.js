@@ -8,7 +8,6 @@ module.exports = {
     ]
   },
 
-
   output: {
     path: path.resolve(__dirname + '/dist'),
     filename: '[name].js'
@@ -49,8 +48,8 @@ module.exports = {
   plugins: [
     new CopyWebpackPlugin([
       {
-	from: 'src/public',
-	to: 'public'
+        from: 'src/public',
+        to: 'public'
       }
     ])
   ],
