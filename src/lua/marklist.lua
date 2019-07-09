@@ -25,7 +25,7 @@ function marklist()
 
    for k,v in pairs(marklist) do
       local parts = split(v, "[^:]+")
-      response[k] = parts[1]
+      marklist[k] = parts[1]
    end
 
    local response = cjson.encode({

@@ -39,3 +39,36 @@ function listItem(table, address) {
   link.appendChild(chevron)
   linkCell.appendChild(link)
 }
+
+function fetchBlacklist() {
+  fetch("http://localhost:8888/api/blacklist")
+    .then(response => response.json())
+    .then(data => {
+      setBlacklistCount(data.blacklist.length)
+      setBlacklistColumn(data.blacklist)
+    });
+}
+
+function fetchWhitelist() {
+  fetch("http://localhost:8888/api/whitelist")
+    .then(response => response.json())
+    .then(data => {
+      setWhitelistCount(data.whitelist.length)
+      setWhitelistColumn(data.whitelist)
+    });
+}
+
+function fetchMarklist() {
+  fetch("http://localhost:8888/api/marklist")
+    .then(response => response.json())
+    .then(data => {
+      setMarklistCount(data.marklist.length)
+      setMarklistColumn(data.marklist)
+    });
+}
+
+function dashboard() {
+  fetchBlacklist()
+  fetchWhitelist()
+  fetchMarklist()
+}
