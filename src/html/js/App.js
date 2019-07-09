@@ -45,7 +45,7 @@ function fetchBlacklist() {
     .then(response => response.json())
     .then(data => {
       setBlacklistCount(data.blacklist.length)
-      setBlacklistColumn(data.blacklist)
+      setBlacklistColumn(data.blacklist.slice(0,10))
     });
 }
 
@@ -54,7 +54,7 @@ function fetchWhitelist() {
     .then(response => response.json())
     .then(data => {
       setWhitelistCount(data.whitelist.length)
-      setWhitelistColumn(data.whitelist)
+      setWhitelistColumn(data.whitelist.slice(0,10))
     });
 }
 
@@ -63,7 +63,7 @@ function fetchMarklist() {
     .then(response => response.json())
     .then(data => {
       setMarklistCount(data.marklist.length)
-      setMarklistColumn(data.marklist)
+      setMarklistColumn(data.marklist.slice(0,10))
     });
 }
 
