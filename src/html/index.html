@@ -6,15 +6,9 @@
     <meta name="description" content="">
     <meta name="author" content="Aaron Bedra" />
 
-    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400italic,600italic,800italic,400,600,800" type="text/css">
     <link rel="stylesheet" href="stylesheets/font-awesome.min.css" type="text/css" />
     <link rel="stylesheet" href="stylesheets/bootstrap.min.css" type="text/css" />
-    <link rel="stylesheet" href="js/libs/css/ui-lightness/jquery-ui-1.9.2.custom.css" type="text/css" />
-    <link rel="stylesheet" href="js/plugins/icheck/skins/minimal/blue.css" type="text/css" />
-    <link rel="stylesheet" href="js/plugins/select2/select2.css" type="text/css" />
-    <link rel="stylesheet" href="js/plugins/fullcalendar/fullcalendar.css" type="text/css" />
     <link rel="stylesheet" href="stylesheets/App.css" type="text/css" />
-    <link rel="stylesheet" href="stylesheets/custom.css" type="text/css" />
     <style>
       #header {
       padding-top: 20px;
@@ -27,7 +21,6 @@
     </style>
   </head>
   <body>
-
     <div id="wrapper">
       <header id="header">
         <a href="/" style="text-decoration:none;">
@@ -56,7 +49,7 @@
 
         <nav id="sidebar">
           <ul id="main-nav" class="open-active">
-            <li>
+            <li class="active">
               <a href="/">
                 <i class="fa fa-dashboard"></i>
                 Dashboard
@@ -104,7 +97,7 @@
 	      <a href="blacklist" class="dashboard-stat primary">
 		<div class="details">
 		  <span class="content">Blacklisted Actors</span>
-		  <span class="value">0</span>
+		  <span id="blacklist-count" class="value">-</span>
 		</div>
 
 		<i class="fa fa-play-circle more"></i>
@@ -115,7 +108,7 @@
 	      <a href="marklist" class="dashboard-stat secondary">
 		<div class="details">
 		  <span class="content">Marked Actors</span>
-		  <span class="value">0</span>
+		  <span id="marklist-count" class="value">-</span>
 		</div>
 
 		<i class="fa fa-play-circle more"></i>
@@ -126,7 +119,7 @@
 	      <a href="whitelist" class="dashboard-stat tertiary">
 		<div class="details">
 		  <span class="content">Whitelisted Actors</span>
-		  <span class="value">0</span>
+		  <span id="whitelist-count" class="value">-</span>
 		</div>
 
 		<i class="fa fa-play-circle more"></i>
@@ -143,7 +136,7 @@
 
 		<div class="portlet-content">
 		  <div class="table-responsive">
-		    <table class="table">
+		    <table class="table" id="blacklist">
 		      <thead>
 			<tr>
 			  <th>IP Address</th>
@@ -151,21 +144,13 @@
 			</tr>
 		      </thead>
 		      <tbody>
-			<tr>
-			  <td>1.1.1.1</td>
-			  <td>
-			    <a href="actor.html?address=1.1.1.1" class="btn btn-xs btn-tertiary">
-			      View &nbsp;&nbsp;<i class="fa fa-chevron-right"></i>
-			    </a>
-			  </td>
-			</tr>
 		      </tbody>
 		    </table>
 		  </div>
 
 		  <hr />
 
-		  <a href="blacklist" class="btn btn-sm btn-primary">View All Blacklisted Actors</a>
+		  <a href="blacklist.html" class="btn btn-sm btn-primary">View All Blacklisted Actors</a>
 		</div>
 	      </div>
 	    </div>
@@ -178,7 +163,7 @@
 
 		<div class="portlet-content">
 		  <div class="table-responsive">
-		    <table class="table">
+		    <table class="table" id="marklist">
 		      <thead>
 			<tr>
 			  <th>IP Address</th>
@@ -186,21 +171,13 @@
 			</tr>
 		      </thead>
 		      <tbody>
-			<tr>
-			  <td>2.2.2.2</td>
-			  <td>
-			    <a href="actor.html?address=1.1.1.1" class="btn btn-xs btn-tertiary">
-			      View &nbsp;&nbsp;<i class="fa fa-chevron-right"></i>
-			    </a>
-			  </td>
-			</tr>
 		      </tbody>
 		    </table>
 		  </div>
 
 		  <hr />
 
-		  <a href="blacklist" class="btn btn-sm btn-secondary">View All Marked Actors</a>
+		  <a href="marklist.html" class="btn btn-sm btn-secondary">View All Marked Actors</a>
 		</div>
 	      </div>
 	    </div>
@@ -213,7 +190,7 @@
 
 		<div class="portlet-content">
 		  <div class="table-responsive">
-		    <table class="table">
+		    <table class="table" id="whitelist">
 		      <thead>
 			<tr>
 			  <th>IP Address</th>
@@ -221,21 +198,13 @@
 			</tr>
 		      </thead>
 		      <tbody>
-			<tr>
-			  <td>3.3.3.3</td>
-			  <td>
-			    <a href="actor.html?address=1.1.1.1" class="btn btn-xs btn-tertiary">
-			    View &nbsp;&nbsp;<i class="fa fa-chevron-right"></i>
-			    </a>
-			  </td>
-			</tr>
 		      </tbody>
 		    </table>
 		  </div>
 
 		  <hr />
 
-		  <a href="blacklist" class="btn btn-sm btn-tertiary">View All Whitelisted Actors</a>
+		  <a href="whitelist.html" class="btn btn-sm btn-tertiary">View All Whitelisted Actors</a>
 		</div>
 	      </div>
 	    </div>
@@ -252,8 +221,14 @@
       </ul>
     </footer>
 
-    <script src="js/libs/jquery-1.9.1.min.js"></script>
-    <script src="js/libs/bootstrap.min.js"></script>
     <script src="js/App.js"></script>
+    <script>
+      setBlacklistCount(12345)
+      setMarklistCount(123)
+      setWhitelistCount(12)
+      setBlacklistColumn(["1.1.1.1", "1.1.1.2", "1.1.1.3"])
+      setMarklistColumn(["2.2.2.1", "2.2.2.2", "2.2.2.3"])
+      setWhitelistColumn(["3.3.3.1", "3.3.3.2", "3.3.3.3"])
+    </script>
   </body>
 </html>

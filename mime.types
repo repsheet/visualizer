@@ -1,4 +1,5 @@
 types {
     text/html html;
     text/css  css;
+    text/javascript js;
 }
