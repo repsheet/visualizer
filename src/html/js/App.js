@@ -15,6 +15,13 @@ function setBlacklistColumn(actors) {
   actors.forEach(actor => listItem(table, actor))
 }
 
+function setBlacklistPage(actors) {
+  const table = document.querySelector("#blacklist")
+  for (let [address, reason] of Object.entries(actors)) {
+    listItemWithReason(table, address, reason)
+  }
+}
+
 function setWhitelistColumn(actors) {
   const table = document.querySelector("#whitelist")
   actors.forEach(actor => listItem(table, actor))
@@ -40,12 +47,37 @@ function listItem(table, address) {
   linkCell.appendChild(link)
 }
 
+function listItemWithReason(table, address, reason) {
+  let row = table.insertRow(-1)
+  let ip = row.insertCell(0)
+  let reasonCell = row.insertCell(1)
+  let linkCell = row.insertCell(2)
+  ip.appendChild(document.createTextNode(address))
+  reasonCell.appendChild(document.createTextNode(reason))
+  let link = document.createElement("a")
+  let chevron = document.createElement("i")
+  link.setAttribute("href", "actor.html?address=" + address)
+  link.className = "btn btn-xs btn-tertiary"
+  chevron.className = "fa fa-chevron-right"
+  link.appendChild(document.createTextNode("View  "))
+  link.appendChild(chevron)
+  linkCell.appendChild(link)
+}
+
 function fetchBlacklist() {
   fetch("http://localhost:8888/api/blacklist")
     .then(response => response.json())
     .then(data => {
       setBlacklistCount(data.blacklist.length)
       setBlacklistColumn(data.blacklist.slice(0,10))
+    });
+}
+
+function fetchBlacklistWithReason() {
+  fetch("http://localhost:8888/api/blacklist_with_reason")
+    .then(response => response.json())
+    .then(data => {
+      setBlacklistPage(data.blacklist)
     });
 }
 
