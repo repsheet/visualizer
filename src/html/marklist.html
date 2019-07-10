@@ -1,8 +1,4 @@
 <!DOCTYPE html>
-<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
   <head>
     <title>Repsheet::Visualizer</title>
     <meta charset="utf-8">
@@ -100,7 +96,7 @@
 
 		<div class="portlet-content">
 		  <div class="table-responsive">
-		    <table class="table">
+		    <table class="table" id="marklist">
 		      <thead>
 			<tr>
 			  <th>IP Address</th>
@@ -109,15 +105,6 @@
 			</tr>
 		      </thead>
 		      <tbody>
-			<tr>
-			  <td>1.1.1.1</td>
-			  <td>Sample</td>
-			  <td>
-			    <a href="/actors/{{.Id}}" class="btn btn-xs btn-tertiary">
-			      View &nbsp;&nbsp;<i class="fa fa-chevron-right"></i>
-			    </a>
-			  </td>
-			</tr>
 		      </tbody>
 		    </table>
 		  </div>
@@ -138,5 +125,8 @@
     </footer>
 
     <script src="js/App.js"></script>
+    <script>
+      fetchMarklistWithReason()
+    </script>
   </body>
 </html>

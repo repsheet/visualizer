@@ -27,9 +27,23 @@ function setWhitelistColumn(actors) {
   actors.forEach(actor => listItem(table, actor))
 }
 
+function setWhitelistPage(actors) {
+  const table = document.querySelector("#whitelist")
+  for (let [address, reason] of Object.entries(actors)) {
+    listItemWithReason(table, address, reason)
+  }
+}
+
 function setMarklistColumn(actors) {
   const table = document.querySelector("#marklist")
   actors.forEach(actor => listItem(table, actor))
+}
+
+function setMarklistPage(actors) {
+  const table = document.querySelector("#marklist")
+  for (let [address, reason] of Object.entries(actors)) {
+    listItemWithReason(table, address, reason)
+  }
 }
 
 function listItem(table, address) {
@@ -39,6 +53,7 @@ function listItem(table, address) {
   ip.appendChild(document.createTextNode(address))
   let link = document.createElement("a")
   let chevron = document.createElement("i")
+  linkCell.style.textAlign = "right";
   link.setAttribute("href", "actor.html?address=" + address)
   link.className = "btn btn-xs btn-tertiary"
   chevron.className = "fa fa-chevron-right"
@@ -52,6 +67,7 @@ function listItemWithReason(table, address, reason) {
   let ip = row.insertCell(0)
   let reasonCell = row.insertCell(1)
   let linkCell = row.insertCell(2)
+  linkCell.style.textAlign = "right";
   ip.appendChild(document.createTextNode(address))
   reasonCell.appendChild(document.createTextNode(reason))
   let link = document.createElement("a")
@@ -90,12 +106,28 @@ function fetchWhitelist() {
     });
 }
 
+function fetchWhitelistWithReason() {
+  fetch("http://localhost:8888/api/whitelist_with_reason")
+    .then(response => response.json())
+    .then(data => {
+      setWhitelistPage(data.whitelist)
+    });
+}
+
 function fetchMarklist() {
   fetch("http://localhost:8888/api/marklist")
     .then(response => response.json())
     .then(data => {
       setMarklistCount(data.marklist.length)
       setMarklistColumn(data.marklist.slice(0,10))
+    });
+}
+
+function fetchMarklistWithReason() {
+  fetch("http://localhost:8888/api/marklist_with_reason")
+    .then(response => response.json())
+    .then(data => {
+      setMarklistPage(data.marklist)
     });
 }
 

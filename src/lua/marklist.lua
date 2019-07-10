@@ -18,7 +18,7 @@ function marklist()
    end
 
    local marklist, err = red:keys("*:repsheet:ip:marked")
-   if not ok then
+   if not marklist then
       ngx.say("Failed to get keys: ", err)
       return
    end

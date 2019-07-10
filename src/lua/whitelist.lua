@@ -18,7 +18,7 @@ function whitelist()
    end
 
    local whitelist, err = red:keys("*:repsheet:ip:whitelisted")
-   if not ok then
+   if not whitelist then
       ngx.say("Failed to get keys: ", err)
       return
    end

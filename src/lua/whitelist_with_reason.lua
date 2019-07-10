@@ -9,7 +9,7 @@ function split(str, sep)
    return words
 end
 
-function blacklist()
+function whitelist()
    local red = redis:new()
    local ok, err = red:connect("127.0.0.1", 6379)
    if not ok then
@@ -17,25 +17,25 @@ function blacklist()
       return
    end
 
-   local blacklist, err = red:keys("*:repsheet:ip:blacklisted")
-   if not blacklist then
+   local whitelist, err = red:keys("*:repsheet:ip:whitelisted")
+   if not whitelist then
       ngx.say("Failed to get keys: ", err)
       return
    end
 
-   local blacklist_with_reason = {}
-   for k,v in pairs(blacklist) do
+   local whitelist_with_reason = {}
+   for k,v in pairs(whitelist) do
       local parts = split(v, "[^:]+")
       local reason, err = red:get(v)
       if not reason then
 	 ngx.say("Failed to get reason: ", err)
 	 return
       end
-      blacklist_with_reason[parts[1]] = reason
+      whitelist_with_reason[parts[1]] = reason
    end
 
    local response = cjson.encode({
-         blacklist = blacklist_with_reason
+         whitelist = whitelist_with_reason
    })
 
    ngx.say(response)
@@ -43,4 +43,4 @@ function blacklist()
    return
 end
 
-blacklist()
+whitelist()

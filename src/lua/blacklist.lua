@@ -18,7 +18,7 @@ function blacklist()
    end
 
    local blacklist, err = red:keys("*:repsheet:ip:blacklisted")
-   if not ok then
+   if not blacklist then
       ngx.say("Failed to get keys: ", err)
       return
    end
