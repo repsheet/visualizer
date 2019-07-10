@@ -1,12 +1,34 @@
+function isEmpty(obj) {
+  for(var key in obj) {
+    if(obj.hasOwnProperty(key)) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
 function setBlacklistCount(count) {
+  if (count === undefined) {
+    count = 0;
+  }
+
   document.querySelector("#blacklist-count").innerHTML = count
 }
 
 function setWhitelistCount(count) {
+  if (count === undefined) {
+    count = 0;
+  }
+
   document.querySelector("#whitelist-count").innerHTML = count
 }
 
 function setMarklistCount(count) {
+  if (count === undefined) {
+    count = 0;
+  }
+
   document.querySelector("#marklist-count").innerHTML = count
 }
 
@@ -84,8 +106,12 @@ function fetchBlacklist() {
   fetch("http://localhost:8888/api/blacklist")
     .then(response => response.json())
     .then(data => {
-      setBlacklistCount(data.blacklist.length)
-      setBlacklistColumn(data.blacklist.slice(0,10))
+      if (!isEmpty(data.blacklist)) {
+	setBlacklistCount(data.blacklist.length)
+	setBlacklistColumn(data.blacklist.slice(0,10))
+      } else {
+	setBlacklistCount(0)
+      }
     });
 }
 
@@ -101,8 +127,12 @@ function fetchWhitelist() {
   fetch("http://localhost:8888/api/whitelist")
     .then(response => response.json())
     .then(data => {
-      setWhitelistCount(data.whitelist.length)
-      setWhitelistColumn(data.whitelist.slice(0,10))
+      if (!isEmpty(data.whitelist)) {
+	setWhitelistCount(data.whitelist.length)
+	setWhitelistColumn(data.whitelist.slice(0,10))
+      } else {
+	setWhitelistCount(0)
+      }
     });
 }
 
@@ -118,8 +148,12 @@ function fetchMarklist() {
   fetch("http://localhost:8888/api/marklist")
     .then(response => response.json())
     .then(data => {
-      setMarklistCount(data.marklist.length)
-      setMarklistColumn(data.marklist.slice(0,10))
+      if (!isEmpty(data.marklist)) {
+	setMarklistCount(data.marklist.length)
+	setMarklistColumn(data.marklist.slice(0,10))
+      } else {
+	setMarklistCount(0)
+      }
     });
 }
 
