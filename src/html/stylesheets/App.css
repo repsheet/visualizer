@@ -3446,3 +3446,7 @@ ul.support-list li {
 .current {
     font-size: 1.5em;
 }
+
+.requests {
+    list-style-type: none;
+}

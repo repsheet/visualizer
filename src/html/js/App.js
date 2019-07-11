@@ -14,12 +14,15 @@ function isEmpty(obj) {
 }
 
 function setActorStatus(address, data) {
-  const status = data[0]
-  const reason = data[1]
+  const status = data.status[0]
+  const reason = data.status[1]
 
   document.querySelector("#address-container").innerHTML = address
   document.querySelector("#actor-status-container").innerHTML = status
   document.querySelector("#actor-reason-container").innerHTML = reason
+  document.querySelector("#request-count-container").innerHTML = data.request_count
+
+  addRequests(data.requests)
 }
 
 function setBlacklistCount(count) {
@@ -116,6 +119,18 @@ function listItemWithReason(table, address, reason) {
   linkCell.appendChild(link)
 }
 
+function addRequests(requests) {
+  const container = document.querySelector("#activity-container")
+  let ul = document.createElement("ul")
+  ul.className = "requests"
+  requests.forEach(request => {
+    let li = document.createElement("li")
+    li.appendChild(document.createTextNode(request))
+    ul.appendChild(li)
+  });
+  container.appendChild(ul)
+}
+
 function fetchBlacklist() {
   fetch("http://localhost:8888/api/blacklist")
     .then(response => response.json())
@@ -185,7 +200,7 @@ function fetchActorStatus() {
     .then(response => response.json())
     .then(data => {
       if (!isEmpty(data.status)) {
-	setActorStatus(address, data.status)
+	setActorStatus(address, data)
       }
     });
 }

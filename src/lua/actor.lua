@@ -18,14 +18,28 @@ function actor()
       return
    end
 
-   local status, err = red["repsheet.status"](red, ngx.var.arg_address)
+   local address = ngx.var.arg_address
+
+   local status, err = red["repsheet.status"](red, address)
    if not status then
       ngx.say("Failed to get status: ", err)
       return
    end
 
+   local request_count = red:llen(address .. ":repsheet:requests")
+   if not request_count then
+      ngx.say("Failed to get request count: ", err)
+   end
+
+   local requests = red:lrange(address .. ":repsheet:requests", 0, -1)
+   if not requests then
+      ngx.say("Failed to get requests ", err)
+   end
+
    local response = cjson.encode({
-         status = status
+         status = status,
+	 request_count = request_count,
+	 requests = requests
    })
 
    ngx.say(response)
