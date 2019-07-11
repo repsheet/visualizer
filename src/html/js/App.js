@@ -43,38 +43,49 @@ function insertActorsWithReason(table, actors) {
   }
 }
 
-function insertTableRow(table, address) {
-  const row = table.insertRow(-1)
-  const ip = row.insertCell(0)
-  const linkCell = row.insertCell(1)
+function createIpCell(row, address, position) {
+  const ip = row.insertCell(position)
   ip.appendChild(document.createTextNode(address))
-  const link = document.createElement("a")
+}
+
+function createChevron() {
   const chevron = document.createElement("i")
-  linkCell.style.textAlign = "right";
+  chevron.className = "fa fa-chevron-right"
+  return chevron
+}
+
+function createLink(address) {
+  const link = document.createElement("a")
   link.setAttribute("href", "actor.html?address=" + address)
   link.className = "btn btn-xs btn-tertiary"
-  chevron.className = "fa fa-chevron-right"
   link.appendChild(document.createTextNode("View  "))
-  link.appendChild(chevron)
-  linkCell.appendChild(link)
+  link.appendChild(createChevron())
+  return link
+}
+
+function createLinkCell(row, address, position) {
+  const linkCell = row.insertCell(position)
+  linkCell.style.textAlign = "right";
+  linkCell.appendChild(createLink(address))
+  return linkCell
+}
+
+function createReasonCell(row, reason, position) {
+  const reasonCell = row.insertCell(position)
+  reasonCell.appendChild(document.createTextNode(reason))
+}
+
+function insertTableRow(table, address) {
+  const row = table.insertRow(-1)
+  createIpCell(row, address, 0)
+  createLinkCell(row, address, 1)
 }
 
 function insertTableRowWithReason(table, address, reason) {
   const row = table.insertRow(-1)
-  const ip = row.insertCell(0)
-  const reasonCell = row.insertCell(1)
-  const linkCell = row.insertCell(2)
-  linkCell.style.textAlign = "right";
-  ip.appendChild(document.createTextNode(address))
-  reasonCell.appendChild(document.createTextNode(reason))
-  const link = document.createElement("a")
-  const chevron = document.createElement("i")
-  link.setAttribute("href", "actor.html?address=" + address)
-  link.className = "btn btn-xs btn-tertiary"
-  chevron.className = "fa fa-chevron-right"
-  link.appendChild(document.createTextNode("View  "))
-  link.appendChild(chevron)
-  linkCell.appendChild(link)
+  createIpCell(row, address, 0)
+  createReasonCell(row, reason, 1)
+  createLinkCell(row, address, 2)
 }
 
 function addRequests(requests) {
