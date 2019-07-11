@@ -18,7 +18,7 @@ function actor()
       return
    end
 
-   local status, err = red["repsheet.status"](red, "1.1.1.1")
+   local status, err = red["repsheet.status"](red, ngx.var.arg_address)
    if not status then
       ngx.say("Failed to get status: ", err)
       return

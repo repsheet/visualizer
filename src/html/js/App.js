@@ -1,3 +1,8 @@
+function getAddress() {
+  const params = new URLSearchParams(window.location.search)
+  return params.get("address")
+}
+
 function isEmpty(obj) {
   for(var key in obj) {
     if(obj.hasOwnProperty(key)) {
@@ -6,6 +11,15 @@ function isEmpty(obj) {
   }
 
   return true;
+}
+
+function setActorStatus(address, data) {
+  const status = data[0]
+  const reason = data[1]
+
+  document.querySelector("#address-container").innerHTML = address
+  document.querySelector("#actor-status-container").innerHTML = status
+  document.querySelector("#actor-reason-container").innerHTML = reason
 }
 
 function setBlacklistCount(count) {
@@ -162,6 +176,17 @@ function fetchMarklistWithReason() {
     .then(response => response.json())
     .then(data => {
       setMarklistPage(data.marklist)
+    });
+}
+
+function fetchActorStatus() {
+  const address = getAddress()
+  fetch("http://localhost:8888/api/actor?address=" + address)
+    .then(response => response.json())
+    .then(data => {
+      if (!isEmpty(data.status)) {
+	setActorStatus(address, data.status)
+      }
     });
 }
 

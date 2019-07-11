@@ -102,14 +102,17 @@
 	  </div>
 
 	  <div class="col-md-3 col-sm-6 col-sidebar-right">
-	    <h4>Status</h4>
-
 	    <div class="list-group">
               <a href="blacklist.html" class="list-group-item"><h3 class="pull-right"><i class="fa fa-eye"></i></h3>
 		<h4 class="list-group-item-heading" id="actor-status-container"></h4>
+		<p class="list-group-item-text" id="actor-reason-container"></p>
               </a>
-	    </div>
 
+	      <a href="#" class="list-group-item"><h3 class="pull-right"><i class="fa fa-eye"></i></h3>
+		<h4 class="list-group-item-heading">0</h4>
+		<p class="list-group-item-text">Requests</p>
+	      </a>
+	    </div>
 	    <br />
 	  </div>
 	</div>
@@ -126,5 +129,8 @@
   </footer>
 
   <script src="js/App.js"></script>
+  <script>
+    fetchActorStatus()
+  </script>
 </body>
 </html>
