@@ -11,7 +11,7 @@ end
 
 function blacklist()
    local red = redis:new()
-   local ok, err = red:connect("127.0.0.1", 6379)
+   local ok, err = red:connect(ngx.var.redis_host, ngx.var.redis_port)
    if not ok then
       ngx.say("Failed to connect: ", err)
       return
