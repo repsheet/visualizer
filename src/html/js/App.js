@@ -103,7 +103,7 @@ function addRequests(requests) {
 function fetchBlacklist() {
   const container = document.querySelector("#blacklist-count")
   const table = document.querySelector("#blacklist")
-  fetch(window.location + "api/blacklist")
+  fetch("http://" + window.location.host + "/api/blacklist")
     .then(response => response.json())
     .then(data => {
       if (!isEmpty(data.blacklist)) {
@@ -118,7 +118,7 @@ function fetchBlacklist() {
 function fetchWhitelist() {
   const container = document.querySelector("#whitelist-count")
   const table = document.querySelector("#whitelist")
-  fetch(window.location + "api/whitelist")
+  fetch("http://" + window.location.host + "/api/whitelist")
     .then(response => response.json())
     .then(data => {
       if (!isEmpty(data.whitelist)) {
@@ -133,7 +133,7 @@ function fetchWhitelist() {
 function fetchMarklist() {
   const container = document.querySelector("#marklist-count")
   const table = document.querySelector("#marklist")
-  fetch(window.location + "api/marklist")
+  fetch("http://" + window.location.host + "/api/marklist")
     .then(response => response.json())
     .then(data => {
       if (!isEmpty(data.marklist)) {
@@ -147,7 +147,7 @@ function fetchMarklist() {
 
 function fetchBlacklistWithReason() {
   const table = document.querySelector("#blacklist")
-  fetch(window.location + "api/blacklist_with_reason")
+  fetch("http://" + window.location.host + "/api/blacklist_with_reason")
     .then(response => response.json())
     .then(data => {
       insertActorsWithReason(table, data.blacklist)
@@ -156,7 +156,7 @@ function fetchBlacklistWithReason() {
 
 function fetchWhitelistWithReason() {
     const table = document.querySelector("#whitelist")
-  fetch(window.location + "api/whitelist_with_reason")
+  fetch("http://" + window.location.host + "/api/whitelist_with_reason")
     .then(response => response.json())
     .then(data => {
       insertActorsWithReason(table, data.whitelist)
@@ -165,7 +165,7 @@ function fetchWhitelistWithReason() {
 
 function fetchMarklistWithReason() {
   const table = document.querySelector("#marklist")
-  fetch(window.location + "api/marklist_with_reason")
+  fetch("http://" + window.location.host + "/api/marklist_with_reason")
     .then(response => response.json())
     .then(data => {
       insertActorsWithReason(table, data.marklist)
@@ -174,7 +174,7 @@ function fetchMarklistWithReason() {
 
 function fetchActorStatus() {
   const address = getAddress()
-  fetch(window.location + "api/actor?address=" + address)
+  fetch("http://" + window.location.host + "/api/actor?address=" + address)
     .then(response => response.json())
     .then(data => {
       if (!isEmpty(data.status)) {
