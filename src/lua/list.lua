@@ -10,9 +10,9 @@ function split(str, sep)
 end
 
 function Set (list)
-  local set = {}
-  for _, l in ipairs(list) do set[l] = true end
-  return set
+   local set = {}
+   for _, l in ipairs(list) do set[l] = true end
+   return set
 end
 
 function is_valid_list_type(list_type)
@@ -31,6 +31,21 @@ function generate_error_message(message)
    })
 
    return response
+end
+
+function populate_reasons(red, results)
+   local list_with_reason = {}
+   for k,v in pairs(results) do
+      local parts = split(v, "[^:]+")
+      local reason, err = red:get(v)
+      if not reason then
+         ngx.say(generate_error_message("Failed to get reason: "..err))
+         return
+      end
+      list_with_reason[parts[1]] = reason
+   end
+
+   return list_with_reason
 end
 
 function list()
@@ -53,9 +68,24 @@ function list()
       return
    end
 
-   for k,v in pairs(list) do
-      local parts = split(v, "[^:]+")
-      list[k] = parts[1]
+   if not ngx.var.arg_include_reason then
+      for k,v in pairs(list) do
+         local parts = split(v, "[^:]+")
+         list[k] = parts[1]
+      end
+   else
+      local list_with_reason = {}
+      for k,v in pairs(list) do
+         local parts = split(v, "[^:]+")
+         local reason, err = red:get(v)
+         if not reason then
+            ngx.say(generate_error_message("Failed to get reason: "..err))
+            return
+         end
+         list_with_reason[parts[1]] = reason
+      end
+
+      list = list_with_reason
    end
 
    local response = cjson.encode({

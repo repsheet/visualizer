@@ -113,6 +113,14 @@ function fetchList(type, container, table) {
     });
 }
 
+function fetchListWithReason(type, table) {
+  fetch("http://localhost:8888/api/list?type=" + type + "&include_reason=true")
+    .then(response => response.json())
+    .then(data => {
+      insertActorsWithReason(table, data.list)
+    });
+}
+
 function fetchBlacklist() {
   const container = document.querySelector("#blacklist-count")
   const table = document.querySelector("#blacklist")
@@ -133,29 +141,17 @@ function fetchMarklist() {
 
 function fetchBlacklistWithReason() {
   const table = document.querySelector("#blacklist")
-  fetch("http://localhost:8888/api/blacklist_with_reason")
-    .then(response => response.json())
-    .then(data => {
-      insertActorsWithReason(table, data.blacklist)
-    });
+  fetchListWithReason("blacklist", table)
 }
 
 function fetchWhitelistWithReason() {
-    const table = document.querySelector("#whitelist")
-  fetch("http://localhost:8888/api/whitelist_with_reason")
-    .then(response => response.json())
-    .then(data => {
-      insertActorsWithReason(table, data.whitelist)
-    });
+  const table = document.querySelector("#whitelist")
+  fetchListWithReason("whitelist", table)
 }
 
 function fetchMarklistWithReason() {
   const table = document.querySelector("#marklist")
-  fetch("http://localhost:8888/api/marklist_with_reason")
-    .then(response => response.json())
-    .then(data => {
-      insertActorsWithReason(table, data.marklist)
-    });
+  fetchListWithReason("mark", table)
 }
 
 function fetchActorStatus() {
