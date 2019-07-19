@@ -100,49 +100,35 @@ function addRequests(requests) {
   container.appendChild(ul)
 }
 
-function fetchBlacklist() {
-  const container = document.querySelector("#blacklist-count")
-  const table = document.querySelector("#blacklist")
-  fetch("http://localhost:8888/api/blacklist")
+function fetchList(type, container, table) {
+  fetch("http://localhost:8888/api/list?type=" + type)
     .then(response => response.json())
     .then(data => {
-      if (!isEmpty(data.blacklist)) {
-	setCount(container, data.blacklist.length)
-	insertActors(table, data.blacklist.slice(0,10))
+      if (!isEmpty(data.list)) {
+	setCount(container, data.list.length)
+	insertActors(table, data.list.slice(0,10))
       } else {
 	setCount(container, 0)
       }
     });
+}
+
+function fetchBlacklist() {
+  const container = document.querySelector("#blacklist-count")
+  const table = document.querySelector("#blacklist")
+  fetchList("blacklist", container, table)
 }
 
 function fetchWhitelist() {
   const container = document.querySelector("#whitelist-count")
   const table = document.querySelector("#whitelist")
-  fetch("http://localhost:8888/api/whitelist")
-    .then(response => response.json())
-    .then(data => {
-      if (!isEmpty(data.whitelist)) {
-	setCount(container, data.whitelist.length)
-	insertActors(table, data.whitelist.slice(0,10))
-      } else {
-	setCount(container, 0)
-      }
-    });
+  fetchList("whitelist", container, table)
 }
 
 function fetchMarklist() {
   const container = document.querySelector("#marklist-count")
   const table = document.querySelector("#marklist")
-  fetch("http://localhost:8888/api/marklist")
-    .then(response => response.json())
-    .then(data => {
-      if (!isEmpty(data.marklist)) {
-	setCount(container, data.marklist.length)
-	insertActors(table, data.marklist.slice(0,10))
-      } else {
-	setCount(container, 0)
-      }
-    });
+  fetchList("mark", container, table)
 }
 
 function fetchBlacklistWithReason() {
