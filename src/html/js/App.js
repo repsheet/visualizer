@@ -13,6 +13,11 @@ function getAddress() {
   return params.get("address")
 }
 
+function search() {
+  const address = document.querySelector("#actor").value;
+  window.location = "http://" + window.location.host + "/actor.html?address=" + address;
+}
+
 function setActorStatus(address, data) {
   const status = data.status[0]
   const reason = data.status[1]
