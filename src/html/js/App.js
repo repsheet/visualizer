@@ -105,15 +105,8 @@ function addRequests(requests) {
   container.appendChild(ul)
 }
 
-<<<<<<< HEAD
-function fetchBlacklist() {
-  const container = document.querySelector("#blacklist-count")
-  const table = document.querySelector("#blacklist")
-  fetch("http://" + window.location.host + "/api/blacklist")
-=======
 function fetchList(type, container, table) {
   fetch("http://localhost:8888/api/list?type=" + type)
->>>>>>> lua
     .then(response => response.json())
     .then(data => {
       if (!isEmpty(data.list)) {
@@ -125,15 +118,8 @@ function fetchList(type, container, table) {
     });
 }
 
-<<<<<<< HEAD
-function fetchWhitelist() {
-  const container = document.querySelector("#whitelist-count")
-  const table = document.querySelector("#whitelist")
-  fetch("http://" + window.location.host + "/api/whitelist")
-=======
 function fetchListWithReason(type, table) {
   fetch("http://localhost:8888/api/list?type=" + type + "&include_reason=true")
->>>>>>> lua
     .then(response => response.json())
     .then(data => {
       insertActorsWithReason(table, data.list)
