@@ -43,9 +43,9 @@
 
     <div id="sidebar-wrapper" class="collapse sidebar-collapse">
       <div id="search">
-        <form method="post" action="/search">
+        <form onsubmit="event.preventDefault();">
           <input name="actor" id="actor" class="form-control input-sm" type="text" placeholder="Search for an Actor" />
-          <button type="submit" id="search-btn" class="btn"><i class="fa fa-search"></i></button>
+          <button type="submit" id="search-btn" class="btn" onclick="search()"><i class="fa fa-search"></i></button>
         </form>
       </div>
 

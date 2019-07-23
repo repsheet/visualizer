@@ -13,6 +13,11 @@ function getAddress() {
   return params.get("address")
 }
 
+function search() {
+  const address = document.querySelector("#actor").value;
+  window.location = "http://" + window.location.host + "/actor.html?address=" + address;
+}
+
 function setActorStatus(address, data) {
   const status = data.status[0]
   const reason = data.status[1]
@@ -100,76 +105,72 @@ function addRequests(requests) {
   container.appendChild(ul)
 }
 
+<<<<<<< HEAD
 function fetchBlacklist() {
   const container = document.querySelector("#blacklist-count")
   const table = document.querySelector("#blacklist")
   fetch("http://" + window.location.host + "/api/blacklist")
+=======
+function fetchList(type, container, table) {
+  fetch("http://localhost:8888/api/list?type=" + type)
+>>>>>>> lua
     .then(response => response.json())
     .then(data => {
-      if (!isEmpty(data.blacklist)) {
-	setCount(container, data.blacklist.length)
-	insertActors(table, data.blacklist.slice(0,10))
+      if (!isEmpty(data.list)) {
+	setCount(container, data.list.length)
+	insertActors(table, data.list.slice(0,10))
       } else {
 	setCount(container, 0)
       }
     });
+}
+
+<<<<<<< HEAD
+function fetchWhitelist() {
+  const container = document.querySelector("#whitelist-count")
+  const table = document.querySelector("#whitelist")
+  fetch("http://" + window.location.host + "/api/whitelist")
+=======
+function fetchListWithReason(type, table) {
+  fetch("http://localhost:8888/api/list?type=" + type + "&include_reason=true")
+>>>>>>> lua
+    .then(response => response.json())
+    .then(data => {
+      insertActorsWithReason(table, data.list)
+    });
+}
+
+function fetchBlacklist() {
+  const container = document.querySelector("#blacklist-count")
+  const table = document.querySelector("#blacklist")
+  fetchList("blacklist", container, table)
 }
 
 function fetchWhitelist() {
   const container = document.querySelector("#whitelist-count")
   const table = document.querySelector("#whitelist")
-  fetch("http://" + window.location.host + "/api/whitelist")
-    .then(response => response.json())
-    .then(data => {
-      if (!isEmpty(data.whitelist)) {
-	setCount(container, data.whitelist.length)
-	insertActors(table, data.whitelist.slice(0,10))
-      } else {
-	setCount(container, 0)
-      }
-    });
+  fetchList("whitelist", container, table)
 }
 
 function fetchMarklist() {
   const container = document.querySelector("#marklist-count")
   const table = document.querySelector("#marklist")
-  fetch("http://" + window.location.host + "/api/marklist")
-    .then(response => response.json())
-    .then(data => {
-      if (!isEmpty(data.marklist)) {
-	setCount(container, data.marklist.length)
-	insertActors(table, data.marklist.slice(0,10))
-      } else {
-	setCount(container, 0)
-      }
-    });
+  fetchList("mark", container, table)
 }
 
 function fetchBlacklistWithReason() {
   const table = document.querySelector("#blacklist")
-  fetch("http://" + window.location.host + "/api/blacklist_with_reason")
-    .then(response => response.json())
-    .then(data => {
-      insertActorsWithReason(table, data.blacklist)
-    });
+  fetchListWithReason("blacklist", table)
 }
 
 function fetchWhitelistWithReason() {
-    const table = document.querySelector("#whitelist")
-  fetch("http://" + window.location.host + "/api/whitelist_with_reason")
-    .then(response => response.json())
-    .then(data => {
-      insertActorsWithReason(table, data.whitelist)
-    });
+  const table = document.querySelector("#whitelist")
+  fetchListWithReason("whitelist", table)
 }
 
 function fetchMarklistWithReason() {
   const table = document.querySelector("#marklist")
-  fetch("http://" + window.location.host + "/api/marklist_with_reason")
-    .then(response => response.json())
-    .then(data => {
-      insertActorsWithReason(table, data.marklist)
-    });
+  fetchListWithReason("mark", table)
 }
 
 function fetchActorStatus() {
