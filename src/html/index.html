@@ -6,10 +6,10 @@
     <meta name="description" content="">
     <meta name="author" content="Aaron Bedra" />
 
-    <link rel="stylesheet" href="stylesheets/font-awesome.min.css" type="text/css" />
-    <link rel="stylesheet" href="stylesheets/bootstrap.min.css" type="text/css" />
-    <link rel="stylesheet" href="stylesheets/App.css" type="text/css" />
-    <link rel="shortcut icon" type="image/png" href="images/favicon.ico"/>
+    <link rel="stylesheet" href="./stylesheets/font-awesome.min.css" type="text/css" />
+    <link rel="stylesheet" href="./stylesheets/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="./stylesheets/App.css" type="text/css" />
+    <link rel="shortcut icon" type="image/png" href="./images/favicon.ico"/>
     <style>
       #header {
 	padding-top: 20px;
@@ -24,7 +24,7 @@
   <body>
     <div id="wrapper">
       <header id="header">
-        <a href="/" style="text-decoration:none;">
+        <a href="./" style="text-decoration:none;">
           <h3 class="logo-head">Repsheet Visualizer</h3>
         </a>
       </header>
@@ -32,7 +32,7 @@
       <nav id="top-bar" class="collapse top-bar-collapse">
         <ul class="nav navbar-nav pull-left">
           <li class="">
-            <a href="/">
+            <a href="./">
               <i class="fa fa-home"></i>
               Home
             </a>
@@ -51,28 +51,28 @@
         <nav id="sidebar">
           <ul id="main-nav" class="open-active">
             <li class="active">
-              <a href="/">
+              <a href="./">
                 <i class="fa fa-dashboard"></i>
                 Dashboard
               </a>
             </li>
 
             <li>
-              <a href="/blacklist.html">
+              <a href="./blacklist.html">
                 <i class="fa fa-ban"></i>
                 Blacklist
               </a>
             </li>
 
             <li>
-              <a href="/marklist.html">
+              <a href="./marklist.html">
                 <i class="fa fa-gavel"></i>
                 Marklist
               </a>
             </li>
 
             <li>
-              <a href="/whitelist.html">
+              <a href="./whitelist.html">
                 <i class="fa fa-thumbs-o-up"></i>
                 Whitelist
               </a>
@@ -95,7 +95,7 @@
 
 	  <div class="row">
 	    <div class="col-md-4 col-sm-6">
-	      <a href="blacklist.html" class="dashboard-stat primary">
+	      <a href="./blacklist.html" class="dashboard-stat primary">
 		<div class="details">
 		  <span class="content">Blacklisted Actors</span>
 		  <span id="blacklist-count" class="value">-</span>
@@ -106,7 +106,7 @@
 	    </div>
 
 	    <div class="col-md-4 col-sm-6">
-	      <a href="marklist.html" class="dashboard-stat secondary">
+	      <a href="./marklist.html" class="dashboard-stat secondary">
 		<div class="details">
 		  <span class="content">Marked Actors</span>
 		  <span id="marklist-count" class="value">-</span>
@@ -117,7 +117,7 @@
 	    </div>
 
 	    <div class="col-md-4 col-sm-6">
-	      <a href="whitelist.html" class="dashboard-stat tertiary">
+	      <a href="./whitelist.html" class="dashboard-stat tertiary">
 		<div class="details">
 		  <span class="content">Whitelisted Actors</span>
 		  <span id="whitelist-count" class="value">-</span>
@@ -151,7 +151,7 @@
 
 		  <hr />
 
-		  <a href="blacklist.html" class="btn btn-sm btn-primary">View All Blacklisted Actors</a>
+		  <a href="./blacklist.html" class="btn btn-sm btn-primary">View All Blacklisted Actors</a>
 		</div>
 	      </div>
 	    </div>
@@ -178,7 +178,7 @@
 
 		  <hr />
 
-		  <a href="marklist.html" class="btn btn-sm btn-secondary">View All Marked Actors</a>
+		  <a href="./marklist.html" class="btn btn-sm btn-secondary">View All Marked Actors</a>
 		</div>
 	      </div>
 	    </div>
@@ -205,7 +205,7 @@
 
 		  <hr />
 
-		  <a href="whitelist.html" class="btn btn-sm btn-tertiary">View All Whitelisted Actors</a>
+		  <a href="./whitelist.html" class="btn btn-sm btn-tertiary">View All Whitelisted Actors</a>
 		</div>
 	      </div>
 	    </div>
@@ -222,7 +222,7 @@
       </ul>
     </footer>
 
-    <script src="js/App.js"></script>
+    <script src="./js/App.js"></script>
     <script>
       dashboard()
     </script>
