@@ -18,6 +18,19 @@ function search() {
   window.location = "http://" + window.location.host + "/actor.html?address=" + address;
 }
 
+function stripPathname(pathname) {
+  const parts = pathname.split("/")
+  if (parts.length > 1) {
+    return parts.slice(0, -1).join("/")
+  } else {
+    return pathname
+  }
+}
+
+function getPath() {
+  return window.location.protocol + "//" + window.location.host + stripPathname(window.location.pathname)
+}
+
 function setActorStatus(address, data) {
   const status = data.status[0]
   const reason = data.status[1]
@@ -106,7 +119,7 @@ function addRequests(requests) {
 }
 
 function fetchList(type, container, table) {
-  fetch("http://localhost:8888/api/list?type=" + type)
+  fetch(getPath() + "/api/list?type=" + type)
     .then(response => response.json())
     .then(data => {
       if (!isEmpty(data.list)) {
@@ -119,10 +132,21 @@ function fetchList(type, container, table) {
 }
 
 function fetchListWithReason(type, table) {
-  fetch("http://localhost:8888/api/list?type=" + type + "&include_reason=true")
+  fetch(getPath() + "/api/list?type=" + type + "&include_reason=true")
     .then(response => response.json())
     .then(data => {
       insertActorsWithReason(table, data.list)
+    });
+}
+
+function fetchActorStatus() {
+  const address = getAddress()
+  fetch(getPath() + "/api/actor?address=" + address)
+    .then(response => response.json())
+    .then(data => {
+      if (!isEmpty(data.status)) {
+	setActorStatus(address, data)
+      }
     });
 }
 
@@ -157,17 +181,6 @@ function fetchWhitelistWithReason() {
 function fetchMarklistWithReason() {
   const table = document.querySelector("#marklist")
   fetchListWithReason("mark", table)
-}
-
-function fetchActorStatus() {
-  const address = getAddress()
-  fetch("http://" + window.location.host + "/api/actor?address=" + address)
-    .then(response => response.json())
-    .then(data => {
-      if (!isEmpty(data.status)) {
-	setActorStatus(address, data)
-      }
-    });
 }
 
 function dashboard() {
